@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     color: '#000',
     cursor: 'pointer',
-    fontWeight: 700,
+    // fontWeight: 700,
     textDecoration: 'none',
     fontSize: 17,
     '&:hover': {
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
       // borderRadius: 20,
       color: '#fff',
       transition: '0.6s',
-      fontWeight: 'bold',
+      // fontWeight: 'bold',
       backgroundColor: theme.palette.primary.light,
     },
   },

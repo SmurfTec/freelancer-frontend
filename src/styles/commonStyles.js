@@ -88,8 +88,9 @@ const styles = makeStyles((theme) => ({
 
   // ^ Some common styles
   marginBet: {
-    marginInline: theme.spacing(3),
+    // marginInline: theme.spacing(3),
     marginBlock: 75,
+    position: 'relative',
 
     '& h4': {
       marginLeft: theme.spacing(1),
@@ -98,8 +99,80 @@ const styles = makeStyles((theme) => ({
   },
   serviceDetails: {
     backgroundColor: '#f1fdf7',
-    paddingInline: theme.spacing(2),
+    paddingInline: theme.spacing(5),
     paddingBlock: theme.spacing(5),
+  },
+  serviceSubHead: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(1),
+    '& svg': {
+      marginRight: theme.spacing(2),
+    },
+  },
+
+  // ^ Sub Category Card Styles
+  catContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    listStyleImage: 'none',
+    marginTop: theme.spacing(5),
+
+    '& li': {
+      boxSizing: 'border-box',
+      textAlign: 'center',
+      width: '50%',
+      [theme.breakpoints.up('sm')]: {
+        width: '20%',
+      },
+      [theme.breakpoints.down('sm')]: {
+        width: '33.33%',
+        paddingBottom: 50,
+      },
+
+      '& a': {
+        textAlign: 'center',
+        position: 'relative',
+        display: 'inline-block',
+        '& img': {
+          display: 'block',
+          width: 48,
+          height: 48,
+          margin: '0 auto 15px',
+        },
+
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 45,
+          right: '50%',
+          WebkitTransform: 'translateX(50%)',
+          transform: 'translateX(50%)',
+          padding: '0 0 8px',
+          width: 48,
+          borderBottom: '2px solid #c5c6c9',
+        },
+
+        '&:hover': {
+          '&::after': {
+            padding: '0 20px 8px',
+            borderColor: theme.palette.primary.main,
+          },
+        },
+      },
+    },
+  },
+  footer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#161e2c',
+    color: '#fff',
+    paddingBlock: theme.spacing(4),
+    paddingInline: theme.spacing(3),
   },
 }));
 

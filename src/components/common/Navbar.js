@@ -159,7 +159,7 @@ const Navbar = () => {
                     <Button
                       variant='contained'
                       className={classes.RegisterBtn}
-                      onClick={() => navigate('/login')}
+                      onClick={() => navigate('/register')}
                     >
                       Register
                     </Button>

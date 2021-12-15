@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import GlobalStyles from 'theme/GlobalStyles';
 import breakpoints from './breakpoints';
+import typography from 'theme/typography';
 
 const Theme = ({ children }) => {
   const themeOptions = useMemo(() => {
@@ -14,11 +15,12 @@ const Theme = ({ children }) => {
         },
         text: {
           primary: '#161C24',
-          secondary: '#919EAB',
+          secondary: '#62646a',
           disabled: '#637381',
         },
       },
       breakpoints,
+      typography,
     };
   }, []);
 
