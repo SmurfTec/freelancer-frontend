@@ -5,8 +5,9 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  Tabs,
+  Tab,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { Link, useNavigate } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -32,6 +33,7 @@ const Register = () => {
   // const history = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [tabState, setTabState] = useState(0);
 
   const [
     inputState,
@@ -64,9 +66,29 @@ const Register = () => {
     //   }
     // }
   };
+
+  const handleTabChange = (event, newValue) => {
+    setTabState(newValue);
+    setInputstate((st) => ({
+      ...st,
+      role: newValue === 0 ? 'buyer' : 'seller',
+    }));
+  };
+
   return (
     <FormLayout>
       <div className={classes.separator}> Join as </div>
+      <Tabs
+        value={tabState}
+        onChange={handleTabChange}
+        indicatorColor=''
+        textColor='primary'
+        centered
+        className={classes.Tabs}
+      >
+        <Tab label='Buyer' />
+        <Tab label='Seller' />
+      </Tabs>
 
       <section className={classes.wrapper}>
         <form onSubmit={onFormSubmit}>
@@ -79,6 +101,7 @@ const Register = () => {
                 onChange={handleTxtChange}
                 variant='outlined'
                 fullWidth
+                size='small'
               />
             </Grid>
             <Grid item xs={12}>
@@ -90,6 +113,7 @@ const Register = () => {
                 onChange={handleTxtChange}
                 variant='outlined'
                 fullWidth
+                size='small'
               />
             </Grid>
             <Grid item xs={12}>
@@ -101,6 +125,7 @@ const Register = () => {
                 onChange={handleTxtChange}
                 variant='outlined'
                 fullWidth
+                size='small'
               />
             </Grid>
             <Grid item xs={12}>
@@ -112,6 +137,7 @@ const Register = () => {
                 onChange={handleTxtChange}
                 variant='outlined'
                 fullWidth
+                size='small'
               />
             </Grid>
 
@@ -123,6 +149,7 @@ const Register = () => {
               <Button
                 type='submit'
                 fullWidth
+                size='small'
                 variant='contained'
                 color='primary'
                 disabled={loading}

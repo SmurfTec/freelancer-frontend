@@ -174,6 +174,20 @@ const styles = makeStyles((theme) => ({
     paddingBlock: theme.spacing(4),
     paddingInline: theme.spacing(3),
   },
+
+  Tabs: {
+    marginTop: 20,
+    '& .MuiTab-root': {
+      minWidth: 120,
+      paddingInline: 0,
+      border: '1px solid #ccc',
+    },
+    '& .Mui-selected': {
+      backgroundColor: theme.palette.primary.main,
+      transition: '0.5s',
+      color: '#fff',
+    },
+  },
 }));
 
 export default styles;
