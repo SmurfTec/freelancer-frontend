@@ -7,6 +7,7 @@ import {
   Grid,
   Tabs,
   Tab,
+  Divider,
 } from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
 import React, { useState } from 'react';
@@ -104,12 +105,22 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box
+          p={3}
+          style={{
+            height: 250,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Box
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
+            style={
+              {
+                // display: 'flex',
+                // flexDirection: 'column',
+                // height: 250,
+              }
+            }
           >
             <Typography variant='h6'>{item.title}</Typography>
             <Typography variant='h5' fontWeight='normal'>
@@ -120,7 +131,7 @@ function TabPanel(props) {
           <Box
             style={{
               display: 'flex',
-              marginTop: 10,
+              marginTop: 'auto',
               gap: 10,
             }}
           >
@@ -142,120 +153,112 @@ const ViewGig = () => {
     <Box style={{ paddingBottom: '2rem' }}>
       <Navbar />
       <Container style={{ marginTop: '2rem', maxWidth: '1200px' }}>
-        <Grid container spacing={2}>
-          <Grid item sm={7}>
-            <Typography variant='h4'>{gig.title}</Typography>
-            <Box
-              style={{
-                display: 'flex',
-                gap: 10,
-                alignItems: 'center',
-              }}
-            >
-              <Avatar src={gig.user.photo} />
-              <Typography variant='body2'>{gig.user.fullName}</Typography>
-              <Rating
-                name='half-rating'
-                defaultValue={gig.rating}
-                readOnly
-                precision={0.5}
-                size='small'
-              />
-              <Typography variant='h6' style={{ color: '#FFB400' }}>
-                {gig.rating}
-              </Typography>
-            </Box>
-            <Box style={{ marginBlock: '2rem' }}>
+        <Typography variant='h4'>{gig.title}</Typography>
+        <Box
+          style={{
+            display: 'flex',
+            gap: 10,
+            alignItems: 'center',
+          }}
+        >
+          <Avatar src={gig.user.photo} />
+          <Typography variant='body2'>{gig.user.fullName}</Typography>
+          <Rating
+            name='half-rating'
+            defaultValue={gig.rating}
+            readOnly
+            precision={0.5}
+            size='small'
+          />
+          <Typography variant='h6' style={{ color: '#FFB400' }}>
+            {gig.rating}
+          </Typography>
+        </Box>
+        <Grid
+          container
+          spacing={4}
+          style={{
+            marginTop: '1rem',
+          }}
+        >
+          <Grid item sm={8} style={{ height: 400 }}>
+            <Box>
               <Carousel navButtonsAlwaysVisible>
                 {items.map((item, i) => (
                   <Item key={i} item={item} />
                 ))}
               </Carousel>
             </Box>
-            <Typography variant='h5' style={{ marginBottom: '1rem' }}>
-              About this gig
-            </Typography>
-            <Typography variant='h5'>{gig.description}</Typography>
-            <Typography
-              variant='h5'
-              fontWeight='normal'
-              style={{ marginTop: '2rem', marginBottom: '1rem' }}
-            >
-              Reviews
-            </Typography>
-            <GigReview
-              review={{
-                user: {
-                  fullName: faker.name.findName(),
-                  photo: faker.internet.avatar(),
-                },
-                description: faker.random.words(10),
-                createdAt: new Date(),
-                rating: faker.datatype.number({
-                  min: 3,
-                  max: 5,
-                  precision: 0.1,
-                }),
-              }}
-            />
-            <GigReview
-              review={{
-                user: {
-                  fullName: faker.name.findName(),
-                  photo: faker.internet.avatar(),
-                },
-                description: faker.random.words(10),
-                createdAt: new Date(),
-                rating: faker.datatype.number({
-                  min: 3,
-                  max: 5,
-                  precision: 0.1,
-                }),
-              }}
-            />
-            <GigReview
-              review={{
-                user: {
-                  fullName: faker.name.findName(),
-                  photo: faker.internet.avatar(),
-                },
-                description: faker.random.words(10),
-                createdAt: new Date(),
-                rating: faker.datatype.number({
-                  min: 3,
-                  max: 5,
-                  precision: 0.1,
-                }),
-              }}
-            />
           </Grid>
           <Grid
             item
-            sm={5}
+            sm={4}
             style={{
-              border: '1px solid #ccc',
-              padding: 0,
               height: 400,
             }}
           >
-            <Tabs
-              value={packageTab}
-              onChange={(e, val) => setPackageTab(val)}
-              aria-label='gig packages'
-              indicatorColor=''
-              textColor='primary'
-              fullWidth
-              className={classes.Tabs}
+            <Box
+              style={{
+                border: '1px solid #ccc',
+                height: 300,
+              }}
             >
-              <Tab label='Basic' {...a11yProps(0)} />
-              <Tab label='Standard' {...a11yProps(1)} />
-              <Tab label='Premium' {...a11yProps(2)} />
-            </Tabs>
-            <TabPanel item={package1} value={packageTab} index={0}></TabPanel>
-            <TabPanel item={package2} value={packageTab} index={1}></TabPanel>
-            <TabPanel item={package3} value={packageTab} index={2}></TabPanel>
+              <Tabs
+                value={packageTab}
+                onChange={(e, val) => setPackageTab(val)}
+                aria-label='gig packages'
+                indicatorColor=''
+                textColor='primary'
+                // fullWidth
+                className={classes.Tabs}
+              >
+                <Tab label='Basic' {...a11yProps(0)} />
+                <Tab label='Standard' {...a11yProps(1)} />
+                <Tab label='Premium' {...a11yProps(2)} />
+              </Tabs>
+              <TabPanel item={package1} value={packageTab} index={0}></TabPanel>
+              <TabPanel item={package2} value={packageTab} index={1}></TabPanel>
+              <TabPanel item={package3} value={packageTab} index={2}></TabPanel>
+            </Box>
           </Grid>
         </Grid>
+        <Typography variant='h5' style={{ marginBottom: '1rem' }}>
+          About this gig
+        </Typography>
+        <Typography variant='body1'>{gig.description}</Typography>
+        <Box style={{ maxWidth: 500 }}>
+          <Typography
+            variant='h5'
+            fontWeight='normal'
+            style={{ marginTop: '2rem', marginBottom: '1rem' }}
+          >
+            Reviews
+          </Typography>
+          <Divider />
+          {Array(5)
+            .fill()
+            .map((el) => (
+              <React.Fragment key={faker.name.findName()}>
+                {' '}
+                <GigReview
+                  review={{
+                    user: {
+                      fullName: faker.name.findName(),
+                      photo: faker.internet.avatar(),
+                    },
+                    description: faker.random.words(10),
+                    createdAt: new Date(),
+                    rating: faker.datatype.number({
+                      min: 3,
+                      max: 5,
+                      precision: 0.1,
+                    }),
+                  }}
+                />
+                <Divider />
+              </React.Fragment>
+            ))}
+        </Box>
       </Container>
     </Box>
   );

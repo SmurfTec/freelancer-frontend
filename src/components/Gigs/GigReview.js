@@ -1,11 +1,10 @@
 import { Avatar, Box, Typography } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
-import faker from 'faker';
 import React from 'react';
 
 const GigReview = ({ review }) => {
   return (
-    <Box style={{ marginBottom: '2rem' }}>
+    <Box style={{ marginBottom: '2rem', marginTop: '1rem', marginLeft: 20 }}>
       <Box>
         <Avatar src={review.user.photo} />
         <Typography variant='body2'>{review.user.fullName}</Typography>

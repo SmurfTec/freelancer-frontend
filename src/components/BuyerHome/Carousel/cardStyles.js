@@ -7,7 +7,14 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
     '& .MuiCardContent-root': {
-      paddingTop: 15,
+      display: 'flex',
+      minHeight: 160,
+      /* padding-top: 10px; */
+      flexDirection: 'column',
+      paddingInline: 5,
+      justifyContent: 'space-between',
+      paddingBottom: 10,
+      minHeight: 170,
     },
   },
 }));

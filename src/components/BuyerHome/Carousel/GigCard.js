@@ -38,28 +38,32 @@ const CategoryCard = ({ gig, handleClick }) => {
         />
       </CardActionArea>
       <CardContent>
-        <Box
-          display='flex'
-          alignItems='center'
-          style={{
-            gap: 10,
-            marginBottom: '1rem',
-          }}
-        >
-          <Avatar src={user.photo} style={{ height: '30px', width: '30px' }} />
-          <Typography gutterBottom variant='body1' component='h2'>
-            {user.fullName}
+        <Box style={{}}>
+          <Box
+            display='flex'
+            alignItems='center'
+            style={{
+              gap: 10,
+              marginBottom: 10,
+            }}
+          >
+            <Avatar
+              src={user.photo}
+              style={{ height: '30px', width: '30px' }}
+            />
+            <Typography gutterBottom variant='body1' component='h2'>
+              {user.fullName}
+            </Typography>
+          </Box>
+          <Typography variant='body1' fontWeight='bold' component='body2'>
+            {title}
           </Typography>
         </Box>
-        <Typography variant='body1' fontWeight='bold' component='p'>
-          {title}
-          {/* {trimString(description, 40)}... */}
-          {/* {description?.slice(0, 30)}... */}
-        </Typography>
         <Box
           style={{
             display: 'flex',
             gap: 10,
+            alignItems: 'center',
           }}
         >
           <Rating
@@ -67,8 +71,9 @@ const CategoryCard = ({ gig, handleClick }) => {
             defaultValue={gig.rating}
             readOnly
             precision={0.5}
+            size='small'
           />
-          <Typography variant='h5' style={{ color: '#FFB400' }}>
+          <Typography variant='h6' style={{ color: '#FFB400' }}>
             {gig.rating}
           </Typography>
         </Box>

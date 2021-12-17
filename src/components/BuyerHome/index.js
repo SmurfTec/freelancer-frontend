@@ -202,18 +202,44 @@ const BuyerHome = () => {
             Post a Request
           </Button>
         </Grid>
-        <Grid item sm={10}>
-          <Box>
+        <Grid
+          item
+          sm={10}
+          style={{
+            padding: '30px 15px',
+            display: 'flex',
+            gap: '30px',
+            display: 'flex',
+            gap: '30px',
+            padding: '0',
+            paddingInline: '50px',
+            alignItems: 'center',
+          }}
+        >
+          <Box
+            style={{
+              flexBasis: '40%',
+            }}
+          >
             <Typography variant='h5'>
               Here's what you need to build your website
             </Typography>
           </Box>
-          <Box className={classes.carouselCard}>
+          <Box
+            style={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              gap: 20,
+            }}
+          >
+            <DesignCard />
             <DesignCard />
           </Box>
         </Grid>
       </Grid>
-      <Typography variant='h5'>Continue browsing</Typography>
+      <Typography variant='h5' style={{ marginTop: '2rem' }}>
+        Continue browsing
+      </Typography>
       <CarouselLayout>
         {gigs &&
           gigs.map((el) => (
@@ -222,6 +248,20 @@ const BuyerHome = () => {
             </div>
           ))}
       </CarouselLayout>
+      <Typography
+        variant='h5'
+        style={{ marginTop: '2rem', marginBottom: '1rem' }}
+      >
+        Most Popular Gigs
+      </Typography>
+      <Grid container spacing={2}>
+        {gigs &&
+          gigs.map((el) => (
+            <Grid item sm={2} key={el.value}>
+              <GigCard gig={el} handleClick={handleCatClick} />
+            </Grid>
+          ))}
+      </Grid>
     </Box>
   );
 };

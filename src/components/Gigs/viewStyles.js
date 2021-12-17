@@ -5,6 +5,8 @@ const styles = makeStyles((theme) => ({
     '& .MuiTab-root': {
       // paddingInline: 15,
       border: '1px solid #ccc',
+      flexGrow: 1,
+      minWidth: 'unset',
     },
     '& .Mui-selected': {
       backgroundColor: theme.palette.primary.main,

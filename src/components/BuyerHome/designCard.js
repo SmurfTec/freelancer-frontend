@@ -10,23 +10,26 @@ const DesignCard = ({ gig }) => {
   const classes = styles();
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Box
-          display='flex'
-          alignItems='center'
-          style={{
-            gap: 10,
-            marginBottom: '1rem',
-          }}
-        >
-          <Typography gutterBottom variant='body1' component='h2'>
-            Web Designing
-          </Typography>
-        </Box>
-      </CardContent>
-      {/* <CardActions></CardActions> */}
-    </Card>
+    <Box
+      style={{
+        gap: 10,
+        marginBottom: '1rem',
+        backgroundColor: '#fff',
+        border: '1px solid #000',
+        minWidth: 200,
+        textAlign: 'center',
+        display: 'flex',
+        /* align-items: center; */
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        minHeight: 150,
+        // background : `url$`
+      }}
+    >
+      <Typography gutterBottom variant='body1' component='h2'>
+        Web Designing
+      </Typography>
+    </Box>
   );
 };
 
