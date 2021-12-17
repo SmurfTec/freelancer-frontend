@@ -6,6 +6,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import ThemeConfig from 'theme';
 import BuyerHome from 'components/BuyerHome';
 import ViewGig from 'components/Gigs/ViewGig';
+import DevRequest from 'components/DevRequest';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path='/register' element={<Register />} />
         <Route path='/buyerhome' element={<BuyerHome />} />
         <Route path='/gigs/:id' element={<ViewGig />} />
+        <Route path='/devRequest/create' element={<DevRequest />} />
         <Route path='/' element={<LandingPage />} />
       </Routes>
     </ThemeConfig>
