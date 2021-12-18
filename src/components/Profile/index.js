@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Avatar,
   Box,
@@ -14,12 +14,14 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from 'components/common/Navbar';
 import EditIcon from '@material-ui/icons/Edit';
-import { userProfile, gigs } from 'data';
+import { user, gigs } from 'data';
 import GigCard from 'components/Gigs/GigCard';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import { Icon } from '@material-ui/core';
+import { AuthContext } from 'contexts/AuthContext';
+import Loading from 'components/common/Loading';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -72,6 +74,10 @@ const handleCreateGig = () => {
 
 const ModifyProfile = () => {
   const classes = styles();
+  const { user } = useContext(AuthContext);
+
+  if (!user) return <Loading noTitle />;
+
   return (
     <section>
       <Navbar />
@@ -94,13 +100,18 @@ const ModifyProfile = () => {
                 >
                   <Avatar
                     className={classes.avatarImg}
-                    alt={userProfile.fullName}
-                    src={userProfile.userImg}
+                    alt={user.fullName}
+                    src={
+                      user.photo ||
+                      `https://ui-avatars.com/api/?rounded=true&name=${user.fullName
+                        .split(' ')
+                        .join('+')}`
+                    }
                   />
                   <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant='h5'>{userProfile.fullName}</Typography>
+                    <Typography variant='h5'>{user.fullName}</Typography>
                     <Typography variant='subtitle1' color='textSecondary'>
-                      {userProfile.email}
+                      {user.email}
                     </Typography>
                   </Box>
                   <Box style={{ width: '80%' }}>
@@ -117,9 +128,7 @@ const ModifyProfile = () => {
                         From
                       </Typography>
                     </Box>
-                    <Typography variant='subtitle2'>
-                      {userProfile.country}
-                    </Typography>
+                    <Typography variant='body1'>{user.country}</Typography>
                   </Box>
                   <Box className={classes.MoreInfoBox}>
                     <Box className={classes.MoreInfoTitle}>
@@ -132,8 +141,8 @@ const ModifyProfile = () => {
                         Member Since
                       </Typography>
                     </Box>
-                    <Typography variant='subtitle2'>
-                      {new Date(userProfile.createdAt).toDateString()}
+                    <Typography variant='body1'>
+                      {new Date(user.createdAt).toDateString()}
                     </Typography>
                   </Box>
                 </Box>
@@ -145,9 +154,7 @@ const ModifyProfile = () => {
                   Description
                 </Typography>
                 <Box>
-                  <Typography variant='body1'>
-                    {userProfile.description}
-                  </Typography>
+                  <Typography variant='body1'>{user.description}</Typography>
                 </Box>
               </Box>
               <Box sx={{ mt: 4 }}>
@@ -158,12 +165,13 @@ const ModifyProfile = () => {
                   <Typography variant='h5'>Skills</Typography>
                   <Box sx={{ mt: 2 }}>
                     <Typography variant='body1'>
-                      {userProfile.skills &&
-                        userProfile.skills.map((us) => (
-                          <span>
-                            {us} <strong> | </strong>{' '}
-                          </span>
-                        ))}
+                      {user.skills.length > 0
+                        ? user.skills.map((us) => (
+                            <span>
+                              {us} <strong> | </strong>{' '}
+                            </span>
+                          ))
+                        : 'You dont have any skill yet !'}
                     </Typography>
                   </Box>
                 </Box>
@@ -172,7 +180,9 @@ const ModifyProfile = () => {
           </Grid>
           <Grid item xs={12} sm={8}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-              {gigs && gigs.map((g) => <GigCard {...g} />)}
+              {user.gigs.map((g) => (
+                <GigCard {...g} />
+              ))}
               <Card
                 style={{
                   width: 230,

@@ -4,7 +4,7 @@ import Login from 'components/Login';
 import Register from 'components/Register';
 import LandingPage from 'components/LandingPage';
 import ThemeConfig from 'theme';
-import ModifyProfile from 'components/Profile/ModifyProfile';
+import Profile from 'components/Profile';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from 'contexts/AuthContext';
 import PublicRoute from 'Routers/PublicRoute';
@@ -28,7 +28,7 @@ const App = () => {
       {/* <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <ProtechtedRoute path='/profile' element={<ModifyProfile />} />
+        <ProtechtedRoute path='/profile' element={<Profile />} />
         <PublicRoute path='/' element={<LandingPage />} />
       </Routes> */}
     </ThemeConfig>

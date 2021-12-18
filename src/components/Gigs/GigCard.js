@@ -36,7 +36,7 @@ const styles = makeStyles((theme) => ({
 
 const GigCard = (gig) => {
   const classes = styles();
-  const { id, title, images, price } = gig;
+  const { id, title, images, price, packages } = gig;
   console.log(`images`, images);
 
   const handleGigModify = (e) => {
@@ -69,7 +69,8 @@ const GigCard = (gig) => {
         <CardActions>
           <Box sx={{ paddingInline: 2, display: 'flex' }}>
             <Typography variant='body2' color='primary' align='right'>
-              STARTING AT <span className={classes.price}>{price}</span>
+              STARTING AT{' '}
+              <span className={classes.price}>{packages[0].price}</span>
             </Typography>
           </Box>
         </CardActions>

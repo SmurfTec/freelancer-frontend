@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Grid, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
 import ItemsCarousel from 'react-items-carousel';
 

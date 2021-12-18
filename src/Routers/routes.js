@@ -1,7 +1,7 @@
 import Loading from 'components/common/Loading';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
-import ModifyProfile from 'components/Profile/ModifyProfile';
+import ModifyProfile from 'components/Profile';
 import Register from 'components/Register';
 import { Navigate } from 'react-router-dom';
 

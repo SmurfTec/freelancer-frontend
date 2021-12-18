@@ -1,6 +1,8 @@
-import { Box, Container, Typography } from '@material-ui/core';
+import { Box, Container, makeStyles, Typography } from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
 import React from 'react';
+
+const useStyles = makeStyles((theme) => ({}));
 
 const Index = () => {
   const classes = useStyles();
