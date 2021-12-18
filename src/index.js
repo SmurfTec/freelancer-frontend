@@ -7,11 +7,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-      <ToastContainer position='top-left' />
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <App />
+    <ToastContainer position='top-left' />
+  </BrowserRouter>,
   document.getElementById('root')
 );

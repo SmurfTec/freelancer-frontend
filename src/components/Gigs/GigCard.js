@@ -29,13 +29,15 @@ const styles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     color: '#fff',
     zIndex: 1,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
 }));
 
 const GigCard = (gig) => {
   const classes = styles();
-  const { id, title, images, price } = gig;
-  console.log(`images`, images);
+  const { title, images, price } = gig;
 
   const handleGigModify = (e) => {
     e.stopPropagation();

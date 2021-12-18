@@ -19,6 +19,7 @@ import Navbar from 'components/common/Navbar';
 import EditIcon from '@material-ui/icons/Edit';
 import { userProfile, gigs } from 'data';
 import GigCard from 'components/Gigs/GigCard';
+import { NavLink } from 'react-router-dom';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -53,19 +54,21 @@ const handleClick = () => {
   //    history.push(`/tours/details/${_id}`);
 };
 
-const ModifyProfile = () => {
+const ViewProfile = () => {
   const classes = styles();
   return (
     <section>
-      <Navbar />
+      <Navbar user='user' />
       <Container className={classes.container}>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>
             <Paper className={classes.paper}>
               <Box className={classes.userBox}>
-                <IconButton aria-label='delete' className={classes.editBtn}>
-                  <EditIcon />
-                </IconButton>
+                <NavLink to='/profile/create'>
+                  <IconButton aria-label='delete' className={classes.editBtn}>
+                    <EditIcon color='primary' />
+                  </IconButton>
+                </NavLink>
                 <Box
                   sx={{
                     width: '100%',
@@ -86,7 +89,7 @@ const ModifyProfile = () => {
                       {userProfile.email}
                     </Typography>
                     <Typography variant='subtitle2'>
-                      ( {userProfile.country} )
+                      ( {userProfile.country.label} )
                     </Typography>
                   </Box>
                 </Box>
@@ -112,7 +115,7 @@ const ModifyProfile = () => {
                     <Typography variant='body1'>
                       {userProfile.skills &&
                         userProfile.skills.map((us) => (
-                          <span>
+                          <span key={us}>
                             {us} <strong> | </strong>{' '}
                           </span>
                         ))}
@@ -138,7 +141,7 @@ const ModifyProfile = () => {
               </Box>
 
               <Box sx={{ mt: 4, display: 'flex', flexWrap: 'wrap' }}>
-                {gigs && gigs.map((g) => <GigCard {...g} />)}
+                {gigs && gigs.map((g) => <GigCard {...g} key={g.id} />)}
               </Box>
             </Paper>
           </Grid>
@@ -148,4 +151,4 @@ const ModifyProfile = () => {
   );
 };
 
-export default ModifyProfile;
+export default ViewProfile;
