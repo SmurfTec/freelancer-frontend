@@ -20,6 +20,7 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import { Icon } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -70,19 +71,21 @@ const handleCreateGig = () => {
   //    history.push(`/gigs/create`);
 };
 
-const ModifyProfile = () => {
+const ViewProfile = () => {
   const classes = styles();
   return (
     <section>
-      <Navbar />
+      <Navbar user='user' />
       <Container className={classes.container}>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>
             <Paper className={classes.paper}>
               <Box className={classes.userBox}>
-                <IconButton aria-label='delete' className={classes.editBtn}>
-                  <EditIcon />
-                </IconButton>
+                <NavLink to='/profile/create'>
+                  <IconButton aria-label='delete' className={classes.editBtn}>
+                    <EditIcon color='primary' />
+                  </IconButton>
+                </NavLink>
                 <Box
                   sx={{
                     width: '100%',
@@ -160,7 +163,7 @@ const ModifyProfile = () => {
                     <Typography variant='body1'>
                       {userProfile.skills &&
                         userProfile.skills.map((us) => (
-                          <span>
+                          <span key={us}>
                             {us} <strong> | </strong>{' '}
                           </span>
                         ))}
@@ -224,4 +227,4 @@ const ModifyProfile = () => {
   );
 };
 
-export default ModifyProfile;
+export default ViewProfile;
