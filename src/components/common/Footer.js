@@ -8,7 +8,7 @@ const Footer = () => {
   const classes = styles();
   return (
     <section className={classes.footer}>
-      <Logo variant='h3' color='light' />
+      <Logo variant='h3' color='light ' />
       <div>Copyright © 2022 Freelancer Technology Pty Limited</div>
     </section>
   );
