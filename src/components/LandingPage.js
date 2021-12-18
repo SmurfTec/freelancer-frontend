@@ -9,7 +9,7 @@ import { Box, Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import CircleIcon from '@material-ui/icons/CheckCircleOutline';
 import img from 'assets/serviceDesc.jpg';
-import { sub_cat } from 'data';
+import { categories } from 'data';
 import SubCategoryCard from './common/SubCategoryCard';
 import { Container } from '@material-ui/core';
 import Footer from './common/Footer';
@@ -100,9 +100,9 @@ const LandingPage = () => {
         <Typography variant='h4'>Explore the Marketplace</Typography>
 
         <ul className={classes.catContainer}>
-          {sub_cat &&
-            sub_cat.map((c) => (
-              <li>
+          {categories &&
+            categories.map((c) => (
+              <li key={c.id}>
                 <SubCategoryCard {...c} key={c.id} />
               </li>
             ))}

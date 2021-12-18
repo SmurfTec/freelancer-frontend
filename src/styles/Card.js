@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   cardMedia: {
-    height: 460,
+    height: 330,
     position: 'relative',
   },
 

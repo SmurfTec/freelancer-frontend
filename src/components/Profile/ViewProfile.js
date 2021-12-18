@@ -20,9 +20,12 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import { Icon } from '@material-ui/core';
+<<<<<<< HEAD:src/components/Profile/index.js
 import { AuthContext } from 'contexts/AuthContext';
 import Loading from 'components/common/Loading';
+=======
 import { NavLink } from 'react-router-dom';
+>>>>>>> master:src/components/Profile/ViewProfile.js
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -168,12 +171,22 @@ const ViewProfile = () => {
                   <Typography variant='h5'>Skills</Typography>
                   <Box sx={{ mt: 2 }}>
                     <Typography variant='body1'>
-                      {user.skills &&
-                        user.skills.map((us) => (
+<<<<<<< HEAD:src/components/Profile/index.js
+                      {user.skills.length > 0
+                        ? user.skills.map((us) => (
+                            <span>
+                              {us} <strong> | </strong>{' '}
+                            </span>
+                          ))
+                        : 'You dont have any skill yet !'}
+=======
+                      {userProfile.skills &&
+                        userProfile.skills.map((us) => (
                           <span key={us}>
                             {us} <strong> | </strong>{' '}
                           </span>
                         ))}
+>>>>>>> master:src/components/Profile/ViewProfile.js
                     </Typography>
                   </Box>
                 </Box>

@@ -29,6 +29,9 @@ const styles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     color: '#fff',
     zIndex: 1,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+    },
     flexGrow: 1,
     padding: 5,
   },
@@ -37,7 +40,6 @@ const styles = makeStyles((theme) => ({
 const GigCard = (gig) => {
   const classes = styles();
   const { id, title, images, price, packages } = gig;
-  console.log(`images`, images);
 
   const handleGigModify = (e) => {
     e.stopPropagation();

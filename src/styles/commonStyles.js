@@ -87,6 +87,15 @@ const styles = makeStyles((theme) => ({
   },
 
   // ^ Some common styles
+  paper: {
+    paddingInline: theme.spacing(3),
+    borderRadius: theme.spacing(2),
+    paddingBottom: theme.spacing(4),
+  },
+  container: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(4),
+  },
   marginBet: {
     // marginInline: theme.spacing(3),
     marginBlock: 75,

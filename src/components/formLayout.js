@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Grid, Box, Card } from '@material-ui/core';
-import SiteLogo from 'components/common/SiteLogo';
 import { useStyles } from 'styles/FormLayoutStyles';
+import Logo from './common/Logo';
 
 const FormLayout = ({ children }) => {
   const classes = useStyles();
@@ -19,7 +19,7 @@ const FormLayout = ({ children }) => {
       <Card className={classes.formContent}>
         <Grid container>
           <Grid item sx={{ mb: 5 }} colspacing={5} xs={12}>
-            <SiteLogo w={130} h={80} />
+            <Logo variant='h3' color='textPrimary' />
           </Grid>
         </Grid>
         {children}

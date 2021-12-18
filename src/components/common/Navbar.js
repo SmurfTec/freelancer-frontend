@@ -1,21 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 import useStyles from 'styles/NavBarStyles';
 import { Box, Button } from '@material-ui/core';
-import { useNavigate, NavLink } from 'react-router-dom';
-import SiteLogo from 'components/common/SiteLogo';
-// import logo from 'assets/logo.jpg';
-// import { AuthContext } from 'contexts/AuthContext';
-import theme from 'theme';
+import { useNavigate } from 'react-router-dom';
+import AccountPopover from './AccountPopover';
+import Logo from './Logo';
 
-const Navbar = () => {
+const Navbar = (props) => {
   const classes = useStyles();
 
   const navigate = useNavigate();
@@ -28,9 +25,6 @@ const Navbar = () => {
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-  };
-  const handleSearch = (searchValue) => {
-    console.log(`searchValue`, searchValue);
   };
 
   const handleMenuClose = () => {
@@ -70,15 +64,21 @@ const Navbar = () => {
       onClose={handleMobileMenuClose}
       className={classes.MobileMenu}
     >
-      <MenuItem>
-        <Button
-          variant='contained'
-          className={classes.RegisterBtn}
-          onClick={() => navigate('/login')}
-        >
-          Login / Register
-        </Button>
-      </MenuItem>
+      {props.user ? (
+        <MenuItem>
+          <AccountPopover />
+        </MenuItem>
+      ) : (
+        <MenuItem>
+          <Button
+            variant='contained'
+            className={classes.RegisterBtn}
+            onClick={() => navigate('/login')}
+          >
+            Login / Register
+          </Button>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -86,7 +86,7 @@ const Navbar = () => {
     <div className={`${classes.root}`}>
       <AppBar position='fixed' className={classes.Appbar}>
         <Toolbar>
-          <SiteLogo w={100} h={60} />
+          <Logo variant={'h4'} color='textPrimary' />
 
           <div
             style={{
@@ -104,17 +104,7 @@ const Navbar = () => {
               alignItems='center'
               sx={{ marginLeft: 'auto' }}
             >
-              <Box
-                style={{
-                  display: 'flex',
-                  flexGrow: 1,
-                  justifyContent: 'space-around',
-                  flexBasis: '25%',
-                  maxWidth: 300,
-                  minWidth: 200,
-                }}
-              >
-                {/* {true && (
+              {/* {true && (
                   <Typography
                     variant='subtitle1'
                     style={{
@@ -139,33 +129,27 @@ const Navbar = () => {
                     </NavLink>
                   </Typography>
                 )} */}
-                {false ? (
+              {props.user ? (
+                <AccountPopover />
+              ) : (
+                <Box
+                  display='flex'
+                  justifyContent='space-around'
+                  maxWidth='300px'
+                  minWidth='200px'
+                >
+                  <Button variant='outlined' onClick={() => navigate('/login')}>
+                    Login
+                  </Button>
                   <Button
                     variant='contained'
                     className={classes.RegisterBtn}
-                    // onClick={logoutUser}
+                    onClick={() => navigate('/register')}
                   >
-                    Logout
+                    Register
                   </Button>
-                ) : (
-                  <>
-                    <Button
-                      variant='outlined'
-                      //   className={classes.RegisterBtn}
-                      onClick={() => navigate('/login')}
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      variant='contained'
-                      className={classes.RegisterBtn}
-                      onClick={() => navigate('/register')}
-                    >
-                      Register
-                    </Button>
-                  </>
-                )}
-              </Box>
+                </Box>
+              )}
             </Box>
           </div>
           <div className={classes.sectionMobile}>

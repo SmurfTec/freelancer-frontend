@@ -5,6 +5,7 @@ const useManyInputs = (initialState) => {
 
   //* it will take all the inputs type='text'/'number'
   const handleTxtChange = (e) => {
+    console.log(`e.target.name`, e.target.name);
     setState((st) => ({ ...st, [e.target.name]: e.target.value }));
   };
 
