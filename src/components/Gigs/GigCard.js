@@ -14,7 +14,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 const styles = makeStyles((theme) => ({
   gigCard: {
-    maxWidth: 250,
+    width: 230,
     position: 'relative',
   },
   price: {
@@ -32,6 +32,8 @@ const styles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.primary.main,
     },
+    flexGrow: 1,
+    padding: 5,
   },
 }));
 
@@ -49,6 +51,7 @@ const GigCard = (gig) => {
         aria-haspopup='true'
         onClick={handleGigModify}
         className={classes.modifyGig}
+        size='small'
       >
         <EditIcon />
       </IconButton>
@@ -67,7 +70,7 @@ const GigCard = (gig) => {
         </CardContent>
         <CardActions>
           <Box sx={{ paddingInline: 2, display: 'flex' }}>
-            <Typography variant='body1' color='primary' align='right'>
+            <Typography variant='body2' color='primary' align='right'>
               STARTING AT <span className={classes.price}>{price}</span>
             </Typography>
           </Box>

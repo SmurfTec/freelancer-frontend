@@ -100,12 +100,29 @@ export const userProfile = {
     'Team Work',
     'Creativity',
   ],
+  createdAt: new Date(),
 };
 
 export const gigs = [
   {
     id: 11,
     title: 'I develop or fix your mern , react or node js ',
+    category: 'Programming',
+    subCategory: 'Web Programming',
+    images: gigImg,
+    price: '$44',
+  },
+  {
+    id: 12,
+    title: 'I will fix node js applications',
+    category: 'Programming',
+    subCategory: 'Web Programming',
+    images: gigImg,
+    price: '$44',
+  },
+  {
+    id: 13,
+    title: 'I Fix React Js Applications',
     category: 'Programming',
     subCategory: 'Web Programming',
     images: gigImg,
