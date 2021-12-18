@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Grid, Typography, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 // import { useForm, FormProvider } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import { Alert } from 'components/common/Alert';
 import FormLayout from 'components/formLayout';
 import useManyInputs from 'hooks/useManyInputs';
 import { TextField } from '@material-ui/core';
 import styles from 'styles/commonStyles';
+import { AuthContext } from 'contexts/AuthContext';
+import axios from 'axios';
+import { API_BASE_URL, handleCatch } from 'utils/makeReq';
 const Login = () => {
+  const { token, user, signInUser } = useContext(AuthContext);
   const classes = styles();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const initialState = {
     email: '',
     password: '',
@@ -27,16 +34,32 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
-  const onFormSubmit = (e) => {
+  let redirect = location.search ? location.search.split('=')[1] : '/';
+
+  useEffect(() => {
+    // console.log(`redirect`, redirect);
+
+    if (user) {
+      navigate(redirect);
+    }
+  }, [user, navigate, redirect]);
+
+  const onFormSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      console.log(`inputState`, inputState);
+      const res = await axios.post(`${API_BASE_URL}/auth/login/freelancer`, {
+        ...inputState,
+      });
+      console.log(`res`, res);
+
+      signInUser(res.data.token, res.data.user);
+
       resetState();
     } catch (error) {
-      setError('Failed to login\n', error);
+      handleCatch(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -97,11 +120,11 @@ const Login = () => {
                 )}
               </Button>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Link to='/forgotpassword' variant='body2'>
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
           </Grid>
         </form>
 

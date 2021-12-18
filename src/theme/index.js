@@ -11,6 +11,7 @@ const Theme = ({ children }) => {
     return {
       palette: {
         primary: {
+          // main: '#1ab6bfe6',
           main: '#00AB55',
         },
         text: {
