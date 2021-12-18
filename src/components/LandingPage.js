@@ -14,6 +14,17 @@ import SubCategoryCard from './common/SubCategoryCard';
 import { Container } from '@material-ui/core';
 import Footer from './common/Footer';
 
+import img1 from 'assets/airbus-logo2.svg';
+import img2 from 'assets/amazon_logo2.svg';
+import img3 from 'assets/deloitte-logo2.svg';
+import img4 from 'assets/facebook-corporate-logo2.svg';
+import img5 from 'assets/fujitsu-logo.svg';
+import img6 from 'assets/google-logo.svg';
+import img7 from 'assets/ibm-logo2.svg';
+import { v4 } from 'uuid';
+
+const supporters = [img1, img2, img3, img4, img5, img6, img7];
+
 const LandingPage = () => {
   const classes = styles();
   const handleCatClick = () => {};
@@ -22,6 +33,17 @@ const LandingPage = () => {
     <React.Fragment>
       <NavBar />
       <Banner />
+      <Box
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}
+      >
+        {supporters.map((el) => (
+          <img src={el} alt='partner' key={v4()} />
+        ))}
+      </Box>
 
       <Container className={classes.marginBet}>
         <Typography variant='h4'>Popular Professional Services</Typography>
