@@ -48,9 +48,8 @@ export const AuthProvider = ({ children }) => {
       // console.log(`res`, res);
 
       setUser(res.user);
-      toast.success('Profile Updates Successfully !');
+      toast.success('Profile Updated Successfully !');
     } catch (err) {
-      setState(user);
       handleCatch(err);
     }
   };
@@ -71,6 +70,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
 
+    console.log('logging out');
     localStorage.removeItem(LOCALSTORAGE_TOKEN_KEY);
   };
 

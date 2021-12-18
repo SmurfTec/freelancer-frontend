@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { alpha } from '@material-ui/core/styles';
 import {
   Button,
@@ -12,9 +12,10 @@ import {
 import MenuPopover from './MenuPopover';
 // import { useAuth } from 'Context/AuthContext';
 import { toast } from 'react-toastify';
-import { userProfile } from 'data';
+import { AuthContext } from 'contexts/AuthContext';
 
 export default function AccountPopover() {
+  const { user } = useContext(AuthContext);
   const anchorRef = useRef(null);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -54,7 +55,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={userProfile.photo} alt='User' />
+        <Avatar src={user.photo} alt='User' />
       </IconButton>
 
       <MenuPopover
@@ -65,7 +66,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant='subtitle1' noWrap>
-            {userProfile.email}
+            {user.fullName.toUpperCase()}
           </Typography>
         </Box>
         <Divider sx={{ my: 1 }} />
@@ -74,7 +75,8 @@ export default function AccountPopover() {
             fullWidth
             color='primary'
             variant='outlined'
-            onClick={handleLogout}
+            component={Link}
+            to='/logout'
           >
             Logout
           </Button>

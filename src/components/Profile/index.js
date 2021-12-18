@@ -14,7 +14,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from 'components/common/Navbar';
 import EditIcon from '@material-ui/icons/Edit';
-import { user, gigs } from 'data';
+import { user, gigs, months } from 'data';
 import GigCard from 'components/Gigs/GigCard';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
@@ -145,7 +145,8 @@ const ViewProfile = () => {
                       </Typography>
                     </Box>
                     <Typography variant='body1'>
-                      {new Date(user.createdAt).toDateString()}
+                      {months[new Date(user.createdAt).getMonth()]}{' '}
+                      {new Date(user.createdAt).getFullYear()}
                     </Typography>
                   </Box>
                 </Box>
@@ -157,7 +158,7 @@ const ViewProfile = () => {
                   Description
                 </Typography>
                 <Box>
-                  <Typography variant='body1'>{user.description}</Typography>
+                  <Typography variant='body1'>{user.about}</Typography>
                 </Box>
               </Box>
               <Box sx={{ mt: 4 }}>
@@ -168,12 +169,13 @@ const ViewProfile = () => {
                   <Typography variant='h5'>Skills</Typography>
                   <Box sx={{ mt: 2 }}>
                     <Typography variant='body1'>
-                      {user.skills &&
-                        user.skills.map((us) => (
-                          <span key={us}>
-                            {us} <strong> | </strong>{' '}
-                          </span>
-                        ))}
+                      {user.skills.length > 0
+                        ? user.skills.map((us) => (
+                            <span key={us}>
+                              {us} <strong> | </strong>{' '}
+                            </span>
+                          ))
+                        : 'You dont have any skills yet!'}
                     </Typography>
                   </Box>
                 </Box>
