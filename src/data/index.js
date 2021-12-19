@@ -25,6 +25,16 @@ export const services = [
     value: 'data-entry',
     desc: 'Learn the business',
   },
+  {
+    label: 'Data Entry',
+    value: 'data-entry',
+    desc: 'Learn the business',
+  },
+  {
+    label: 'Data Entry',
+    value: 'data-entry',
+    desc: 'Learn the business',
+  },
 ];
 
 export const categories = [
