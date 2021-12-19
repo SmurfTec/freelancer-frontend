@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Container,
   Paper,
@@ -7,6 +7,7 @@ import {
   Avatar,
   TextField,
   Chip,
+  Button,
 } from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +15,10 @@ import styles from 'styles/commonStyles';
 import { userProfile, countries } from 'data';
 import useManyInputs from 'hooks/useManyInputs';
 import { Autocomplete } from '@material-ui/lab';
+import { AuthContext } from 'contexts/AuthContext';
+import { Save } from '@material-ui/icons';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -38,6 +43,18 @@ const CreateProfile = () => {
   const classes = styles();
   const classes_s = useStyles();
 
+  const { user, updateMe } = useContext(AuthContext);
+
+  const initialState = {
+    fullName: '',
+    photo: '',
+    email: '',
+    country: countries[0],
+    about: '',
+    skills: [],
+    createdAt: new Date(),
+  };
+
   const [
     state,
     handleTxtChange,
@@ -45,18 +62,18 @@ const CreateProfile = () => {
     changeInput,
     resetState,
     setState,
-  ] = useManyInputs(userProfile);
+  ] = useManyInputs(initialState);
+
+  useEffect(() => {
+    if (user) setState(user);
+  }, [user]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    updateMe(state);
+
     console.log(`state`, state);
   };
-
-  const chk = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-  ];
 
   const handleCountryChange = (e, value) => {
     changeInput('country', value);
@@ -65,6 +82,50 @@ const CreateProfile = () => {
   const handleSkills = (e, newValue) => {
     const arr = new Set(newValue);
     changeInput('skills', [...arr]);
+  };
+
+  const handleImage = async (e) => {
+    const selectedFile = e.target.files[0];
+    const fileType = ['image/'];
+    try {
+      console.log(`selectedFile.type`, selectedFile.type);
+      if (selectedFile && selectedFile.type.includes(fileType)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = async (e) => {
+          // console.log(`result onLoadEnd`, e.target.result);
+          const file = e.target.result;
+
+          // TODO  Delete Image from cloudinary if it exists on this user
+
+          // // * 1 Upload Image on Cloudinary
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append(
+            'upload_preset',
+            process.env.REACT_APP_CLOUDINARY_PRESET
+          );
+
+          const res = await axios.post(
+            `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+            formData
+          );
+          const uploadedImage = res.data.url;
+          // console.log(`res`, res);
+
+          // console.log(`resData`, resData);
+
+          changeInput('photo', uploadedImage);
+        };
+      } else {
+        toast.error('Only Image files are acceptable !');
+      }
+    } catch (err) {
+      toast(
+        err?.response?.data?.message || err.message || 'Something Went Wrong'
+      );
+      // console.log(`err`, err);
+    }
   };
 
   return (
@@ -79,19 +140,30 @@ const CreateProfile = () => {
           </Box>
           <form onSubmit={handleFormSubmit}>
             <Box className={classes_s.box}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                }}
-              >
-                <Avatar
-                  className={classes_s.avatarImg}
-                  alt={state.fullName}
-                  src={state.photo}
-                />
-              </Box>
+              <input
+                accept='image/*'
+                style={{ display: 'none' }}
+                id='contained-button-file'
+                onChange={handleImage}
+                type='file'
+                name='photo'
+              />
+              <label htmlFor='contained-button-file'>
+                {' '}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Avatar
+                    className={classes_s.avatarImg}
+                    alt={state.fullName}
+                    src={state.photo}
+                  />
+                </Box>
+              </label>{' '}
               <TextField
                 name='fullName'
                 value={state.fullName}
@@ -110,16 +182,15 @@ const CreateProfile = () => {
                 type='email'
               />
               <TextField
-                name='description'
-                value={state.description}
-                label='DESCRIPTION'
+                name='about'
+                value={state.about}
+                label='About'
                 multiline
                 rows={6}
                 onChange={handleTxtChange}
                 variant='outlined'
                 fullWidth
               />
-
               <Autocomplete
                 options={countries}
                 getOptionLabel={(option) => option}
@@ -132,7 +203,7 @@ const CreateProfile = () => {
                     {...params}
                     label='SELECT COUNTRY'
                     variant='outlined'
-                    InputProps={{ ...params.InputProps, type: 'search' }}
+                    InputProps={{ ...params.InputProps }}
                   />
                 )}
               />
@@ -171,6 +242,19 @@ const CreateProfile = () => {
                   />
                 )}
               />
+            </Box>
+            <Box textAlign='right'>
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                endIcon={<Save />}
+                style={{
+                  marginTop: '1rem',
+                }}
+              >
+                Save
+              </Button>
             </Box>
           </form>
         </Paper>

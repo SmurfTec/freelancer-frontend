@@ -50,7 +50,7 @@ const styles = makeStyles((theme) => ({
 
   bannerImg: {
     height: 550,
-    marginBottom: theme.spacing(5),
+    marginBottom: theme.spacing(2),
     backgroundImage: `url(${img})`,
   },
 

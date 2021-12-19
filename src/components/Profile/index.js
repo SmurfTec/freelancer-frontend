@@ -14,18 +14,15 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from 'components/common/Navbar';
 import EditIcon from '@material-ui/icons/Edit';
-import { user, gigs } from 'data';
+import { user, gigs, months } from 'data';
 import GigCard from 'components/Gigs/GigCard';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import { Icon } from '@material-ui/core';
-<<<<<<< HEAD:src/components/Profile/index.js
 import { AuthContext } from 'contexts/AuthContext';
 import Loading from 'components/common/Loading';
-=======
 import { NavLink } from 'react-router-dom';
->>>>>>> master:src/components/Profile/ViewProfile.js
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -148,7 +145,8 @@ const ViewProfile = () => {
                       </Typography>
                     </Box>
                     <Typography variant='body1'>
-                      {new Date(user.createdAt).toDateString()}
+                      {months[new Date(user.createdAt).getMonth()]}{' '}
+                      {new Date(user.createdAt).getFullYear()}
                     </Typography>
                   </Box>
                 </Box>
@@ -160,7 +158,7 @@ const ViewProfile = () => {
                   Description
                 </Typography>
                 <Box>
-                  <Typography variant='body1'>{user.description}</Typography>
+                  <Typography variant='body1'>{user.about}</Typography>
                 </Box>
               </Box>
               <Box sx={{ mt: 4 }}>
@@ -171,22 +169,13 @@ const ViewProfile = () => {
                   <Typography variant='h5'>Skills</Typography>
                   <Box sx={{ mt: 2 }}>
                     <Typography variant='body1'>
-<<<<<<< HEAD:src/components/Profile/index.js
                       {user.skills.length > 0
                         ? user.skills.map((us) => (
-                            <span>
+                            <span key={us}>
                               {us} <strong> | </strong>{' '}
                             </span>
                           ))
-                        : 'You dont have any skill yet !'}
-=======
-                      {userProfile.skills &&
-                        userProfile.skills.map((us) => (
-                          <span key={us}>
-                            {us} <strong> | </strong>{' '}
-                          </span>
-                        ))}
->>>>>>> master:src/components/Profile/ViewProfile.js
+                        : 'You dont have any skills yet!'}
                     </Typography>
                   </Box>
                 </Box>

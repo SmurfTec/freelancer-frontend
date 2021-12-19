@@ -6,28 +6,28 @@ export const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 1800 },
-    items: 5,
+    items: 6,
     slidesToSlide: 3,
   },
   Largedesktop: {
-    breakpoint: { max: 1799, min: 1025 },
-    items: 5,
+    breakpoint: { max: 1799, min: 1200 },
+    items: 6,
     slidesToSlide: 2,
   },
   desktop: {
-    breakpoint: { max: 1024, min: 992 },
+    breakpoint: { max: 1200, min: 992 },
+    items: 6,
+    slidesToSlide: 3, //
+  },
+  tablet: {
+    breakpoint: { max: 992, min: 768 },
     items: 4,
     slidesToSlide: 1, //
   },
-  // tablet: {
-  //   breakpoint: { max: 992, min: 768 },
-  //   items: 4,
-  //   slidesToSlide: 1, //
-  // },
-  // smTablet: {
-  //   breakpoint: { max: 785, min: 576 },
-  //   items: 3,
-  // },
+  smTablet: {
+    breakpoint: { max: 785, min: 576 },
+    items: 4,
+  },
   smMobile: {
     breakpoint: { max: 576, min: 0 },
     items: 1,
@@ -40,9 +40,9 @@ function CarouselLayout({ children, deviceType }) {
     swipeable: true,
     draggable: true,
     showDots: false,
-    responsive: responsive,
+    // responsive: responsive,
     ssr: false, // means to render carousel on server-side.
-    infinite: true,
+    infinite: false,
     //   autoPlay: props.deviceType !== 'mobile' ? true : false,
     //   autoPlaySpeed: 3000,
     //   autoPlay: false,
