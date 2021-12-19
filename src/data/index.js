@@ -395,3 +395,24 @@ export const countries = [
   'Zimbabwe',
   'Åland Islands',
 ];
+
+export const gigTableData = [
+  {
+    title: 'I develop or fix your mern , react or node js ',
+    img: gigImg,
+    impressions: 20,
+    orders: '0',
+  },
+  {
+    title: 'I will fix node js applications ',
+    img: gigImg,
+    impressions: 10,
+    orders: '0',
+  },
+  {
+    title: 'I Fix React Js Applications',
+    img: gigImg,
+    impressions: 0,
+    orders: '0',
+  },
+];
