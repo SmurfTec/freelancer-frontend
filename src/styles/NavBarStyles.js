@@ -1,4 +1,6 @@
 import { makeStyles } from '@material-ui/core';
+import { styled } from '@material-ui/core/styles';
+import { NavLink as Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -25,9 +27,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     color: '#000',
     cursor: 'pointer',
-    // fontWeight: 700,
     textDecoration: 'none',
-    fontSize: 17,
+    '& a': {
+      color: theme.palette.text.primary,
+    },
     '&:hover': {
       // borderBottom: '2px solid #B033fa',
       color: 'deepskyblue',
@@ -70,6 +73,24 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: 'none',
     },
   },
+  navLink: {
+    '&.active': {
+      color: theme.palette.primary.main,
+    },
+  },
 }));
 
 export default useStyles;
+
+// export const NavLink = styled(({ theme }) => ({
+//   color: theme.palette.primary.main,
+//   display: 'flex',
+//   alignItems: 'center',
+//   textDecoration: 'none',
+//   padding: '0 1rem',
+//   height: '100%',
+//   cursor: 'pointer',
+//   // '&.active': {
+//   //   color: '#15cdfc',
+//   // },
+// }));

@@ -60,7 +60,7 @@ const GigCard = (gig) => {
           component='img'
           alt={title}
           height='170'
-          image={images}
+          image={images[0]}
           title={title}
         />
         <CardContent>
