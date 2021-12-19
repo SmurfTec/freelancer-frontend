@@ -126,7 +126,7 @@ const ViewProfile = () => {
                       <Typography
                         variant='subtitle1'
                         component='p'
-                        fontweight='normal'
+                        fontWeight='normal'
                       >
                         From
                       </Typography>
@@ -139,7 +139,7 @@ const ViewProfile = () => {
                       <Typography
                         variant='subtitle1'
                         component='p'
-                        fontweight='normal'
+                        fontWeight='normal'
                       >
                         Member Since
                       </Typography>
@@ -185,7 +185,7 @@ const ViewProfile = () => {
           <Grid item xs={12} sm={8}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
               {user.gigs.map((g) => (
-                <GigCard {...g} />
+                <GigCard {...g} key={g._id} />
               ))}
               {user.gigs.length < 5 && (
                 <Card

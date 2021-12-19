@@ -1,27 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
-
 import useStyles from 'styles/NavBarStyles';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import AccountPopover from './AccountPopover';
 import Logo from './Logo';
+import { AuthContext } from 'contexts/AuthContext';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = (props) => {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  //   const { logoutUser, user } = useContext(AuthContext);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -35,6 +35,8 @@ const Navbar = (props) => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleSwitchUser = () => {};
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -64,10 +66,48 @@ const Navbar = (props) => {
       onClose={handleMobileMenuClose}
       className={classes.MobileMenu}
     >
-      {props.user ? (
-        <MenuItem>
-          <AccountPopover />
-        </MenuItem>
+      {user ? (
+        <>
+          <MenuItem>
+            <AccountPopover />
+          </MenuItem>
+          <MenuItem>
+            <Typography variant='subtitle2' className={classes.NavItem}>
+              <NavLink to='/dashboard'>Dashboard</NavLink>
+            </Typography>
+          </MenuItem>
+
+          <MenuItem>
+            <Typography variant='subtitle2' className={classes.NavItem}>
+              <NavLink to='/gigs'>Gigs</NavLink>
+            </Typography>
+          </MenuItem>
+
+          <MenuItem>
+            <Typography variant='subtitle2' className={classes.NavItem}>
+              <NavLink to='/orders'>Orders</NavLink>
+            </Typography>
+          </MenuItem>
+          <MenuItem>
+            <Typography variant='subtitle2' className={classes.NavItem}>
+              <NavLink to='/chat'>Chat</NavLink>
+            </Typography>
+          </MenuItem>
+
+          <MenuItem>
+            <NavLink to='/'>
+              <Typography
+                variant='subtitle1'
+                color='primary'
+                // className={classes.NavItem}
+                style={{ fontWeight: 500 }}
+              >
+                Switch To
+                {user.role === 'seller' ? 'Buyer' : 'Seller'}
+              </Typography>
+            </NavLink>
+          </MenuItem>
+        </>
       ) : (
         <MenuItem>
           <Button
@@ -104,33 +144,37 @@ const Navbar = (props) => {
               alignItems='center'
               sx={{ marginLeft: 'auto' }}
             >
-              {/* {true && (
-                  <Typography
-                    variant='subtitle1'
-                    style={{
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginLeft: 10,
-                    }}
+              {user ? (
+                <>
+                  <Box
+                    display='flex'
+                    justifyContent='space-around'
+                    sx={{ marginInline: 20, columnGap: 25, alignItems: 'end' }}
                   >
-                    <NavLink
-                      to='/menus'
-                      // activeStyle={{
-                      //   color: 'red',
-                      // }}
-                      style={({ isActive }) => ({
-                        color: isActive ? theme.palette.primary.main : '#000',
-                        textDecoration: 'none',
-                      })}
-                    >
-                      Menus
+                    <Typography variant='subtitle2' className={classes.NavItem}>
+                      <NavLink to='/dashboard'>Dashboard</NavLink>
+                    </Typography>
+                    <Typography variant='subtitle2' className={classes.NavItem}>
+                      <NavLink to='/gigs'>Gigs</NavLink>
+                    </Typography>
+                    <Typography variant='subtitle2' className={classes.NavItem}>
+                      <NavLink to='/orders'>Orders</NavLink>
+                    </Typography>
+                    <Typography variant='subtitle2' className={classes.NavItem}>
+                      <NavLink to='/chat'>Chat</NavLink>
+                    </Typography>
+                    <NavLink to='/switchUser'>
+                      <Typography
+                        variant='subtitle1'
+                        color='primary'
+                        style={{ fontWeight: 500 }}
+                      >
+                        Switch To Buyer
+                      </Typography>
                     </NavLink>
-                  </Typography>
-                )} */}
-              {props.user ? (
-                <AccountPopover />
+                  </Box>
+                  <AccountPopover />
+                </>
               ) : (
                 <Box
                   display='flex'

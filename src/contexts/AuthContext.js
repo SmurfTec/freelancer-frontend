@@ -139,6 +139,7 @@ export const AuthProvider = ({ children }) => {
       }}
     >
       {children}
+      {console.log(`user`, user)}
     </AuthContext.Provider>
   );
 };
