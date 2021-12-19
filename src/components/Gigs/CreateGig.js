@@ -17,6 +17,8 @@ import { DataContext } from 'contexts/DataContext';
 import useToggle from 'hooks/useToggle';
 import axios from 'axios';
 import { API_BASE_URL } from 'utils/makeReq';
+import { v4 } from 'uuid';
+import { AuthContext } from 'contexts/AuthContext';
 // import { categories, sub_categories } from 'data';
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       rowGap: 20,
       flexDirection: 'column',
+      '& .MuiInputBase-root': {
+        paddingLeft: 10,
+      },
       '& h6': {
         marginBottom: theme.spacing(2),
         position: 'relative',
@@ -53,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateGig = () => {
   const classes = styles();
+  const { createGig } = useContext(AuthContext);
   const { categories } = useContext(DataContext);
   const classes_s = useStyles();
   const [disable, setDisable] = useState(true);
@@ -71,8 +77,7 @@ const CreateGig = () => {
 
   const initialState = {
     title: '',
-    // ^ Package State To be reviewed and need correction,......
-    // ^ Couldnot set the sub states of package state......
+    description: '',
     packages: [
       { name: 'basic', description: '', deliveryTime: '', price: '' },
       { name: 'standard', description: '', deliveryTime: '', price: '' },
@@ -92,7 +97,12 @@ const CreateGig = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(`inputState`, inputState);
-    resetState();
+    createGig({
+      ...inputState,
+      categoryId: inputState.category._id,
+      subCategoryId: inputState.subCategory._id,
+    });
+    // resetState();
   };
 
   const fetchSubCategories = async (id) => {
@@ -118,6 +128,20 @@ const CreateGig = () => {
     setInputstate((st) => ({
       ...st,
       category: value,
+    }));
+  };
+
+  const handlePackageChange = (e, packageName) => {
+    console.log(`e.target.name`, e.target.name);
+    console.log(`e.target.value`, e.target.value);
+    console.log(`packageName`, packageName);
+    setInputstate((st) => ({
+      ...st,
+      packages: st.packages.map((el) =>
+        el.name === packageName
+          ? { ...el, [e.target.name]: e.target.value }
+          : el
+      ),
     }));
   };
 
@@ -155,6 +179,16 @@ const CreateGig = () => {
                 name='title'
                 value={inputState.title}
                 label='TITLE'
+                multiline
+                rows={2}
+                onChange={handleTxtChange}
+                variant='outlined'
+                fullWidth
+              />
+              <TextField
+                name='description'
+                value={inputState.description}
+                label='DESCRIPTION'
                 multiline
                 rows={3}
                 onChange={handleTxtChange}
@@ -225,113 +259,115 @@ const CreateGig = () => {
                     align='center'
                     color='textSecondary'
                   >
-                    BASIC
+                    Basic
                     <span />
                   </Typography>
 
                   <TextField
-                    name='package.basic.description'
-                    value={inputState.package.basic.description}
+                    name='description'
+                    value={inputState.packages[0].description}
                     label='DESCRIPTION'
                     multiline
                     rows={5}
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'basic')}
                     variant='outlined'
                     size='small'
                     type='text'
                   />
                   <TextField
-                    name='deliveryTime'
-                    value={inputState.package.basic.deliveryTime}
+                    name='expectedDays'
+                    value={inputState.packages[0].expectedDays}
                     label='DELIVERY TIME'
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'basic')}
                     variant='outlined'
                     type='number'
                     size='small'
                   />
                   <TextField
                     name='price'
-                    value={inputState.package.basic.price}
+                    value={inputState.packages[0].price}
                     label='PRICE'
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'basic')}
                     variant='outlined'
                     type='number'
                     size='small'
                   />
                 </div>
-                {/* // * Standard Package info */}
                 <div>
                   <Typography
                     variant='subtitle1'
                     align='center'
                     color='textSecondary'
                   >
-                    STANDARD
+                    Standard
                     <span />
                   </Typography>
+
                   <TextField
                     name='description'
-                    value={inputState.package.standard.description}
+                    value={inputState.packages[1].description}
                     label='DESCRIPTION'
                     multiline
                     rows={5}
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'standard')}
                     variant='outlined'
                     size='small'
+                    type='text'
                   />
                   <TextField
-                    name='deliveryTime'
-                    value={inputState.package.standard.deliveryTime}
+                    name='expectedDays'
+                    value={inputState.packages[1].expectedDays}
                     label='DELIVERY TIME'
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'standard')}
                     variant='outlined'
                     type='number'
                     size='small'
                   />
                   <TextField
                     name='price'
-                    value={inputState.package.standard.price}
+                    value={inputState.packages[1].price}
                     label='PRICE'
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'standard')}
                     variant='outlined'
                     type='number'
                     size='small'
                   />
                 </div>
-                {/* // * Premium Package info */}
                 <div>
                   <Typography
                     variant='subtitle1'
                     align='center'
                     color='textSecondary'
                   >
-                    PREMIUM
+                    Premium
                     <span />
                   </Typography>
+
                   <TextField
                     name='description'
-                    value={inputState.package.premium.description}
+                    value={inputState.packages[2].description}
                     label='DESCRIPTION'
                     multiline
                     rows={5}
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'premium')}
                     variant='outlined'
                     size='small'
+                    type='text'
                   />
                   <TextField
-                    name='deliveryTime'
-                    value={inputState.package.premium.deliveryTime}
+                    name='expectedDays'
+                    value={inputState.packages[2].expectedDays}
                     label='DELIVERY TIME'
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'premium')}
                     variant='outlined'
                     type='number'
                     size='small'
                   />
                   <TextField
                     name='price'
-                    value={inputState.package.premium.price}
+                    value={inputState.packages[2].price}
                     label='PRICE'
-                    onChange={handleTxtChange}
+                    onChange={(e) => handlePackageChange(e, 'premium')}
                     variant='outlined'
                     type='number'
                     size='small'

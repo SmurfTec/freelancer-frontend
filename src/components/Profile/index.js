@@ -14,15 +14,14 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from 'components/common/Navbar';
 import EditIcon from '@material-ui/icons/Edit';
-import { user, gigs, months } from 'data';
+import { months } from 'data';
 import GigCard from 'components/Gigs/GigCard';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
-import { Icon } from '@material-ui/core';
 import { AuthContext } from 'contexts/AuthContext';
 import Loading from 'components/common/Loading';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -69,15 +68,16 @@ const handleClick = () => {
   //    history.push(`/tours/details/${_id}`);
 };
 
-const handleCreateGig = () => {
-  //    history.push(`/gigs/create`);
-};
-
 const ViewProfile = () => {
   const classes = styles();
   const { user } = useContext(AuthContext);
 
+  const navigate = useNavigate();
   if (!user) return <Loading noTitle />;
+
+  const handleCreateGig = () => {
+    navigate(`/gigs/create`);
+  };
 
   return (
     <section>

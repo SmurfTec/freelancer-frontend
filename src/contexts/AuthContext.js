@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { makeReq, handleCatch } from 'utils/makeReq';
 
@@ -9,6 +10,7 @@ export const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
   // let history = useHistory();
   let tokenLocal;
+  const navigate = useNavigate();
 
   try {
     tokenLocal = window.localStorage.getItem(LOCALSTORAGE_TOKEN_KEY);
@@ -91,6 +93,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const createGig = async (gig) => {
+    try {
+      const resData = await makeReq(`/gigs`, { body: gig }, 'POST');
+      console.log(`resData`, resData);
+
+      setUser((st) => ({ ...st, gigs: [...st.gigs, resData.gig] }));
+      toast.success('Gig created Successfully!');
+      navigate('/profile');
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       displayName='Auth Context'
@@ -103,6 +118,7 @@ export const AuthProvider = ({ children }) => {
         signInUser,
         updateMe,
         changeMyPassword,
+        createGig,
       }}
     >
       {children}
