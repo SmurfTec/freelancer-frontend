@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Paper,
   TextField,
@@ -12,7 +13,11 @@ import styles from 'styles/commonStyles';
 import useManyInputs from 'hooks/useManyInputs';
 import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
-import { categories, sub_categories } from 'data';
+import { DataContext } from 'contexts/DataContext';
+import useToggle from 'hooks/useToggle';
+import axios from 'axios';
+import { API_BASE_URL } from 'utils/makeReq';
+// import { categories, sub_categories } from 'data';
 const useStyles = makeStyles((theme) => ({
   container: {
     maxWidth: 700,
@@ -48,10 +53,13 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateGig = () => {
   const classes = styles();
+  const { categories } = useContext(DataContext);
   const classes_s = useStyles();
   const [disable, setDisable] = useState(true);
-  const [category, setCategory] = useState(categories[0]);
-  const [subCategory, setSubCategory] = useState(sub_categories[0]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [loadingSubCats, toggleLoadingSubCats] = useToggle(false);
+  // const [category, setCategory] = useState(categories[0]);
+  // const [subCategory, setSubCategory] = useState([]);
   const [custom, setCustom] = useState({
     user: {
       name: {
@@ -65,24 +73,13 @@ const CreateGig = () => {
     title: '',
     // ^ Package State To be reviewed and need correction,......
     // ^ Couldnot set the sub states of package state......
-    package: {
-      basic: {
-        description: '',
-        deliveryTime: '',
-        price: '',
-      },
-      standard: {
-        description: '',
-        deliveryTime: '',
-        price: '',
-      },
-      premium: {
-        description: '',
-        deliveryTime: '',
-        price: '',
-      },
-    },
+    packages: [
+      { name: 'basic', description: '', deliveryTime: '', price: '' },
+      { name: 'standard', description: '', deliveryTime: '', price: '' },
+      { name: 'premium', description: '', deliveryTime: '', price: '' },
+    ],
   };
+
   const [
     inputState,
     handleTxtChange,
@@ -97,6 +94,25 @@ const CreateGig = () => {
     console.log(`inputState`, inputState);
     resetState();
   };
+
+  const fetchSubCategories = async (id) => {
+    toggleLoadingSubCats();
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/categories/${id}/subcategories`
+      );
+      console.log(`res`, res);
+      setSubCategories(res.data.subcategories);
+    } catch (err) {
+    } finally {
+      toggleLoadingSubCats();
+    }
+  };
+  useEffect(() => {
+    if (!inputState.category) return;
+
+    fetchSubCategories(inputState.category._id);
+  }, [inputState.category]);
 
   const handleCategoryChange = (e, value) => {
     setInputstate((st) => ({
@@ -148,7 +164,7 @@ const CreateGig = () => {
 
               <Autocomplete
                 options={categories}
-                getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) => option.title}
                 id='category'
                 data-typeid='category'
                 value={inputState.category}
@@ -158,22 +174,43 @@ const CreateGig = () => {
                     {...params}
                     label='SELECT A CATEGORY'
                     variant='outlined'
-                    InputProps={{ ...params.InputProps, type: 'search' }}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {loadingSubCats ? (
+                            <CircularProgress color='inherit' size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
                   />
                 )}
               />
               <Autocomplete
-                options={sub_categories}
+                options={subCategories}
                 getOptionLabel={(option) => option.title}
                 id='subCategory'
                 value={inputState.subCategory}
                 onChange={handleAutoComplete}
+                loading
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label='SELECT A SUBCATEGORY'
                     variant='outlined'
-                    InputProps={{ ...params.InputProps, type: 'search' }}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {loadingSubCats ? (
+                            <CircularProgress color='inherit' size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
                   />
                 )}
               />
