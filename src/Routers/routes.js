@@ -1,7 +1,7 @@
 import Loading from 'components/common/Loading';
-import CreateGig from 'components/Gigs/CreateGig';
+import CreateGig from 'components/Gigs/ManageGig';
 import LandingPage from 'components/LandingPage';
-import GigTable from 'components/Gigs/GigTable';
+import GigTable from 'components/Gigs/MyGigs';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
 import ViewProfile from 'components/Profile';
@@ -19,13 +19,14 @@ export const protechtedRoutes = [
     element: <CreateProfile />,
   },
   { path: '/gigs/create', element: <CreateGig /> },
+  { path: '/mygigs', element: <GigTable /> },
+  { path: '/mygigs/:id', element: <CreateGig isUpdate /> },
   { path: '/logout', element: <Logout /> },
   { path: '*', element: <Navigate to='/profile' /> },
 ];
 
 export const publicRoutes = [
   { path: '/', element: <LandingPage /> },
-  { path: '/gigs/manage', element: <GigTable /> },
   { path: 'login', element: <Login /> },
   { path: 'register', element: <Register /> },
   { path: '*', element: <Navigate to='/' /> },

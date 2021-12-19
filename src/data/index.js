@@ -9,21 +9,43 @@ export const services = [
     label: 'SEO',
     value: 'seo',
     desc: 'Unlock the growth',
+    image: '',
   },
   {
     label: 'Illustration',
     value: 'illustration',
     desc: 'Color your dreams',
+    image: '',
   },
   {
     label: 'Translation',
     value: 'translation',
     desc: 'Go Global',
+    image: '',
   },
   {
     label: 'Data Entry',
     value: 'data-entry',
     desc: 'Learn the business',
+    image: '',
+  },
+  {
+    label: 'Voice Over',
+    value: 'voice-over',
+    desc: 'Share your message',
+    image: '',
+  },
+  {
+    label: 'Reach More Customers',
+    value: 'data-entry12',
+    desc: 'Social Media',
+    image: '',
+  },
+  {
+    label: 'Data Entry',
+    value: 'data-entry',
+    desc: 'Learn the business',
+    image: '',
   },
   {
     label: 'Data Entry',

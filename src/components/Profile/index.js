@@ -187,49 +187,51 @@ const ViewProfile = () => {
               {user.gigs.map((g) => (
                 <GigCard {...g} />
               ))}
-              <Card
-                style={{
-                  width: 230,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: 300,
-                }}
-              >
-                <CardContent>
-                  <Box
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      height: '100%',
-                      gap: 10,
-                      cursor: 'pointer',
-                    }}
-                    onClick={handleCreateGig}
-                  >
+              {user.gigs.length < 5 && (
+                <Card
+                  style={{
+                    width: 230,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 300,
+                  }}
+                >
+                  <CardContent>
                     <Box
                       style={{
-                        color: 'rgb(255, 255, 255)',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgb(51, 187, 119)',
-                        width: 100,
-                        textAlign: 'center',
-                        height: 100,
-                        fontSize: '20p',
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.2em',
+                        height: '100%',
+                        gap: 10,
+                        cursor: 'pointer',
                       }}
+                      onClick={handleCreateGig}
                     >
-                      {' '}
-                      <AddIcon size='large' />
+                      <Box
+                        style={{
+                          color: 'rgb(255, 255, 255)',
+                          borderRadius: '50%',
+                          backgroundColor: 'rgb(51, 187, 119)',
+                          width: 100,
+                          textAlign: 'center',
+                          height: 100,
+                          fontSize: '20p',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.2em',
+                        }}
+                      >
+                        {' '}
+                        <AddIcon size='large' />
+                      </Box>
+                      <Typography variant='body1'>Create a new Gig</Typography>
                     </Box>
-                    <Typography variant='body1'>Create a new Gig</Typography>
-                  </Box>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              )}
             </Box>
           </Grid>
         </Grid>

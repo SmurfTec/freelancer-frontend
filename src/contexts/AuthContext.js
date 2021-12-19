@@ -1,3 +1,4 @@
+import { gigs } from 'data';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -106,6 +107,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateGig = async (id, gig) => {
+    try {
+      const resData = await makeReq(`/gigs/${id}`, { body: gig }, 'PATCH');
+      console.log(`resData`, resData);
+
+      setUser((st) => ({
+        ...st,
+        gigs: gigs.map((el) => (el._id === id ? resData.gig : el)),
+      }));
+      toast.success('Gig Updated Successfully!');
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       displayName='Auth Context'
@@ -119,6 +135,7 @@ export const AuthProvider = ({ children }) => {
         updateMe,
         changeMyPassword,
         createGig,
+        updateGig,
       }}
     >
       {children}

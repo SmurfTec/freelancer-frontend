@@ -19,6 +19,7 @@ import axios from 'axios';
 import { API_BASE_URL } from 'utils/makeReq';
 import { v4 } from 'uuid';
 import { AuthContext } from 'contexts/AuthContext';
+import { useParams } from 'react-router-dom';
 // import { categories, sub_categories } from 'data';
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,9 +57,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateGig = () => {
+const CreateGig = ({ isUpdate }) => {
   const classes = styles();
-  const { createGig } = useContext(AuthContext);
+  const { createGig, updateGig, user } = useContext(AuthContext);
   const { categories } = useContext(DataContext);
   const classes_s = useStyles();
   const [disable, setDisable] = useState(true);
@@ -66,14 +67,8 @@ const CreateGig = () => {
   const [loadingSubCats, toggleLoadingSubCats] = useToggle(false);
   // const [category, setCategory] = useState(categories[0]);
   // const [subCategory, setSubCategory] = useState([]);
-  const [custom, setCustom] = useState({
-    user: {
-      name: {
-        fname: '',
-        lname: '',
-      },
-    },
-  });
+
+  const { id } = useParams();
 
   const initialState = {
     title: '',
@@ -84,6 +79,13 @@ const CreateGig = () => {
       { name: 'premium', description: '', deliveryTime: '', price: '' },
     ],
   };
+
+  useEffect(() => {
+    let gig = user.gigs.find((el) => el._id === id);
+    if (gig) {
+      setInputstate(gig);
+    }
+  }, [id]);
 
   const [
     inputState,
@@ -97,11 +99,18 @@ const CreateGig = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(`inputState`, inputState);
-    createGig({
-      ...inputState,
-      categoryId: inputState.category._id,
-      subCategoryId: inputState.subCategory._id,
-    });
+    if (isUpdate)
+      updateGig(id, {
+        ...inputState,
+        categoryId: inputState.category._id,
+        subCategoryId: inputState.subCategory._id,
+      });
+    else
+      createGig({
+        ...inputState,
+        categoryId: inputState.category._id,
+        subCategoryId: inputState.subCategory._id,
+      });
     // resetState();
   };
 

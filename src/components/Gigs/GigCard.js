@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
+import { useNavigate } from 'react-router-dom';
 
 const styles = makeStyles((theme) => ({
   gigCard: {
@@ -39,9 +40,11 @@ const styles = makeStyles((theme) => ({
 
 const GigCard = (gig) => {
   const classes = styles();
-  const { id, title, images, price, packages } = gig;
+  const { _id, title, images, price, packages } = gig;
 
+  const navigate = useNavigate();
   const handleGigModify = (e) => {
+    navigate(`/mygigs/${_id}`);
     e.stopPropagation();
   };
   return (
