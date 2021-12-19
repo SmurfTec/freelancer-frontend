@@ -1,4 +1,5 @@
 import Loading from 'components/common/Loading';
+import DevRequest from 'components/DevRequest';
 import GigTable from 'components/Gigs/GigTable';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
@@ -17,12 +18,13 @@ export const protechtedRoutes = [
     element: <CreateProfile />,
   },
   // {path  : '/gigs' , element : <Gigs />},
+  { path: '/gigs/manage', element: <GigTable /> },
+  { path: '/postRequest', element: <DevRequest /> },
   { path: '/logout', element: <Logout /> },
   { path: '*', element: <Navigate to='/profile' /> },
 ];
 
 export const publicRoutes = [
-  { path: '/gigs/manage', element: <GigTable /> },
   { path: 'login', element: <Login /> },
   { path: 'register', element: <Register /> },
   { path: '*', element: <Navigate to='/login' /> },
