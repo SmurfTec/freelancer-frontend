@@ -130,6 +130,7 @@ export const gigs = [
   },
 ];
 export const countries = ['Pakistan', 'Australia', 'Saudi Arbia'];
+
 export const countries1 = [
   { code: 'AD', label: 'Andorra', phone: '376' },
   { code: 'AE', label: 'United Arab Emirates', phone: '971' },
@@ -419,4 +420,25 @@ export const countries1 = [
   { code: 'ZA', label: 'South Africa', phone: '27' },
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' },
+];
+
+export const gigTableData = [
+  {
+    title: 'I develop or fix your mern , react or node js ',
+    img: gigImg,
+    impressions: 20,
+    orders: '0',
+  },
+  {
+    title: 'I will fix node js applications ',
+    img: gigImg,
+    impressions: 10,
+    orders: '0',
+  },
+  {
+    title: 'I Fix React Js Applications',
+    img: gigImg,
+    impressions: 0,
+    orders: '0',
+  },
 ];

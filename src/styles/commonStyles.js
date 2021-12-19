@@ -96,6 +96,9 @@ const styles = makeStyles((theme) => ({
     marginTop: theme.spacing(8),
     marginBottom: theme.spacing(4),
   },
+  table: {
+    minWidth: 650,
+  },
   marginBet: {
     // marginInline: theme.spacing(3),
     marginBlock: 75,

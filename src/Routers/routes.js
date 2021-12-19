@@ -1,14 +1,15 @@
 import Loading from 'components/common/Loading';
+import GigTable from 'components/Gigs/GigTable';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
-import ModifyProfile from 'components/Profile/ModifyProfile';
+import ViewProfile from 'components/Profile/ViewProfile';
 import Register from 'components/Register';
 import { Navigate } from 'react-router-dom';
 
 export const protechtedRoutes = [
   {
     path: '/profile',
-    element: <ModifyProfile />,
+    element: <ViewProfile />,
   },
   // {path  : '/gigs' , element : <Gigs />},
   { path: 'logout', element: <Logout /> },
@@ -16,6 +17,7 @@ export const protechtedRoutes = [
 ];
 
 export const publicRoutes = [
+  { path: '/gigs/manage', element: <GigTable /> },
   { path: 'login', element: <Login /> },
   { path: 'register', element: <Register /> },
   { path: '*', element: <Navigate to='/login' /> },
