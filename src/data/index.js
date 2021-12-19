@@ -416,3 +416,18 @@ export const gigTableData = [
     orders: '0',
   },
 ];
+
+export const ordersData = [
+  {
+    id: 1231,
+    buyer: {
+      id: 12222,
+      userName: 'callumToner123',
+      img: userImg,
+    },
+    gig: 'develop and fix mern stack, react js and node js ...',
+    deadline: 'Jan 11, 2022',
+    price: '$100',
+    status: 'in progress',
+  },
+];

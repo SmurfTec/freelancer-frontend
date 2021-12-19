@@ -3,6 +3,7 @@ import DevRequest from 'components/DevRequest';
 import GigTable from 'components/Gigs/GigTable';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
+import OrdersTable from 'components/Orders/OrdersTable';
 import ViewProfile from 'components/Profile';
 import CreateProfile from 'components/Profile/CreateProfile';
 import Register from 'components/Register';
@@ -19,6 +20,7 @@ export const protechtedRoutes = [
   },
   // {path  : '/gigs' , element : <Gigs />},
   { path: '/gigs/manage', element: <GigTable /> },
+  { path: '/manageOrders', element: <OrdersTable /> },
   { path: '/postRequest', element: <DevRequest /> },
   { path: '/logout', element: <Logout /> },
   { path: '*', element: <Navigate to='/profile' /> },
