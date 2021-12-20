@@ -14,12 +14,14 @@ import {
   FormControl,
 } from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useManyInputs from 'hooks/useManyInputs';
 import { Autocomplete } from '@material-ui/lab';
 import { categories, sub_categories } from 'data';
 import styles from 'styles/commonStyles';
 import { CloudUpload as CloudUploadIcon } from '@material-ui/icons';
+import { AuthContext } from 'contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   paper: {
     borderRadius: 5,
@@ -37,8 +39,14 @@ const useStyles = makeStyles((theme) => ({
 const DevRequest = () => {
   const classes = styles();
   const classes_s = useStyles();
+  const { user } = useContext(AuthContext);
   const [category, setCategory] = useState(categories[0]);
   const [subCategory, setSubCategory] = useState(sub_categories[0]);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) navigate(`/login?redirect=/devRequests/create`);
+  }, [user]);
 
   const initialState = {
     reqDesc: '',

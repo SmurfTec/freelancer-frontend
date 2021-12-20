@@ -46,14 +46,15 @@ export const protechtedRoutes = [
   // {path  : '/gigs' , element : <Gigs />},
   { path: '/gigs/manage', element: <GigTable /> },
   { path: '/manageOrders', element: <OrdersTable /> },
-  { path: '/postRequest', element: <DevRequest /> },
   { path: '/logout', element: <Logout /> },
   { path: '*', element: <Navigate to='/profile' /> },
+  { path: '/devRequests/create', element: <DevRequest /> },
 ];
+
+export const commonRotues = [{ path: 'login', element: <Login /> }];
 
 export const publicRoutes = [
   { path: '/', element: <LandingPage /> },
-  { path: 'login', element: <Login /> },
   { path: 'register', element: <Register /> },
   { path: '*', element: <Navigate to='/' /> },
 ];

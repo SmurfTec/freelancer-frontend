@@ -5,15 +5,20 @@ import Profile from 'components/Profile';
 // import ModifyProfile from 'components/Profile/ModifyProfile';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from 'contexts/AuthContext';
-import { loading, protechtedRoutes, publicRoutes } from 'Routers/routes';
+import {
+  commonRotues,
+  loading,
+  protechtedRoutes,
+  publicRoutes,
+} from 'Routers/routes';
 
 const App = () => {
   const { token, user } = useContext(AuthContext);
   const [routes, setRoutes] = useState(loading);
   useEffect(() => {
-    if (token && user) setRoutes(protechtedRoutes);
+    if (token && user) setRoutes(protechtedRoutes.concat(commonRotues));
     else if (token) setRoutes(loading);
-    else setRoutes(publicRoutes);
+    else setRoutes(publicRoutes.concat(commonRotues));
   }, [user, token]);
 
   const content = useRoutes(routes);

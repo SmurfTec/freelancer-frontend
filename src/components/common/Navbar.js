@@ -257,7 +257,7 @@ const Navbar = (props) => {
                   gridColumnGap='20px'
                 >
                   <NavLink
-                    to='/devRequests/create'
+                    to='/login?redirect=/devRequests/create'
                     style={{
                       display: 'flex',
                       alignItems: 'center',

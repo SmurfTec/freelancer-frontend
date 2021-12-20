@@ -38,7 +38,7 @@ const Login = () => {
   let redirect = location.search ? location.search.split('=')[1] : '/';
 
   useEffect(() => {
-    // console.log(`redirect`, redirect);
+    console.log(`redirect`, redirect);
 
     if (user) {
       navigate(redirect);
