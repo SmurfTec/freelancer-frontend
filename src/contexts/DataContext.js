@@ -1,4 +1,5 @@
 import axios from 'axios';
+import useToggle from 'hooks/useToggle';
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { makeReq, handleCatch, API_BASE_URL } from 'utils/makeReq';
@@ -11,7 +12,9 @@ export const DataProvider = ({ children }) => {
   // const { user } = useContext(AuthContext);
 
   const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
+
+  const [loadingDevRequests, toggleLoadingDevRequests] = useToggle(true);
+  const [devRequests, setDevRequests] = useState([]);
 
   const fetchCategories = async () => {
     const res = await axios.get(`${API_BASE_URL}/categories`);
@@ -19,15 +22,20 @@ export const DataProvider = ({ children }) => {
     setCategories(res.data.categories);
   };
 
-  const fetchSubCategories = async () => {
-    const res = await axios.get(`${API_BASE_URL}/subcategories`);
-    console.log(`res`, res);
-    setCategories(res.data.subCategories);
+  const fetchDevRequests = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/devRequests`);
+      console.log(`res`, res);
+      setDevRequests(res.data.devRequests);
+    } catch (err) {
+    } finally {
+      toggleLoadingDevRequests();
+    }
   };
 
   useEffect(() => {
+    fetchDevRequests();
     fetchCategories();
-    // fetchSubCategories();
   }, []);
 
   return (
@@ -35,7 +43,8 @@ export const DataProvider = ({ children }) => {
       displayName='Data Context'
       value={{
         categories,
-        subCategories,
+        devRequests,
+        loadingDevRequests,
       }}
     >
       {children}

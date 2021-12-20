@@ -76,7 +76,7 @@ const ViewProfile = () => {
   if (!user) return <Loading noTitle />;
 
   const handleCreateGig = () => {
-    navigate(`/gigs/create`);
+    navigate(`/mygigs/create`);
   };
 
   return (

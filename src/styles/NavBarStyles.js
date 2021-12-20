@@ -1,9 +1,13 @@
 import { makeStyles } from '@material-ui/core';
-import { styled } from '@material-ui/core/styles';
-import { NavLink as Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    '& .MuiPaper-root': {
+      boxShadow: 'none',
+      borderBottom: '1px solid rgba(0, 0, 0, 0.15)',
+      // boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
+    },
+  },
   Appbar: {
     // backgroundColor: '#1462aa',
     backgroundColor: '#fff',

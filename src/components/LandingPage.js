@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import NavBar from 'components/common/Navbar';
 import Banner from './common/Banner';
 import CarouselLayout from 'components/Carousel/CarouselLayout';
@@ -22,12 +22,17 @@ import img5 from 'assets/fujitsu-logo.svg';
 import img6 from 'assets/google-logo.svg';
 import img7 from 'assets/ibm-logo2.svg';
 import { v4 } from 'uuid';
+import { DataContext } from 'contexts/DataContext';
+import { Skeleton } from '@material-ui/lab';
+import DevReqCard from './DevRequest/DevReqCard';
 
 const supporters = [img1, img2, img3, img4, img5, img6, img7];
 
 const LandingPage = () => {
   const classes = styles();
   const handleCatClick = () => {};
+
+  const { devRequests, loadingDevRequests } = useContext(DataContext);
 
   return (
     <React.Fragment>
@@ -44,6 +49,26 @@ const LandingPage = () => {
           <img src={el} alt='partner' key={v4()} />
         ))}
       </Box>
+
+      <Container className={classes.marginBet} maxWidth='1400'>
+        <Typography variant='h4'>Popular Jobs</Typography>
+
+        <Grid container spacing={2}>
+          {loadingDevRequests
+            ? Array(20)
+                .fill()
+                .map(() => (
+                  <Grid item xs={6} sm={3} md={3} lg={2} key={v4()}>
+                    <Skeleton variant='react' height={200} />
+                  </Grid>
+                ))
+            : devRequests.map((el) => (
+                <Grid item sm={2} key={el.value}>
+                  <DevReqCard devRequest={el} handleClick={handleCatClick} />
+                </Grid>
+              ))}
+        </Grid>
+      </Container>
 
       <Container className={classes.marginBet}>
         <Typography variant='h4'>Popular Professional Services</Typography>
@@ -118,7 +143,7 @@ const LandingPage = () => {
         </Container>
       </div>
 
-      <Container className={classes.marginBet}>
+      {/* <Container className={classes.marginBet}>
         <Typography variant='h4'>Explore the Marketplace</Typography>
 
         <ul className={classes.catContainer}>
@@ -129,7 +154,7 @@ const LandingPage = () => {
               </li>
             ))}
         </ul>
-      </Container>
+      </Container> */}
 
       <Box sx={{ mt: 4 }}>
         <Footer />

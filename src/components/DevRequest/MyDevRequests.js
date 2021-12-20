@@ -16,10 +16,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { gigTableData } from 'data';
+import { DevRequestsTableData } from 'data';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import TabLayout from 'components/common/TabLayout';
+import devRequestsMocks from 'mocks/_devRequests';
+import DevRequestsTabs from './Tabs';
 
 const useStyles = makeStyles((theme) => ({
   gigImg: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GigTable = () => {
+const DevRequests = () => {
   const classes = styles();
   const classes_s = useStyles();
 
@@ -75,53 +77,10 @@ const GigTable = () => {
       <Navbar user='user' />
       <Container className={classes.container}>
         <Box sx={{ mt: 3 }}>
-          <Typography variant='h4'>Gigs</Typography>
+          <Typography variant='h4'>Buyer Requests</Typography>
         </Box>
         <Box sx={{ mt: 4 }}>
-          <TabLayout />
-
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label='simple table'>
-              <TableHead>
-                <TableRow>
-                  <TableCell colspan='2'>GIG</TableCell>
-                  <TableCell>IMPRESSIONS</TableCell>
-                  <TableCell>ORDERS</TableCell>
-                  <TableCell>ACTIONS</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {gigTableData.map((gig) => (
-                  <TableRow key={gig.title}>
-                    <TableCell component='th' scope='row'>
-                      <Box className={classes_s.gigImg}>
-                        <img src={gig.img} alt={gig.title} />
-                      </Box>
-                    </TableCell>
-                    <TableCell>{gig.title}</TableCell>
-                    <TableCell>{gig.impressions}</TableCell>
-                    <TableCell>{gig.orders}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label='show more'
-                        aria-controls={menuId}
-                        data-gigtitle={gig.title}
-                        aria-haspopup='true'
-                        onClick={handleMenuOpen}
-                        style={{
-                          marginLeft: 'auto',
-                          color: '#000',
-                        }}
-                      >
-                        <MoreIcon />
-                      </IconButton>
-                    </TableCell>
-                    {/* <TableCell align='right'>{gig.protein}</TableCell> */}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <DevRequestsTabs />
         </Box>
       </Container>
       {renderMenu}
@@ -129,4 +88,4 @@ const GigTable = () => {
   );
 };
 
-export default GigTable;
+export default DevRequests;

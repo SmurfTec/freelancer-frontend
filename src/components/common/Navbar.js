@@ -12,6 +12,7 @@ import AccountPopover from './AccountPopover';
 import Logo from './Logo';
 import { AuthContext } from 'contexts/AuthContext';
 import { NavLink } from 'react-router-dom';
+import { Add } from '@material-ui/icons';
 
 const Navbar = (props) => {
   const classes = useStyles();
@@ -79,7 +80,7 @@ const Navbar = (props) => {
 
           <MenuItem>
             <Typography variant='subtitle2' className={classes.NavItem}>
-              <NavLink to='/gigs'>Gigs</NavLink>
+              <NavLink to='/mygigs'>Gigs</NavLink>
             </Typography>
           </MenuItem>
 
@@ -103,7 +104,7 @@ const Navbar = (props) => {
                 style={{ fontWeight: 500 }}
               >
                 Switch To
-                {user.role === 'seller' ? 'Buyer' : 'Seller'}
+                {user.role === 'Seller' ? 'Buyer' : 'Seller'}
               </Typography>
             </NavLink>
           </MenuItem>
@@ -145,49 +146,147 @@ const Navbar = (props) => {
               sx={{ marginLeft: 'auto' }}
             >
               {user ? (
-                <>
-                  <Box
-                    display='flex'
-                    justifyContent='space-around'
-                    sx={{ marginInline: 20, columnGap: 25, alignItems: 'end' }}
-                  >
-                    <Typography variant='subtitle2' className={classes.NavItem}>
-                      <NavLink to='/dashboard'>Dashboard</NavLink>
-                    </Typography>
-                    <Typography variant='subtitle2' className={classes.NavItem}>
-                      <NavLink to='/gigs'>Gigs</NavLink>
-                    </Typography>
-                    <Typography variant='subtitle2' className={classes.NavItem}>
-                      <NavLink to='/orders'>Orders</NavLink>
-                    </Typography>
-                    <Typography variant='subtitle2' className={classes.NavItem}>
-                      <NavLink to='/chat'>Chat</NavLink>
-                    </Typography>
-                    <NavLink to='/switchUser'>
+                user.role === 'Seller' ? (
+                  <>
+                    <Box
+                      display='flex'
+                      justifyContent='space-around'
+                      sx={{
+                        marginInline: 20,
+                        columnGap: 25,
+                        alignItems: 'end',
+                      }}
+                    >
                       <Typography
-                        variant='subtitle1'
-                        color='primary'
-                        style={{ fontWeight: 500 }}
+                        variant='subtitle2'
+                        className={classes.NavItem}
                       >
-                        Switch To Buyer
+                        <NavLink to='/dashboard'>Dashboard</NavLink>
                       </Typography>
-                    </NavLink>
-                  </Box>
-                  <AccountPopover />
-                </>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/mygigs'>Gigs</NavLink>
+                      </Typography>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/orders'>Orders</NavLink>
+                      </Typography>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/chat'>Chat</NavLink>
+                      </Typography>
+                      <NavLink to='/switchUser'>
+                        <Typography
+                          variant='subtitle1'
+                          color='primary'
+                          style={{ fontWeight: 500 }}
+                        >
+                          Switch To{' '}
+                          {user.role === 'Seller' ? 'Buyer' : 'Seller'}
+                        </Typography>
+                      </NavLink>
+                    </Box>
+                    <AccountPopover />
+                  </>
+                ) : (
+                  <>
+                    <Box
+                      display='flex'
+                      justifyContent='space-around'
+                      sx={{
+                        marginInline: 20,
+                        columnGap: 25,
+                        alignItems: 'end',
+                      }}
+                    >
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/dashboard'>Dashboard</NavLink>
+                      </Typography>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/requests'>Buyer Requests</NavLink>
+                      </Typography>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/mygigs'>Gigs</NavLink>
+                      </Typography>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/orders'>Orders</NavLink>
+                      </Typography>
+                      <Typography
+                        variant='subtitle2'
+                        className={classes.NavItem}
+                      >
+                        <NavLink to='/chat'>Chat</NavLink>
+                      </Typography>
+                      <NavLink to='/switchUser'>
+                        <Typography
+                          variant='subtitle1'
+                          color='primary'
+                          style={{ fontWeight: 500 }}
+                        >
+                          Switch To Buyer
+                        </Typography>
+                      </NavLink>
+                    </Box>
+                    <AccountPopover />
+                  </>
+                )
               ) : (
                 <Box
                   display='flex'
                   justifyContent='space-around'
-                  maxWidth='300px'
+                  maxWidth='400px'
                   minWidth='200px'
+                  gridColumnGap='20px'
                 >
-                  <Button variant='outlined' onClick={() => navigate('/login')}>
+                  <NavLink
+                    to='/devRequests/create'
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Add />
+                    <Typography
+                      variant='subtitle1'
+                      color='primary'
+                      style={{ fontWeight: 500 }}
+                    >
+                      Create Request
+                    </Typography>
+                  </NavLink>
+                  <Button
+                    variant='outlined'
+                    style={{
+                      minWidth: 100,
+                    }}
+                    onClick={() => navigate('/login')}
+                  >
                     Login
                   </Button>
                   <Button
                     variant='contained'
                     className={classes.RegisterBtn}
+                    style={{
+                      minWidth: 100,
+                    }}
                     onClick={() => navigate('/register')}
                   >
                     Register
