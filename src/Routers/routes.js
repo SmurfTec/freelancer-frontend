@@ -3,8 +3,10 @@ import ManageGig from 'components/Gigs/ManageGig';
 import LandingPage from 'components/LandingPage';
 import GigTable from 'components/Gigs/MyGigs';
 import DevRequests from 'components/DevRequest';
+import DevRequest from 'components/DevRequest';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
+import OrdersTable from 'components/Orders/OrdersTable';
 import ViewProfile from 'components/Profile';
 import CreateProfile from 'components/Profile/CreateProfile';
 import Register from 'components/Register';
@@ -16,7 +18,7 @@ import BuyerHome from 'components/BuyerHome';
 export const protechtedRoutes = [
   {
     path: '/',
-    element: <Dashboard />, 
+    element: <Dashboard />,
   },
   {
     path: '/home',
@@ -41,6 +43,10 @@ export const protechtedRoutes = [
   // { path: '/mygigs', element: <GigTable /> },
   // { path: '/requests/mygigs/:id', element: <ManageGig isUpdate /> },
 
+  // {path  : '/gigs' , element : <Gigs />},
+  { path: '/gigs/manage', element: <GigTable /> },
+  { path: '/manageOrders', element: <OrdersTable /> },
+  { path: '/postRequest', element: <DevRequest /> },
   { path: '/logout', element: <Logout /> },
   { path: '*', element: <Navigate to='/profile' /> },
 ];

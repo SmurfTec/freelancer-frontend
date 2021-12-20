@@ -2,18 +2,25 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    marginTop: theme.spacing(2),
     flexGrow: 1,
     width: '100%',
     height: '100%',
     border: 'none',
-    '& .MuiAppBar-root': { boxShadow: 'none', border: 'none' },
-    // borderTopLeftRadius: 15,
-    // backgroundColor: '#4d4d4d',
+    '& .MuiAppBar-root': {
+      boxShadow: 'none',
+      border: 'none',
+      backgroundColor: 'transparent',
+    },
     '& .MuiTabs-flexContainer': {
-      // justifyContent: 'space-around',
       '& .MuiTab-root': {
         minWidth: 100,
-        flexGrow: 1,
+        // flexGrow: 1,
+        position: 'relative',
+        '& .MuiTab-wrapper': {
+          borderBottom: `2px solid`,
+          alignItems: 'flex-start',
+        },
       },
     },
     '& .MuiTabs-indicator': {
@@ -90,6 +97,12 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     marginTop: 20,
+  },
+
+  paper: {
+    borderRadius: 0,
+    paddingBlock: theme.spacing(3),
+    marginInline: theme.spacing(1),
   },
 }));
 

@@ -72,7 +72,7 @@ const GigTable = () => {
 
   return (
     <>
-      <Navbar user='user' />
+      <Navbar />
       <Container className={classes.container}>
         <Box sx={{ mt: 3 }}>
           <Typography variant='h4'>Gigs</Typography>
