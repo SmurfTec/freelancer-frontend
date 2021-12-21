@@ -49,7 +49,7 @@ const NewLandingPage = () => {
                   </Grid>
                 ))
             : devRequests.map((el) => (
-                <Grid item sm={2} key={el.value}>
+                <Grid item xs={6} sm={3} md={3} lg={3} key={el.value}>
                   <DevReqCard devRequest={el} handleClick={handleCatClick} />
                 </Grid>
               ))}

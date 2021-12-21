@@ -12,7 +12,7 @@ export const DevRequestsProvider = ({ children }) => {
   // let history = useHistory();
   const { user } = useContext(AuthContext);
 
-  const [loadingDevRequests, toggleLoadingDevRequests] = useToggle(true);
+  const [loading, toggleLoading] = useToggle(true);
   const [
     devRequests,
     setDevRequests,
@@ -30,7 +30,7 @@ export const DevRequestsProvider = ({ children }) => {
       setDevRequests(res.data.devRequests);
     } catch (err) {
     } finally {
-      toggleLoadingDevRequests();
+      toggleLoading();
     }
   };
 
@@ -40,6 +40,11 @@ export const DevRequestsProvider = ({ children }) => {
     // * Fetch user's Dev requests if he logged in
     fetchDevRequests();
   }, [user]);
+
+  const getRequestById = (id) => {
+    console.log(`devRequests`, devRequests);
+    return devRequests?.find((el) => el._id === id);
+  };
 
   // * CRUD Operations
   const createDevRequest = async (request, callBack) => {
@@ -82,8 +87,9 @@ export const DevRequestsProvider = ({ children }) => {
       displayName='DevRequests Context'
       value={{
         devRequests,
-        loadingDevRequests,
+        loading,
         createDevRequest,
+        getRequestById,
       }}
     >
       {children}

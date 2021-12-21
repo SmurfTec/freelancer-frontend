@@ -11,8 +11,9 @@ import {
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AccessTime } from '@material-ui/icons';
+import LineClamp from './line-clamp';
 
 const styles = makeStyles((theme) => ({
   root: {
@@ -47,13 +48,14 @@ const DevReqCard = ({ devRequest }) => {
   const { _id, title, image, description, budget, expectedDays } = devRequest;
 
   const navigate = useNavigate();
-  const handleGigModify = (e) => {
-    navigate(`/mygigs/${_id}`);
+  const handleClick = (e) => {
+    navigate(`/jobs/${_id}`);
     e.stopPropagation();
   };
+
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea onClick={handleClick}>
         <CardMedia
           component='img'
           alt={title}
@@ -62,12 +64,10 @@ const DevReqCard = ({ devRequest }) => {
           title={title}
         />
         <CardContent>
-          <Typography variant='subtitle1' color='textSecondary' component='p'>
+          {/* <Typography variant='subtitle2' color='textSecondary' component='p'>
             {description}
-          </Typography>
-          <Typography variant='subtitle1' color='textSecondary' component='p'>
-            {expectedDays}
-          </Typography>
+          </Typography> */}
+          <LineClamp text={description} />
         </CardContent>
         <CardActions>
           <Box

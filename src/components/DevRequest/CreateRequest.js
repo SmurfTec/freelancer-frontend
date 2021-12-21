@@ -87,7 +87,7 @@ const DevRequest = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (!user) navigate(`/login?redirect=/devRequests/create`);
+    if (!user) navigate(`/login?redirect=/jobs/create`);
   }, [user]);
 
   const fetchSubCategories = async (id) => {
@@ -140,7 +140,7 @@ const DevRequest = () => {
         resetState();
         toast.success('Success');
         setTimeout(() => {
-          navigate('/devRequests');
+          navigate('/jobs');
         }, 1500);
       }
     );
@@ -148,7 +148,6 @@ const DevRequest = () => {
 
   return (
     <Box>
-      <Navbar />
       <Container className={classes.container}>
         <Box className={classes_s.marginBetween}>
           <Typography variant='h3'>

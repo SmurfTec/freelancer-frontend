@@ -15,14 +15,22 @@ import Dashboard from 'components/dashboard';
 import BuyerHome from 'components/BuyerHome';
 import Navbar from 'components/common/Navbar';
 import LandingPageLayout from 'layouts/LandingPageLayout';
+import NavbarLayout from 'layouts/NavbarLayout';
+import SingleRequest from 'components/DevRequest/SingleRequest';
+
+const NotFound = () => <h1>Not Found</h1>;
 
 export const protechtedRoutes = [
   {
     path: '/',
-    element: <Navbar />,
+    element: <NavbarLayout />,
     children: [
       {
         path: '/',
+        element: <LandingPageNew />,
+      },
+      {
+        path: '/dashboard',
         element: <Dashboard />,
       },
       {
@@ -43,7 +51,9 @@ export const protechtedRoutes = [
       { path: '/mygigs/:id', element: <ManageGig isUpdate /> },
 
       // * DevRequests
-      { path: '/devRequests/create', element: <DevRequest /> },
+      { path: '/jobs/create', element: <DevRequest /> },
+      { path: '/jobs/:id', element: <SingleRequest /> },
+
       { path: '/requests', element: <DevRequestsTable /> },
       // { path: '/requests/mygigs', element: <MyGigs /> },
       // { path: '/mygigs', element: <GigTable /> },
@@ -53,6 +63,7 @@ export const protechtedRoutes = [
       { path: '/gigs/manage', element: <GigTable /> },
       { path: '/manageOrders', element: <OrdersTable /> },
       { path: '/logout', element: <Logout /> },
+      { path: '*', element: <NotFound /> },
     ],
   },
   { path: '*', element: <Navigate to='/profile' /> },
@@ -70,6 +81,7 @@ export const publicRoutes = [
         path: '/',
         element: <LandingPageNew />,
       },
+      { path: '/jobs/:id', element: <SingleRequest /> },
     ],
   },
   { path: 'register', element: <Register /> },

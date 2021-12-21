@@ -73,14 +73,11 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
 
-    console.log('logging out');
     localStorage.removeItem(LOCALSTORAGE_TOKEN_KEY);
   };
 
   // Update Staffer
   const changeMyPassword = async (updatedPassword) => {
-    console.log(`updatedPassword`, updatedPassword);
-
     try {
       const resData = await makeReq(
         `/users/updatepassword/${user._id}`,
@@ -97,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   const createGig = async (gig) => {
     try {
       const resData = await makeReq(`/gigs`, { body: gig }, 'POST');
-      console.log(`resData`, resData);
+      // console.log(`resData`, resData);
 
       setUser((st) => ({ ...st, gigs: [...st.gigs, resData.gig] }));
       toast.success('Gig created Successfully!');
@@ -110,7 +107,7 @@ export const AuthProvider = ({ children }) => {
   const updateGig = async (id, gig) => {
     try {
       const resData = await makeReq(`/gigs/${id}`, { body: gig }, 'PATCH');
-      console.log(`resData`, resData);
+      // console.log(`resData`, resData);
 
       setUser((st) => ({
         ...st,
@@ -139,7 +136,6 @@ export const AuthProvider = ({ children }) => {
       }}
     >
       {children}
-      {console.log(`user`, user)}
     </AuthContext.Provider>
   );
 };

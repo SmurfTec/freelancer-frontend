@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from 'contexts/AuthContext';
 import { DataProvider } from 'contexts/DataContext';
 import { DevRequestsProvider } from 'contexts/DevRequestsContext';
+import { OffersProvider } from 'contexts/OffersContext';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.render(
       <AuthProvider>
         <DataProvider>
           <DevRequestsProvider>
-            <App />
+            <OffersProvider>
+              <App />
+            </OffersProvider>
           </DevRequestsProvider>
         </DataProvider>
       </AuthProvider>

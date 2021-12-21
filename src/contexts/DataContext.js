@@ -18,19 +18,24 @@ export const DataProvider = ({ children }) => {
 
   const fetchCategories = async () => {
     const res = await axios.get(`${API_BASE_URL}/categories`);
-    console.log(`res`, res);
+    // console.log(`res`, res);
     setCategories(res.data.categories);
   };
 
   const fetchDevRequests = async () => {
     try {
       const res = await axios.get(`${API_BASE_URL}/devRequests`);
-      console.log(`res`, res);
+      // console.log(`res`, res);
       setDevRequests(res.data.devRequests);
     } catch (err) {
     } finally {
       toggleLoadingDevRequests();
     }
+  };
+
+  const getRequestById = (id) => {
+    console.log(`devRequests`, devRequests);
+    return devRequests?.find((el) => el._id === id);
   };
 
   useEffect(() => {
@@ -45,6 +50,7 @@ export const DataProvider = ({ children }) => {
         categories,
         devRequests,
         loadingDevRequests,
+        getRequestById,
       }}
     >
       {children}
