@@ -102,14 +102,14 @@ const CreateGig = ({ isUpdate }) => {
     if (isUpdate)
       updateGig(id, {
         ...inputState,
-        categoryId: inputState.category._id,
-        subCategoryId: inputState.subCategory._id,
+        category: inputState.category._id,
+        subCategory: inputState.subCategory._id,
       });
     else
       createGig({
         ...inputState,
-        categoryId: inputState.category._id,
-        subCategoryId: inputState.subCategory._id,
+        category: inputState.category._id,
+        subCategory: inputState.subCategory._id,
       });
     // resetState();
   };
@@ -219,14 +219,6 @@ const CreateGig = ({ isUpdate }) => {
                     variant='outlined'
                     InputProps={{
                       ...params.InputProps,
-                      endAdornment: (
-                        <React.Fragment>
-                          {loadingSubCats ? (
-                            <CircularProgress color='inherit' size={20} />
-                          ) : null}
-                          {params.InputProps.endAdornment}
-                        </React.Fragment>
-                      ),
                     }}
                   />
                 )}

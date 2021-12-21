@@ -7,13 +7,16 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from 'contexts/AuthContext';
 import { DataProvider } from 'contexts/DataContext';
+import { DevRequestsProvider } from 'contexts/DevRequestsContext';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <DataProvider>
-          <App />
+          <DevRequestsProvider>
+            <App />
+          </DevRequestsProvider>
         </DataProvider>
       </AuthProvider>
       <ToastContainer position='top-left' />

@@ -12,14 +12,18 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import { useNavigate } from 'react-router-dom';
+import { AccessTime } from '@material-ui/icons';
 
 const styles = makeStyles((theme) => ({
-  gigCard: {
-    width: 230,
+  root: {
+    // width: 230,
     position: 'relative',
+    '& .MuiCardContent-root': {
+      paddingBottom: 0,
+    },
   },
   price: {
-    fontSize: theme.spacing(3),
+    fontSize: theme.spacing(2),
     paddingLeft: 5,
     fontWeight: 'bold',
   },
@@ -38,7 +42,7 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const DevReqCard = (devRequest) => {
+const DevReqCard = ({ devRequest }) => {
   const classes = styles();
   const { _id, title, image, description, budget, expectedDays } = devRequest;
 
@@ -48,13 +52,13 @@ const DevReqCard = (devRequest) => {
     e.stopPropagation();
   };
   return (
-    <Card className={classes.gigCard}>
+    <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           component='img'
           alt={title}
           height='170'
-          image={image}
+          image={image?.url}
           title={title}
         />
         <CardContent>
@@ -66,10 +70,29 @@ const DevReqCard = (devRequest) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Box sx={{ paddingInline: 2, display: 'flex' }}>
-            <Typography variant='body2' color='primary' align='right'>
+          <Box
+            sx={{
+              paddingInline: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <Typography variant='body2' align='right'>
               Budget
-              <span className={classes.price}>{budget}</span>
+              <span className={classes.price}>${budget}</span>
+            </Typography>
+            <Typography
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              variant='body2'
+              align='right'
+            >
+              <AccessTime />
+              <span className={classes.price}>{expectedDays} days</span>
             </Typography>
           </Box>
         </CardActions>

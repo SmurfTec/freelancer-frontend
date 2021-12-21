@@ -15,13 +15,11 @@ import { toast } from 'react-toastify';
 import { AuthContext } from 'contexts/AuthContext';
 
 export default function AccountPopover() {
-  const { user } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
   const anchorRef = useRef(null);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(null);
-
-  // const { currentUser, logout } = useAuth();
 
   const handleOpen = () => {
     setOpen(true);
@@ -31,7 +29,7 @@ export default function AccountPopover() {
   };
 
   const handleLogout = () => {
-    navigate('/');
+    logoutUser();
   };
   return (
     <>
@@ -75,8 +73,7 @@ export default function AccountPopover() {
             fullWidth
             color='primary'
             variant='outlined'
-            component={Link}
-            to='/logout'
+            onClick={handleLogout}
           >
             Logout
           </Button>

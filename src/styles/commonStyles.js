@@ -185,6 +185,7 @@ const styles = makeStyles((theme) => ({
     color: '#fff',
     paddingBlock: theme.spacing(4),
     paddingInline: theme.spacing(3),
+    marginTop: 'auto',
   },
 
   Tabs: {
