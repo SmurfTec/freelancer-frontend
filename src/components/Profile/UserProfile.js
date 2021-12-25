@@ -9,9 +9,10 @@ import {
   Typography,
   Divider,
   makeStyles,
+  Button,
 } from '@material-ui/core';
 import React, { useContext, useMemo } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import EditIcon from '@material-ui/icons/Edit';
 
 import GigCard from 'components/Gigs/GigCard';
@@ -20,6 +21,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import { months } from 'data';
 import { AuthContext } from 'contexts/AuthContext';
+import { Chat } from '@material-ui/icons';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -43,7 +45,7 @@ const styles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     position: 'relative',
-    paddingBlock: theme.spacing(5),
+    paddingTop: theme.spacing(5),
   },
   MoreInfoBox: {
     display: 'flex',
@@ -142,6 +144,17 @@ const UserProfile = ({ user }) => {
                   {new Date(user.createdAt).getFullYear()}
                 </Typography>
               </Box>
+              {!isMyProfile && (
+                <Button
+                  component={Link}
+                  to={`/messages?user=${user._id}`}
+                  variant='contained'
+                  color='primary'
+                  endIcon={<Chat />}
+                >
+                  Message
+                </Button>
+              )}
             </Box>
           </Box>
         </Paper>

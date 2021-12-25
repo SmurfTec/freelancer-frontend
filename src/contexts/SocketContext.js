@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import socketIo from 'socket.io-client';
-import { API_BASE_ORIGIN } from 'utils/makeReq';
-import Axios from 'axios';
+import { API_BASE_ORIGIN, makeReq } from 'utils/makeReq';
 import { v4 } from 'uuid';
 import { AuthContext } from './AuthContext';
 
@@ -14,7 +13,7 @@ export const SocketProvider = (props) => {
 
   const [loadingChatId, setLoadingChatId] = useState(null);
 
-  const [chats, setChats] = useState();
+  const [chats, setChats] = useState([]);
 
   //* socket connection
   useEffect(() => {
@@ -29,6 +28,16 @@ export const SocketProvider = (props) => {
     });
   }, []);
 
+  const fetchMyChats = async () => {
+    const resData = await makeReq(`/chats/me`);
+
+    setChats(resData.chats);
+  };
+
+  useEffect(() => {
+    if (token && user) fetchMyChats();
+  }, [token, user]);
+
   useEffect(() => {
     if (!socket) return;
     if (!user) return;
@@ -37,9 +46,9 @@ export const SocketProvider = (props) => {
       console.log(`newMessage received :`, message);
       console.log(`chatId :`, chatId);
       console.log(`receiver :`, receiver);
-      console.log(`user.user._id)`, user.user._id);
+      console.log(`user._id)`, user._id);
       // * Push New Message to that chats
-      if (message.sender._id === user.user._id) {
+      if (message.sender._id === user._id) {
         setLoadingChatId(false);
       }
       if (message.isAgreement) {
@@ -55,7 +64,7 @@ export const SocketProvider = (props) => {
               : el;
           })
         );
-      } else if (receiver === user.user._id)
+      } else if (receiver === user._id)
         setChats((st) =>
           st.map((el) => {
             console.log(`el._id === chatId`, el._id === chatId);
@@ -74,7 +83,7 @@ export const SocketProvider = (props) => {
       console.log(`updatedMessage received :`, message);
       console.log(`chatId :`, chatId);
       console.log(`receiver :`, receiver);
-      console.log(`user.user._id)`, user.user._id);
+      console.log(`user._id)`, user._id);
       // * Push New Message to that chats
       setChats((st) =>
         st.map((el) => {
@@ -98,20 +107,20 @@ export const SocketProvider = (props) => {
     });
   }, [socket, user]);
 
-  useEffect(() => {
-    if (!token) return;
-    (async () => {
-      const { data } = await Axios.get(`/api/chats/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setChats(data.chats);
-    })();
-  }, [user]); //! need to be change so that chats do not get fetched everytime user is updated
+  const addNewChat = (data) => {
+    setChats((el) => [...el, data]);
+  };
 
   const sendNewMessage = (text, chatId) => {
     // console.log(`text`, text);
     // console.log(`chatId`, chatId);
+    console.log('emitting newMessage with', {
+      text: text,
+      token: token,
+      chatId,
+    });
+    socket.emit('newMessage', { text: text, token: token, chatId });
+
     setChats((st) =>
       st.map((el) =>
         el._id === chatId
@@ -122,7 +131,7 @@ export const SocketProvider = (props) => {
                 {
                   text: text,
                   _id: v4(),
-                  sender: user.user,
+                  sender: user,
                   createdAt: new Date(),
                 },
               ],
@@ -130,7 +139,6 @@ export const SocketProvider = (props) => {
           : el
       )
     );
-    socket.emit('newMessage', { text: text, token: token, chatId });
   };
 
   const updateAgreementMessage = (
@@ -165,7 +173,7 @@ export const SocketProvider = (props) => {
       })
     );
     console.log(`body`, {
-      token: user.token,
+      token: token,
       chatId,
       agreementId: agreement._id,
       userId: userId,
@@ -174,7 +182,7 @@ export const SocketProvider = (props) => {
       gameId,
     });
     socket.emit('handleAgreement', {
-      token: user.token,
+      token: token,
       chatId,
       agreementId: agreement._id,
       userId: userId,
@@ -215,7 +223,7 @@ export const SocketProvider = (props) => {
     //   )
     // );
     socket.emit('newAgreement', {
-      token: user.token,
+      token: token,
       chatId,
       agreement: { ...agreement },
       userId: userId,
@@ -233,6 +241,8 @@ export const SocketProvider = (props) => {
         sendNewAgreement,
         updateAgreementMessage,
         loadingChatId,
+        fetchMyChats,
+        addNewChat,
       }}
     >
       {props.children}

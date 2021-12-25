@@ -22,6 +22,8 @@ import clsx from 'clsx';
 import useTextInput from 'hooks/useTextInput';
 import useToggleInput from 'hooks/useToggle';
 import { AuthContext } from 'contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
+import { makeReq } from 'utils/makeReq';
 // import AddGameToAgreement from '../../screens/dashboard/modals/AddGameToAgreement';
 // import CreateAgreement from '../../screens/dashboard/modals/CreateAgreement';
 
@@ -35,7 +37,7 @@ const useStyles = makeStyles({
     boxShadow: 'unset',
     // padding: 20,
     background: '#f2f2f2',
-    color: '#fff',
+    // color: '#fff',
     border: '1px solid #ccc',
   },
   headBG: {
@@ -52,7 +54,7 @@ const useStyles = makeStyles({
     },
   },
   messageArea: {
-    height: '70vh',
+    height: '65vh',
     overflowY: 'auto',
     paddingInline: 20,
   },
@@ -124,8 +126,13 @@ const useStyles = makeStyles({
 const Chat = () => {
   const classes = useStyles();
   const { user } = useContext(AuthContext);
-  const { chats, sendNewMessage, updateAgreementMessage, loadingChatId } =
-    useContext(SocketContext);
+  const {
+    chats,
+    sendNewMessage,
+    updateAgreementMessage,
+    loadingChatId,
+    addNewChat,
+  } = useContext(SocketContext);
   const [messageTxt, handleTxtChange, resetMessageTxt] = useTextInput('');
   const [isAgreementOpen, toggleSendAgreement] = useToggleInput(false);
 
@@ -135,6 +142,39 @@ const Chat = () => {
   const [currentAgreementUser, setCurrentAgreementUser] = useState(null);
   const [acceptAgreementState, setAcceptAgreementState] = useState(null);
   const [activeChat, setActiveChat] = useState();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    (async () => {
+      let newMessageUser = location.search && location.search.split('=')[1];
+      console.log(`newMessageUser`, newMessageUser);
+
+      if (!newMessageUser) return;
+
+      // * Find Chat in the chats
+      let chat = chats.find(
+        (el) => !!el.participants.find((p) => p._id === newMessageUser)
+      );
+
+      console.log(`chat`, chat);
+
+      if (!chat) {
+        // * Create New Chat
+        const resData = await makeReq(
+          `/chats`,
+          {
+            body: {
+              receiver: newMessageUser,
+            },
+          },
+          'POST'
+        );
+        console.log(`resData`, resData);
+        addNewChat(resData.chat);
+      }
+    })();
+  }, [location.search]);
 
   const handleAgreement = async (status, msgAgreement, messageId) => {
     console.log(`status`, status);
@@ -225,20 +265,6 @@ const Chat = () => {
 
   return (
     <Container sx={{ paddingTop: 2 }}>
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          style={{
-            marginBottom: '3rem',
-            marginTop: '1rem',
-          }}
-        >
-          <Typography variant='h5' className='header-message'>
-            Messaging
-          </Typography>
-        </Grid>
-      </Grid>
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
           {/* <Divider />
@@ -274,8 +300,10 @@ const Chat = () => {
                           alt='Remy Sharp'
                           src={`https://ui-avatars.com/api/?rounded=true&name=${
                             isMe(chat) === true
-                              ? chat.participants?.[1].name
-                              : chat.participants?.[0].name.split(' ').join('+')
+                              ? chat.participants?.[1].fullName
+                              : chat.participants?.[0].fullName
+                                  .split(' ')
+                                  .join('+')
                           }`}
                         />
                       </ListItemIcon>
@@ -283,8 +311,8 @@ const Chat = () => {
                       <ListItemText
                         primary={
                           isMe(chat) === true
-                            ? chat.participants?.[1].name
-                            : chat.participants?.[0].name
+                            ? chat.participants?.[1].fullName
+                            : chat.participants?.[0].fullName
                         }
                         secondary={chat.messages[
                           chat.messages.length - 1
@@ -328,13 +356,13 @@ const Chat = () => {
                     {isMyMsg(message) === false && (
                       <ListItemIcon>
                         <Avatar
-                          alt={user?.name}
-                          src={`https://ui-avatars.com/api/?rounded=true&name=${message.sender.name
+                          alt={user?.fullName}
+                          src={`https://ui-avatars.com/api/?rounded=true&name=${message.sender.fullName
                             ?.split(' ')
                             .join('+')}`}
                           style={{
-                            height: 50,
-                            width: 50,
+                            height: 35,
+                            width: 35,
                           }}
                         />
                       </ListItemIcon>
@@ -584,12 +612,12 @@ const Chat = () => {
                       <ListItemIcon>
                         <Avatar
                           alt='Remy Sharp'
-                          src={`https://ui-avatars.com/api/?rounded=true&name=${user?.name
+                          src={`https://ui-avatars.com/api/?rounded=true&name=${user?.fullName
                             .split(' ')
                             .join('+')}`}
                           style={{
-                            height: 50,
-                            width: 50,
+                            height: 35,
+                            width: 35,
                           }}
                         />
                       </ListItemIcon>
@@ -622,6 +650,9 @@ const Chat = () => {
                   form='messageForm'
                   variant='contained'
                   sx={{ marginLeft: 1 }}
+                  style={{
+                    background: 'dodgerblue',
+                  }}
                 >
                   <SendIcon />
                 </Button>
@@ -642,7 +673,7 @@ const Chat = () => {
                   background: 'dodgerblue',
                 }}
               >
-                {loadingChatId ? 'Sending' : 'Agreement'}
+                {loadingChatId ? 'Sending' : 'Offer'}
               </Button>
               {loadingChatId && (
                 <div style={{ marginLeft: 10 }} className='loaderSmall'></div>
