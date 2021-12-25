@@ -38,7 +38,7 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const GigCard = (gig) => {
+const GigCard = (gig, isOwner) => {
   const classes = styles();
   const { _id, title, images, price, packages } = gig;
 
@@ -49,15 +49,17 @@ const GigCard = (gig) => {
   };
   return (
     <Card className={classes.gigCard}>
-      <IconButton
-        aria-label='show more'
-        aria-haspopup='true'
-        onClick={handleGigModify}
-        className={classes.modifyGig}
-        size='small'
-      >
-        <EditIcon />
-      </IconButton>
+      {isOwner === true && (
+        <IconButton
+          aria-label='show more'
+          aria-haspopup='true'
+          onClick={handleGigModify}
+          className={classes.modifyGig}
+          size='small'
+        >
+          <EditIcon />
+        </IconButton>
+      )}
       <CardActionArea>
         <CardMedia
           component='img'

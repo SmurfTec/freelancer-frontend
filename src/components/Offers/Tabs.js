@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
   AppBar,
@@ -12,17 +12,10 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import useStyles from 'styles/TabStyles';
-import DevRequestsTable from './Table';
 import devRequestsMocks from 'mocks/_devRequests';
 import styles from 'styles/commonStyles';
-// import SentTabItem from './SentTabItem';
-// import SentIcon from '@material-ui/icons/SentTakeoff';
-// import HotelIcon from '@material-ui/icons/Apartment';
-// import VehicleIcon from '@material-ui/icons/DriveEta';
-// import { useForm, Controller } from 'react-hook-form';
-// import Select from 'react-select';
-// import { CustomInputField, CustomDatePicker } from 'components/FormControls';
-
+import OffersTable from './Table';
+import { OffersContext } from 'contexts/OffersContext';
 const selectStyles = {
   option: (styles, { isSelected }) => {
     return {
@@ -69,10 +62,11 @@ function a11yProps(index) {
   };
 }
 
-export default function DevRequestsTabs() {
+export default function OffersTabs() {
   const classes = useStyles();
   const classes2 = styles();
   const [value, setValue] = React.useState(0);
+  const { offers, loading } = useContext(OffersContext);
   // const [tripOption, setTripOption] = React.useState(0);
   //   const {
   //     formState: { errors },
@@ -131,24 +125,26 @@ export default function DevRequestsTabs() {
           scrollButtons='auto'
           aria-label='scrollable auto tabs example'
         >
-          {/* <Tab label='Sent' {...a11yProps(0)} />
-          <Tab label='Received' {...a11yProps(1)} /> */}
+          <Tab label='Sent' {...a11yProps(0)} />
+          <Tab label='Received' {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel className={classes.TabPanel} value={value} index={0}>
-        <DevRequestsTable
-          data={devRequestsMocks}
+        <OffersTable
+          data={offers}
           classes={classes2}
           menuId={menuId}
           handleMenuOpen={handleMenuOpen}
+          loading={loading}
         />
       </TabPanel>{' '}
       <TabPanel className={classes.TabPanel} value={value} index={1}>
-        <DevRequestsTable
-          data={devRequestsMocks}
+        <OffersTable
+          data={offers}
           classes={classes2}
           menuId={menuId}
           handleMenuOpen={handleMenuOpen}
+          loading={loading}
         />
         {renderMenu}
       </TabPanel>

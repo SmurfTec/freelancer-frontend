@@ -1,6 +1,6 @@
 import Loading from 'components/common/Loading';
 import ManageGig from 'components/Gigs/ManageGig';
-import LandingPageNew from 'components/NewLandingPage';
+import JobsPage from 'components/JobsPage';
 import GigTable from 'components/Gigs/MyGigs';
 import DevRequest from 'components/DevRequest/CreateRequest';
 import Login from 'components/Login';
@@ -12,11 +12,14 @@ import Register from 'components/Register';
 import { Navigate } from 'react-router-dom';
 import DevRequestsTable from 'components/DevRequest/MyDevRequests';
 import Dashboard from 'components/dashboard';
-import BuyerHome from 'components/BuyerHome';
-import Navbar from 'components/common/Navbar';
 import LandingPageLayout from 'layouts/LandingPageLayout';
 import NavbarLayout from 'layouts/NavbarLayout';
 import SingleRequest from 'components/DevRequest/SingleRequest';
+import UserHome from 'components/UserHome';
+import Services from 'components/ServicesPage';
+import MyOffers from 'components/Offers/MyOffers';
+import Chat from 'components/Chat';
+import ViewUser from 'components/Profile/ViewUser';
 
 const NotFound = () => <h1>Not Found</h1>;
 
@@ -27,16 +30,27 @@ export const protechtedRoutes = [
     children: [
       {
         path: '/',
-        element: <LandingPageNew />,
+        element: <UserHome />,
       },
+      {
+        path: '/services',
+        element: <Services />,
+      },
+      {
+        path: '/offers',
+        element: <MyOffers />,
+      },
+      {
+        path: '/messages',
+        element: <Chat />,
+      },
+      // { path: '/services/:id', element: <ManageGig  /> },
+
       {
         path: '/dashboard',
         element: <Dashboard />,
       },
-      {
-        path: '/home',
-        element: <BuyerHome />,
-      },
+
       {
         path: '/profile',
         element: <ViewProfile />,
@@ -45,12 +59,19 @@ export const protechtedRoutes = [
         path: '/profile/create',
         element: <CreateProfile />,
       },
+      // * Users
+      {
+        path: '/users/:id',
+        element: <ViewUser />,
+      },
+
       // * GIGS
       { path: '/mygigs', element: <GigTable /> },
       { path: '/mygigs/create', element: <ManageGig /> },
       { path: '/mygigs/:id', element: <ManageGig isUpdate /> },
 
       // * DevRequests
+      { path: '/jobs', element: <JobsPage /> },
       { path: '/jobs/create', element: <DevRequest /> },
       { path: '/jobs/:id', element: <SingleRequest /> },
 
@@ -79,7 +100,11 @@ export const publicRoutes = [
     children: [
       {
         path: '/',
-        element: <LandingPageNew />,
+        element: <JobsPage />,
+      },
+      {
+        path: '/services',
+        element: <Services />,
       },
       { path: '/jobs/:id', element: <SingleRequest /> },
     ],

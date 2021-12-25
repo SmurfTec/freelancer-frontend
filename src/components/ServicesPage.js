@@ -10,11 +10,11 @@ import {
 import Navbar from 'components/common/Navbar';
 import ItemsCarousel from 'react-items-carousel';
 
-import useStyles from './styles';
+import useStyles from './BuyerHome/styles';
 import { v4 } from 'uuid';
 import faker from 'faker';
-import CarouselLayout from './Carousel/CarouselLayout';
-import GigCard from './Carousel/GigCard';
+import CarouselLayout from './BuyerHome/Carousel/CarouselLayout';
+import GigCard from './BuyerHome/Carousel/GigCard';
 import gig1 from 'assets/gig1.jpg';
 import gig2 from 'assets/gig2.jpg';
 import gig3 from 'assets/gig3.png';
@@ -24,7 +24,7 @@ import gig6 from 'assets/gig6.png';
 import gig7 from 'assets/gig7.jpg';
 import gig8 from 'assets/gig8.png';
 import gig9 from 'assets/gig9.jpg';
-import DesignCard from './designCard';
+import DesignCard from './BuyerHome/designCard';
 
 const gigs = [
   {
@@ -190,7 +190,7 @@ const gigs = [
   },
 ];
 
-const BuyerHome = () => {
+const Services = () => {
   const handleCatClick = () => {};
 
   const classes = useStyles();
@@ -273,4 +273,4 @@ const BuyerHome = () => {
   );
 };
 
-export default BuyerHome;
+export default Services;

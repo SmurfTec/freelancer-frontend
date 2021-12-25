@@ -25,9 +25,9 @@ export const OffersProvider = ({ children }) => {
 
   const fetchOffers = async () => {
     try {
-      const res = await makeReq(`/offers/me`);
-      console.log(`res`, res);
-      setOffers(res.data.offers);
+      const resData = await makeReq(`/offers/me`);
+      console.log(`resData`, resData);
+      setOffers(resData.offers);
     } catch (err) {
     } finally {
       toggleLoading();
@@ -58,6 +58,7 @@ export const OffersProvider = ({ children }) => {
       );
 
       console.log(`resData`, resData);
+      pushOffer(resData.offer);
       callBack?.();
     } catch (err) {
       handleCatch(err);

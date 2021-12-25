@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import img from 'assets/job.jpg';
+
 const styles = makeStyles((theme) => ({
   wrapper: {
     marginTop: theme.spacing(3),

@@ -1,27 +1,8 @@
-import {
-  Box,
-  Container,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-} from '@material-ui/core';
-import Navbar from 'components/common/Navbar';
-import React, { useState } from 'react';
+import { Box, Container, Typography, Menu, MenuItem } from '@material-ui/core';
+import React from 'react';
 import styles from 'styles/commonStyles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { DevRequestsTableData } from 'data';
 import { makeStyles } from '@material-ui/core/styles';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import TabLayout from 'components/common/TabLayout';
-import devRequestsMocks from 'mocks/_devRequests';
-import DevRequestsTabs from './Tabs';
+import OfferTabs from './Tabs';
 
 const useStyles = makeStyles((theme) => ({
   gigImg: {
@@ -74,13 +55,12 @@ const MyOffers = () => {
 
   return (
     <>
-      <Navbar user='user' />
-      <Container className={classes.container}>
-        <Box sx={{ mt: 3 }}>
-          <Typography variant='h4'>Buyer Requests</Typography>
+      <Container>
+        <Box>
+          <Typography variant='h4'>Offers Submitted for Jobs</Typography>
         </Box>
         <Box sx={{ mt: 4 }}>
-          <DevRequestsTabs />
+          <OfferTabs />
         </Box>
       </Container>
       {renderMenu}

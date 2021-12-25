@@ -48,9 +48,9 @@ export const DataProvider = ({ children }) => {
       displayName='Data Context'
       value={{
         categories,
-        devRequests,
-        loadingDevRequests,
         getRequestById,
+        loadingDevRequests,
+        devRequests,
       }}
     >
       {children}

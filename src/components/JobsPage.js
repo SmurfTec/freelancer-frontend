@@ -25,38 +25,53 @@ import { v4 } from 'uuid';
 import { DataContext } from 'contexts/DataContext';
 import { Skeleton } from '@material-ui/lab';
 import DevReqCard from './DevRequest/DevReqCard';
+import { AuthContext } from 'contexts/AuthContext';
+import { DevRequestsContext } from 'contexts/DevRequestsContext';
 
 const supporters = [img1, img2, img3, img4, img5, img6, img7];
 
-const NewLandingPage = () => {
+const RenderContent = ({ loading, data, handleCatClick }) => (
+  <Grid container spacing={2}>
+    {loading
+      ? Array(20)
+          .fill()
+          .map(() => (
+            <Grid item xs={6} sm={3} md={3} lg={2} key={v4()}>
+              <Skeleton variant='react' height={200} />
+            </Grid>
+          ))
+      : data?.map((el) => (
+          <Grid item xs={6} sm={3} md={3} lg={3} key={el.value}>
+            <DevReqCard devRequest={el} handleClick={handleCatClick} />
+          </Grid>
+        ))}
+  </Grid>
+);
+
+const JobsPage = () => {
   const classes = styles();
   const handleCatClick = () => {};
+  const { user } = useContext(AuthContext);
 
   const { devRequests, loadingDevRequests } = useContext(DataContext);
+  const { myDevRequests: usersRequests, loadingMyRequests } =
+    useContext(DevRequestsContext);
 
   return (
     <React.Fragment>
       <Container maxWidth='1400'>
         <Typography variant='h4'>Popular Jobs</Typography>
 
-        <Grid container spacing={2}>
-          {loadingDevRequests
-            ? Array(20)
-                .fill()
-                .map(() => (
-                  <Grid item xs={6} sm={3} md={3} lg={2} key={v4()}>
-                    <Skeleton variant='react' height={200} />
-                  </Grid>
-                ))
-            : devRequests.map((el) => (
-                <Grid item xs={6} sm={3} md={3} lg={3} key={el.value}>
-                  <DevReqCard devRequest={el} handleClick={handleCatClick} />
-                </Grid>
-              ))}
-        </Grid>
+        <RenderContent
+          loading={
+            user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
+          }
+          data={user?.role === 'buyer' ? usersRequests : devRequests}
+          handleCatClick={handleCatClick}
+        />
       </Container>
     </React.Fragment>
   );
 };
 
-export default NewLandingPage;
+export default JobsPage;

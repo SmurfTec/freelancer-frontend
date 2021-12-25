@@ -72,10 +72,9 @@ const GigTable = () => {
 
   return (
     <>
-      <Navbar />
       <Container className={classes.container}>
         <Box sx={{ mt: 3 }}>
-          <Typography variant='h4'>Gigs</Typography>
+          <Typography variant='h4'>Services</Typography>
         </Box>
         <Box sx={{ mt: 4 }}>
           <TabLayout />
@@ -84,7 +83,7 @@ const GigTable = () => {
             <Table className={classes.table} aria-label='simple table'>
               <TableHead>
                 <TableRow>
-                  <TableCell colspan='2'>GIG</TableCell>
+                  <TableCell colspan='2'>Service</TableCell>
                   <TableCell>IMPRESSIONS</TableCell>
                   <TableCell>ORDERS</TableCell>
                   <TableCell>ACTIONS</TableCell>

@@ -83,10 +83,9 @@ const GigTable = () => {
 
   return (
     <>
-      <Navbar user='user' />
       <Container className={classes.container}>
         <Box sx={{ mt: 3 }}>
-          <Typography variant='h4'>Gigs</Typography>
+          <Typography variant='h4'>Your Services</Typography>
         </Box>
         <Box sx={{ mt: 4 }}>
           {/* <TabLayout /> */}
@@ -96,7 +95,7 @@ const GigTable = () => {
               <TableHead>
                 <TableRow>
                   <TableCell colspan='2' align='center'>
-                    GIG
+                    Service
                   </TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Reviews</TableCell>

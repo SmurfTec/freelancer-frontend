@@ -12,33 +12,49 @@ export const DevRequestsProvider = ({ children }) => {
   // let history = useHistory();
   const { user } = useContext(AuthContext);
 
-  const [loading, toggleLoading] = useToggle(true);
+  const [loadingRequests, toggleLoadingReqs] = useToggle(true);
+  const [loadingMyRequests, toggleLoadingMyReqs] = useToggle(true);
+  const [devRequests, setDevRequests] = useState([]);
+
   const [
-    devRequests,
-    setDevRequests,
-    pushDevRequest,
-    filterDevRequests,
-    updateDevRequests,
-    removeDevRequests,
-    clearDevRequests,
+    myDevRequests,
+    setMyDevRequests,
+    pushMyDevRequest,
+    filterMyDevRequests,
+    updateMyDevRequests,
+    removeMyDevRequests,
+    clearMyDevRequests,
   ] = useArray([], '_id');
 
-  const fetchDevRequests = async () => {
+  const fetchMyDevRequests = async () => {
     try {
-      const res = await makeReq(`/devRequests/me`);
-      console.log(`res`, res);
-      setDevRequests(res.data.devRequests);
+      const resData = await makeReq(`/devRequests/me`);
+      console.log(`resData`, resData);
+      setMyDevRequests(resData.devRequests);
     } catch (err) {
     } finally {
-      toggleLoading();
+      toggleLoadingReqs();
+    }
+  };
+  const fetchDevRequests = async () => {
+    try {
+      const resData = await makeReq(`/devRequests`);
+      console.log(`resData`, resData);
+      setDevRequests(resData.devRequests);
+    } catch (err) {
+    } finally {
+      toggleLoadingMyReqs();
     }
   };
 
   useEffect(() => {
-    if (!user) return;
-
-    // * Fetch user's Dev requests if he logged in
     fetchDevRequests();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    fetchMyDevRequests();
+    // * Fetch user's Dev requests if he logged in
   }, [user]);
 
   const getRequestById = (id) => {
@@ -73,7 +89,7 @@ export const DevRequestsProvider = ({ children }) => {
       console.log(`res`, res);
       const resData = await res.json();
       if (res.ok) {
-        pushDevRequest(resData.devRequest);
+        pushMyDevRequest(resData.devRequest);
         callBack?.();
       } else {
         handleCatch(resData);
@@ -86,8 +102,8 @@ export const DevRequestsProvider = ({ children }) => {
     <DevRequestsContext.Provider
       displayName='DevRequests Context'
       value={{
-        devRequests,
-        loading,
+        myDevRequests,
+        loadingMyRequests,
         createDevRequest,
         getRequestById,
       }}

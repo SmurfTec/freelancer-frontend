@@ -17,6 +17,8 @@ const LandingPageLayout = () => {
       <Box style={{ marginTop: '2rem' }} />
       <Outlet />
 
+      <Box style={{ marginTop: '2rem' }} />
+
       <Footer />
     </Box>
   );

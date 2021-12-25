@@ -14,9 +14,12 @@ const Theme = ({ children }) => {
           // main: '#1ab6bfe6',
           main: '#00AB55',
         },
+        hover: {
+          main: '#02c2a9',
+        },
         text: {
-          primary: '#161C24',
-          secondary: '#62646a',
+          primary: '#000',
+          secondary: '#7a7d85',
           disabled: '#637381',
         },
       },

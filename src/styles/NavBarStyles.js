@@ -33,11 +33,15 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     textDecoration: 'none',
     '& a': {
-      color: theme.palette.text.primary,
+      color: theme.palette.text.secondary,
+      '&.active': {
+        color: theme.palette.hover.main,
+      },
     },
     '&:hover': {
+      color: theme.palette.hover.main,
       // borderBottom: '2px solid #B033fa',
-      color: 'deepskyblue',
+      // color: 'deepskyblue',
       transition: '0.3s',
     },
   },
