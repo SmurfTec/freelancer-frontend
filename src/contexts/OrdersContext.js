@@ -62,6 +62,26 @@ export const OrdersProvider = ({ children }) => {
     }
   };
 
+  const manageOrder = async (orderId, status, review, callBack) => {
+    try {
+      const resData = await makeReq(
+        `/orders/manageorder/${orderId}`,
+        {
+          body: {
+            status: status,
+            rating: review?.rating,
+            review: review?.review,
+          },
+        },
+        'PATCH'
+      );
+      callBack?.();
+      updateOrder(orderId, resData.order);
+    } catch (err) {
+    } finally {
+    }
+  };
+
   return (
     <OrdersContext.Provider
       displayName='Orders Context'
@@ -70,6 +90,7 @@ export const OrdersProvider = ({ children }) => {
         getOrderById,
         loading,
         submitOrder,
+        manageOrder,
       }}
     >
       {children}

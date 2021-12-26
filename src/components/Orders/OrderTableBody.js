@@ -4,6 +4,12 @@ import {
   Box,
   IconButton,
   Avatar,
+  Grow,
+  Paper,
+  ClickAwayListener,
+  Popper,
+  MenuList,
+  MenuItem,
 } from '@material-ui/core';
 import Label from 'components/common/Label';
 import React, { useContext, useState } from 'react';
@@ -12,6 +18,7 @@ import useToggle from 'hooks/useToggle';
 import UploadSubmission from './UploadSubmissionDialog';
 import { MoreHoriz } from '@material-ui/icons';
 import { OrdersContext } from 'contexts/OrdersContext';
+import GiveReview from './ReviewDialog';
 
 const OrderTableBody = ({
   data,
@@ -19,9 +26,12 @@ const OrderTableBody = ({
   classes_s,
   showSubmission,
   showActions,
+  manageOrder,
 }) => {
   const [isUploadOpen, toggleUploadOpen] = useToggle(false);
   const [uploadOrderId, setUploadOrderId] = useState();
+  const [orderStatusId, setOrderStatusId] = useState();
+  const [isReviewOpen, toggleReviewOpen] = useToggle(false);
   const { submitOrder } = useContext(OrdersContext);
 
   const getStatusColor = (status) => {
@@ -36,6 +46,16 @@ const OrderTableBody = ({
       default:
         return 'primary';
     }
+  };
+
+  const handleOrderStatus = (status) => {
+    manageOrder(orderStatusId, status);
+    handleToggle();
+  };
+
+  const handleReview = (body) => {
+    manageOrder(orderStatusId, 'completed', body);
+    toggleReviewOpen();
   };
 
   const renderUserCells = (order) => {
@@ -102,6 +122,28 @@ const OrderTableBody = ({
     // console.log(`url`, url);
   };
 
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
   return (
     <>
       {data?.map((order) => (
@@ -136,21 +178,19 @@ const OrderTableBody = ({
                 </IconButton>
               </TableCell>
             ) : (
-              <IconButton
-                aria-label='show more'
-                // aria-controls={menuId}
-                // data-gigtitle={row.title}
-                aria-haspopup='true'
-                // onClick={handleMenuOpen}
-                style={
-                  {
-                    // marginLeft: 'auto',
-                    // color: '#cccccc',
-                  }
-                }
-              >
-                <MoreHoriz />
-              </IconButton>
+              <TableCell>
+                <IconButton
+                  ref={anchorRef}
+                  aria-controls={open ? 'menu-list-grow' : undefined}
+                  aria-haspopup='true'
+                  onClick={() => {
+                    setOrderStatusId(order._id);
+                    handleToggle();
+                  }}
+                >
+                  <MoreHoriz />
+                </IconButton>
+              </TableCell>
             ))}
         </TableRow>
       ))}
@@ -159,6 +199,43 @@ const OrderTableBody = ({
         toggleDialog={toggleUploadOpen}
         handleCreate={handleSubmission}
       />
+      <GiveReview
+        open={isReviewOpen}
+        toggleDialog={toggleReviewOpen}
+        handleCreate={handleReview}
+      />
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === 'bottom' ? 'center top' : 'center bottom',
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList
+                  autoFocusItem={open}
+                  id='menu-list-grow'
+                  onKeyDown={handleListKeyDown}
+                >
+                  <MenuItem onClick={toggleReviewOpen}>Complete</MenuItem>
+                  <MenuItem onClick={() => handleOrderStatus('notAccepted')}>
+                    Not Accepted
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </>
   );
 };
