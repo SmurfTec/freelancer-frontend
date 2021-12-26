@@ -3,10 +3,12 @@ import CreateOfferDialog from 'components/Offers/CreateOffer';
 import { AuthContext } from 'contexts/AuthContext';
 import { DataContext } from 'contexts/DataContext';
 import { DevRequestsContext } from 'contexts/DevRequestsContext';
+import { OffersContext } from 'contexts/OffersContext';
 
 import useToggle from 'hooks/useToggle';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import JobBids from './JobBids';
 
 import useStyles from './styles/SingleRequestStyles';
@@ -23,6 +25,7 @@ const SingleRequest = () => {
   const navigate = useNavigate();
   const [notFound, toggleNotFound] = useToggle(false);
   const [isBidOpen, toggleBidOpen] = useToggle(false);
+  const { createOffer } = useContext(OffersContext);
 
   const { id } = useParams();
 
@@ -48,6 +51,13 @@ const SingleRequest = () => {
 
     return user._id === job.user._id;
   }, [user, job]);
+
+  const handleCreate = (inputState) => {
+    handleCreate(id, inputState, () => {
+      toast.success('Offer Sent successfully!');
+      toggleBidOpen();
+    });
+  };
 
   return (
     <Container style={{ paddingBottom: '3rem' }}>
@@ -126,9 +136,9 @@ const SingleRequest = () => {
                     Apply
                   </Button>
                   <CreateOfferDialog
-                    devRequestId={id}
                     open={isBidOpen}
                     toggleDialog={toggleBidOpen}
+                    handleCreate={handleCreate}
                   />
                 </>
               )}

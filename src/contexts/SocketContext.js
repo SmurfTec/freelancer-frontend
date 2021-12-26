@@ -51,7 +51,7 @@ export const SocketProvider = (props) => {
       if (message.sender._id === user._id) {
         setLoadingChatId(false);
       }
-      if (message.isAgreement) {
+      if (message.isOffer) {
         setChats((st) =>
           st.map((el) => {
             console.log(`el._id === chatId`, el._id === chatId);
@@ -84,7 +84,7 @@ export const SocketProvider = (props) => {
       console.log(`chatId :`, chatId);
       console.log(`receiver :`, receiver);
       console.log(`user._id)`, user._id);
-      // * Push New Message to that chats
+      // * Update Message in chats
       setChats((st) =>
         st.map((el) => {
           console.log(`el._id === chatId`, el._id === chatId);
@@ -141,8 +141,8 @@ export const SocketProvider = (props) => {
     );
   };
 
-  const updateAgreementMessage = (
-    agreement,
+  const updateOfferMessage = (
+    offer,
     chatId,
     userId,
     status,
@@ -151,8 +151,9 @@ export const SocketProvider = (props) => {
   ) => {
     // console.log(`text`, text);
     console.log(`chatId`, chatId);
-    console.log(`agreement`, agreement);
+    console.log(`offer`, offer);
     console.log(`userId`, userId);
+    console.log(`status`, status);
 
     setChats((st) =>
       st.map((el) => {
@@ -175,57 +176,31 @@ export const SocketProvider = (props) => {
     console.log(`body`, {
       token: token,
       chatId,
-      agreementId: agreement._id,
+      offerId: offer._id,
       userId: userId,
       status,
       messageId: messageId,
-      gameId,
     });
-    socket.emit('handleAgreement', {
+    socket.emit('handleOffer', {
       token: token,
       chatId,
-      agreementId: agreement._id,
+      offerId: offer._id,
       userId: userId,
       status,
       messageId: messageId,
-      gameId,
     });
   };
 
-  const sendNewAgreement = (agreement, chatId, userId) => {
+  const sendNewOffer = (offer, chatId, userId) => {
     // console.log(`text`, text);
     console.log(`chatId`, chatId);
-    console.log(`agreement`, agreement);
+    console.log(`offer`, offer);
     console.log(`userId`, userId);
 
-    const agreementId = v4();
-    // setChats((st) =>
-    //   st.map((el) =>
-    //     el._id === chatId
-    //       ? {
-    //           ...el,
-    //           messages: [
-    //             ...el.messages,
-    //             {
-    //               isAgreement: true,
-    //               agreement: {
-    //                 ...agreement,
-    //                 status: 'pending',
-    //                 createdAt: new Date(),
-    //               },
-    //               _id: agreementId,
-    //               sender: user.user,
-    //               createdAt: new Date(),
-    //             },
-    //           ],
-    //         }
-    //       : el
-    //   )
-    // );
-    socket.emit('newAgreement', {
+    socket.emit('newOffer', {
       token: token,
       chatId,
-      agreement: { ...agreement },
+      offer: { ...offer },
       userId: userId,
     });
     setLoadingChatId(chatId);
@@ -238,8 +213,8 @@ export const SocketProvider = (props) => {
         socket,
         sendNewMessage,
         chats,
-        sendNewAgreement,
-        updateAgreementMessage,
+        sendNewOffer,
+        updateOfferMessage,
         loadingChatId,
         fetchMyChats,
         addNewChat,

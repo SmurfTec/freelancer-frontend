@@ -24,6 +24,7 @@ import useToggleInput from 'hooks/useToggle';
 import { AuthContext } from 'contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { makeReq } from 'utils/makeReq';
+import CreateOfferDialog from 'components/Offers/CreateOffer';
 // import AddGameToAgreement from '../../screens/dashboard/modals/AddGameToAgreement';
 // import CreateAgreement from '../../screens/dashboard/modals/CreateAgreement';
 
@@ -39,6 +40,9 @@ const useStyles = makeStyles({
     background: '#f2f2f2',
     // color: '#fff',
     border: '1px solid #ccc',
+    '& .MuiTypography-colorTextSecondary': {
+      color: '#fff',
+    },
   },
   headBG: {
     backgroundColor: '#e0e0e0',
@@ -76,9 +80,11 @@ const useStyles = makeStyles({
     paddingTop: 0,
     '& p': {
       fontSize: 14,
+      color: '#000',
     },
     '& .MuiListItemText-secondary': {
       fontSize: 14,
+      color: '#000',
     },
   },
 
@@ -92,9 +98,11 @@ const useStyles = makeStyles({
     paddingTop: 0,
     '& p': {
       fontSize: 14,
+      color: '#000',
     },
     '& .MuiListItemText-secondary': {
       fontSize: 14,
+      color: '#000',
     },
   },
 
@@ -129,18 +137,18 @@ const Chat = () => {
   const {
     chats,
     sendNewMessage,
-    updateAgreementMessage,
+    updateOfferMessage,
     loadingChatId,
     addNewChat,
+    sendNewOffer,
   } = useContext(SocketContext);
   const [messageTxt, handleTxtChange, resetMessageTxt] = useTextInput('');
-  const [isAgreementOpen, toggleSendAgreement] = useToggleInput(false);
+  const [sendOfferOpen, toggleSendOffer] = useToggleInput(false);
 
-  const [isAddGameOpen, toggleAddGameOpen] = useToggleInput(false);
-  const [agreement, setAgreement] = useState(null);
+  const [offer, setOffer] = useState(null);
 
-  const [currentAgreementUser, setCurrentAgreementUser] = useState(null);
-  const [acceptAgreementState, setAcceptAgreementState] = useState(null);
+  const [currentOfferUser, setCurrentOfferUser] = useState(null);
+  const [acceptOfferState, setAcceptOfferState] = useState(null);
   const [activeChat, setActiveChat] = useState();
 
   const location = useLocation();
@@ -176,30 +184,48 @@ const Chat = () => {
     })();
   }, [location.search]);
 
-  const handleAgreement = async (status, msgAgreement, messageId) => {
+  const handleCreateOffer = (inputState) => {
+    console.log(`inputState`, inputState);
+    let targetUser =
+      isMe(activeChat) === true
+        ? activeChat.participants?.[1]._id
+        : activeChat.participants?.[0]._id;
+
+    console.log(`targetUser`, targetUser);
+
+    sendNewOffer(inputState, activeChat._id, targetUser);
+    toggleSendOffer();
+  };
+
+  const handleOffer = async (status, msgOffer, messageId) => {
     console.log(`status`, status);
     console.log(`messageId`, messageId);
     if (status === 'rejected') {
-      // * reject msgAgreement
-      updateAgreementMessage(
-        msgAgreement,
+      // * reject msgOffer
+      updateOfferMessage(
+        msgOffer,
         activeChat._id,
         user._id,
         'rejected',
         messageId
       );
     } else {
-      setAcceptAgreementState({
-        msgAgreement,
-        chatId: activeChat._id,
-        userId: user._id,
-        status: 'accepted',
-        messageId,
-      });
+      updateOfferMessage(
+        msgOffer,
+        activeChat._id,
+        user._id,
+        'accepted',
+        messageId
+      );
+      // setAcceptOfferState({
+      //   msgOffer,
+      //   chatId: activeChat._id,
+      //   userId: user._id,
+      //   status: 'accepted',
+      //   messageId,
+      // });
 
-      setAgreement(msgAgreement);
-
-      toggleAddGameOpen();
+      // setOffer(msgOffer);
     }
   };
 
@@ -252,19 +278,19 @@ const Chat = () => {
     return chat.participants?.[0]._id === user?._id;
   };
 
-  const sendAgreement = () => {
+  const sendOffer = () => {
     let targetUser =
       isMe(activeChat) === true
         ? activeChat.participants?.[1]._id
         : activeChat.participants?.[0]._id;
 
     console.log(`targetUser`, targetUser);
-    setCurrentAgreementUser([targetUser, activeChat._id]);
-    toggleSendAgreement();
+    setCurrentOfferUser([targetUser, activeChat._id]);
+    toggleSendOffer();
   };
 
   return (
-    <Container sx={{ paddingTop: 2 }}>
+    <Container sx={{ paddingTop: 2, maxWidth: 'unset' }}>
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
           {/* <Divider />
@@ -371,27 +397,26 @@ const Chat = () => {
                       container
                       className={clsx({
                         // classes.drawer is applied always
-                        [classes.message]: message.isAgreement === false, // classes.drawerOpen is applied always, bool = true
-                        [classes.agreementMessage]:
-                          message.isAgreement === true, // classes.drawerOpen is applied always, bool = true
+                        [classes.message]: message.isOffer === false, // classes.drawerOpen is applied always, bool = true
+                        [classes.agreementMessage]: message.isOffer === true, // classes.drawerOpen is applied always, bool = true
                         [classes.myMessage]: isMyMsg(message) === true, // classes.drawerOpen is applied always, bool = true
                         [classes.otherMessage]: isMyMsg(message) === false, // you can also use boolean variable
                       })}
                     >
                       {isMyMsg(message) === true ? (
-                        message.isAgreement && message.agreement ? (
+                        message.isOffer && message.offer ? (
                           <Grid item xs={12}>
                             <Typography
                               style={{
                                 fontSize: 18,
                               }}
                             >
-                              Agreement
+                              Offer
                             </Typography>
                             <Box className={classes.Agreement}>
                               <Box className={classes.AgreementHeader}>
                                 <Typography variant='h6' fontWeight='bold'>
-                                  {message.agreement.description}
+                                  {message.offer.description}
                                 </Typography>
                                 <Typography
                                   variant='h6'
@@ -399,7 +424,7 @@ const Chat = () => {
                                     minWidth: 'fit-content',
                                   }}
                                 >
-                                  $ {message.agreement.cost}
+                                  $ {message.offer.budget}
                                 </Typography>
                               </Box>
                               <Box
@@ -414,16 +439,15 @@ const Chat = () => {
                                   component='span'
                                   style={{
                                     color:
-                                      message.agreement.status === 'pending'
+                                      message.offer.status === 'pending'
                                         ? 'orange'
-                                        : message.agreement.status ===
-                                          'accepted'
+                                        : message.offer.status === 'accepted'
                                         ? 'green'
                                         : 'red',
                                     textTransform: 'Capitalize',
                                   }}
                                 >
-                                  <b>{message.agreement.status}</b>
+                                  <b>{message.offer.status}</b>
                                 </Typography>
                                 <Typography
                                   variant='subtitle2'
@@ -433,7 +457,7 @@ const Chat = () => {
                                   }}
                                 >
                                   {new Date(
-                                    message.agreement.createdAt
+                                    message.offer.createdAt
                                   ).toLocaleTimeString()}
                                 </Typography>
                               </Box>
@@ -448,22 +472,22 @@ const Chat = () => {
                               <Typography variant='h5'>Agreement</Typography>
                               <Typography variant='h5'>
                                 <b>Description :</b>{' '}
-                                {message.agreement.description}
+                                {message.offer.description}
                               </Typography>
                               <Typography variant='h5'>
-                                <b>Cost :</b> {message.agreement.cost}
+                                <b>Cost :</b> {message.offer.cost}
                               </Typography>
                               <Typography variant='h5'>
-                                <b>Days :</b> {message.agreement.days}
+                                <b>Days :</b> {message.offer.days}
                               </Typography>
                               <Typography variant='h5'>
                                 <b>Sent at :</b>{' '}
                                 {new Date(
-                                  message.agreement.createdAt
+                                  message.offer.createdAt
                                 ).toLocaleString()}
                               </Typography>
                               <Typography variant='h5'>
-                                <b>Status :</b> {message.agreement.status}
+                                <b>Status :</b> {message.offer.status}
                               </Typography>
                             </Box> */}
                           </Grid>
@@ -485,7 +509,7 @@ const Chat = () => {
                             </Grid>
                           </>
                         )
-                      ) : message.isAgreement && message.agreement ? (
+                      ) : message.isOffer && message.offer ? (
                         <Grid item xs={12}>
                           <Typography
                             style={{
@@ -497,19 +521,19 @@ const Chat = () => {
                           <Box className={classes.Agreement}>
                             <Box className={classes.AgreementHeader}>
                               <Typography variant='h6' fontWeight='bold'>
-                                {message.agreement.description}
+                                {message.offer.description}
                               </Typography>
                               <Typography variant='h6'>
-                                $ {message.agreement.cost}
+                                $ {message.offer.budget}
                               </Typography>
                             </Box>
                             {/* <Box className={classes.AgreementExpansion}>
                               <Typography variant='subtitle'>
-                                {message.agreement.days}
+                                {message.offer.days}
                                 <b>Days :</b>
                               </Typography>
                             </Box> */}
-                            {message.agreement.status === 'pending' ? (
+                            {message.offer.status === 'pending' ? (
                               <Box
                                 style={{
                                   padding: 10,
@@ -524,9 +548,9 @@ const Chat = () => {
                                     color: '#fff',
                                   }}
                                   onClick={() =>
-                                    handleAgreement(
+                                    handleOffer(
                                       'accepted',
-                                      message.agreement,
+                                      message.offer,
                                       message._id
                                     )
                                   }
@@ -540,9 +564,9 @@ const Chat = () => {
                                     color: '#fff',
                                   }}
                                   onClick={() =>
-                                    handleAgreement(
+                                    handleOffer(
                                       'rejected',
-                                      message.agreement,
+                                      message.offer,
                                       message._id
                                     )
                                   }
@@ -563,16 +587,15 @@ const Chat = () => {
                                   component='span'
                                   style={{
                                     color:
-                                      message.agreement.status === 'pending'
+                                      message.offer.status === 'pending'
                                         ? 'orange'
-                                        : message.agreement.status ===
-                                          'accepted'
+                                        : message.offer.status === 'accepted'
                                         ? 'green'
                                         : 'red',
                                     textTransform: 'Capitalize',
                                   }}
                                 >
-                                  <b>{message.agreement.status}</b>
+                                  <b>{message.offer.status}</b>
                                 </Typography>
                                 <Typography
                                   variant='subtitle2'
@@ -582,7 +605,7 @@ const Chat = () => {
                                   }}
                                 >
                                   {new Date(
-                                    message.agreement.createdAt
+                                    message.offer.createdAt
                                   ).toLocaleTimeString()}
                                 </Typography>
                               </Box>
@@ -659,13 +682,13 @@ const Chat = () => {
               </Grid>
             </Grid>
           )}
-          {activeChat && (
+          {activeChat && user?.role === 'seller' && (
             <ListItem>
               <Button
                 color='primary'
                 aria-label='add'
                 variant='contained'
-                onClick={sendAgreement}
+                onClick={toggleSendOffer}
                 size='small'
                 disabled={loadingChatId}
                 endIcon={<Add />}
@@ -682,6 +705,11 @@ const Chat = () => {
           )}
         </Grid>
       </Grid>
+      <CreateOfferDialog
+        open={sendOfferOpen}
+        toggleDialog={toggleSendOffer}
+        handleCreate={handleCreateOffer}
+      />
     </Container>
   );
 };

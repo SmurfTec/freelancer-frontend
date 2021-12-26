@@ -7,18 +7,14 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
-  Paper,
   TextField,
   Box,
   OutlinedInput,
-  Typography,
   makeStyles,
 } from '@material-ui/core';
-import { OffersContext } from 'contexts/OffersContext';
 import useManyInputs from 'hooks/useManyInputs';
 import useToggle from 'hooks/useToggle';
-import React, { useContext } from 'react';
-import { toast } from 'react-toastify';
+import React from 'react';
 import useCommonStyles from 'styles/commonStyles';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,9 +41,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateOfferDialog = ({ open, toggleDialog, devRequestId }) => {
+const CreateOfferDialog = ({ open, toggleDialog, handleCreate }) => {
   const classes = useCommonStyles();
-  const { createOffer } = useContext(OffersContext);
   const classes_s = useStyles();
   const initialState = {
     description: '',
@@ -67,10 +62,11 @@ const CreateOfferDialog = ({ open, toggleDialog, devRequestId }) => {
   ] = useManyInputs(initialState);
 
   const handleSubmit = (e) => {
-    createOffer(devRequestId, inputState, () => {
-      toast.success('Offer Sent successfully!');
-      toggleDialog();
-    });
+    handleCreate(inputState);
+    //  handleCreate(devRequestId, inputState, () => {
+    //    toast.success('Offer Sent successfully!');
+    //    toggleDialog();
+    //  });
     e.preventDefault();
   };
 
