@@ -27,7 +27,7 @@ const OffersTable = ({ handleMenuOpen, classes, data, menuId, loading }) => (
       </TableHead>
       <TableBody>
         {/* {console.log(`data`, data)} */}
-        {loading
+        {loading === true
           ? Array(5)
               .fill()
               .map(() => (

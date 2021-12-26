@@ -5,7 +5,7 @@ import GigTable from 'components/Gigs/MyGigs';
 import DevRequest from 'components/DevRequest/CreateRequest';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
-import OrdersTable from 'components/Orders/OrdersTable';
+import OrdersTable from 'components/Orders/MyOrders';
 import ViewProfile from 'components/Profile';
 import CreateProfile from 'components/Profile/CreateProfile';
 import Register from 'components/Register';
@@ -69,20 +69,19 @@ export const protechtedRoutes = [
       { path: '/mygigs', element: <GigTable /> },
       { path: '/mygigs/create', element: <ManageGig /> },
       { path: '/mygigs/:id', element: <ManageGig isUpdate /> },
+      { path: '/gigs/manage', element: <GigTable /> },
 
       // * DevRequests
       { path: '/jobs', element: <JobsPage /> },
       { path: '/jobs/create', element: <DevRequest /> },
       { path: '/jobs/:id', element: <SingleRequest /> },
-
       { path: '/requests', element: <DevRequestsTable /> },
       // { path: '/requests/mygigs', element: <MyGigs /> },
       // { path: '/mygigs', element: <GigTable /> },
       // { path: '/requests/mygigs/:id', element: <ManageGig isUpdate /> },
 
-      // {path  : '/gigs' , element : <Gigs />},
-      { path: '/gigs/manage', element: <GigTable /> },
-      { path: '/manageOrders', element: <OrdersTable /> },
+      // * Orders
+      { path: '/orders', element: <OrdersTable /> },
       { path: '/logout', element: <Logout /> },
       { path: '*', element: <NotFound /> },
     ],

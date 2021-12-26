@@ -12,6 +12,7 @@ import { SocketProvider } from 'contexts/SocketContext';
 
 // * Style Sheets for different Packages
 import 'react-toastify/dist/ReactToastify.css';
+import { OrdersProvider } from 'contexts/OrdersContext';
 // *
 
 ReactDOM.render(
@@ -21,9 +22,11 @@ ReactDOM.render(
         <DataProvider>
           <DevRequestsProvider>
             <OffersProvider>
-              <SocketProvider>
-                <App />
-              </SocketProvider>
+              <OrdersProvider>
+                <SocketProvider>
+                  <App />
+                </SocketProvider>
+              </OrdersProvider>
             </OffersProvider>
           </DevRequestsProvider>
         </DataProvider>

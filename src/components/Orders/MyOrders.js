@@ -11,7 +11,7 @@ import {
   Chip,
 } from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styles from 'styles/commonStyles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -24,6 +24,12 @@ import { ordersData } from 'data';
 import { makeStyles } from '@material-ui/core/styles';
 import tabstyles from 'styles/TabStyles';
 import PropTypes from 'prop-types';
+import { OrdersContext } from 'contexts/OrdersContext';
+import { Skeleton } from '@material-ui/lab';
+import { v4 } from 'uuid';
+import { AuthContext } from 'contexts/AuthContext';
+import Label from 'components/common/Label';
+import OrderTableBody from './OrderTableBody';
 
 const useStyles = makeStyles((theme) => ({
   gigImg: {
@@ -74,11 +80,40 @@ const OrdersTable = () => {
   const classes = styles();
   const classes_s = useStyles();
   const tabClasses = tabstyles();
+  const [filteredOrders, setFilteredOrders] = useState([]);
+
+  const { orders, loading } = useContext(OrdersContext);
+  const { user } = useContext(AuthContext);
 
   const [actionMenu, setActionMenu] = React.useState(null);
   const isMenuOpen = Boolean(actionMenu);
 
   const [value, setValue] = React.useState(0);
+
+  useEffect(() => {
+    console.log(`orders`, orders);
+    if (!orders) return;
+
+    switch (value) {
+      case 0: {
+        setFilteredOrders(orders.filter((el) => el.status === 'active'));
+        break;
+      }
+      case 1:
+        setFilteredOrders(orders.filter((el) => el.status === 'delivered'));
+        break;
+      case 2:
+        setFilteredOrders(orders.filter((el) => el.status === 'notAccepted'));
+        break;
+      case 3:
+        setFilteredOrders(orders.filter((el) => el.status === 'completed'));
+        break;
+
+      default:
+        setFilteredOrders(orders);
+        break;
+    }
+  }, [orders, value]);
 
   //? Tabs onChange func
   const handleChange = (event, newValue) => {
@@ -115,12 +150,32 @@ const OrdersTable = () => {
     </Menu>
   );
 
+  const isBuyer = useMemo(() => {
+    return user?.role === 'buyer';
+  }, [user]);
+
+  const showSubmission = useMemo(() => {
+    return value !== 0;
+  }, [value]);
+
+  const showActions = useMemo(() => {
+    let actions;
+    if (isBuyer === true) {
+      if (value === 1 || value === 2) {
+        actions = true;
+      }
+    } else if (value === 0 || value === 2) {
+      // * For Seller , Actions will show only in Active / notAccepted
+      actions = true;
+    }
+    return actions;
+  }, [isBuyer, value]);
+
   return (
     <>
-      <Navbar />
       <Container className={classes.container}>
-        <Box sx={{ mt: 3 }}>
-          <Typography variant='h4'>Gigs</Typography>
+        <Box>
+          <Typography variant='h4'>Your Orders</Typography>
         </Box>
         {/* <Box sx={{ mt: 4 }}>
          
@@ -137,71 +192,58 @@ const OrdersTable = () => {
               scrollButtons='auto'
               aria-label='scrollable auto tabs example'
             >
-              <Tab label='Priority' {...a11yProps(0)} />
-              <Tab label='Active' {...a11yProps(1)} />
-              <Tab label='Completed' {...a11yProps(2)} />
+              {/* <Tab label='Priority' {...a11yProps(0)} /> */}
+              <Tab label='Active' {...a11yProps(0)} />
+              <Tab label='Delivered' {...a11yProps(1)} />
+              <Tab label='Not Accepted' {...a11yProps(2)} />
+              <Tab label='Completed' {...a11yProps(3)} />
             </Tabs>
           </AppBar>
-          <TabPanel className={tabClasses.TabPanel} value={value} index={0}>
+          <TabPanel className={tabClasses.TabPanel}>
             <TableContainer component={Paper}>
               <Table className={tabClasses.table} aria-label='simple table'>
                 <TableHead>
                   <TableRow>
-                    <TableCell colspan='2'>BUYER</TableCell>
-                    <TableCell>GIG</TableCell>
-                    <TableCell>DEADLINE</TableCell>
-                    <TableCell>PRICE</TableCell>
-                    <TableCell>STATUS</TableCell>
+                    <TableCell colspan='2' align='center'>
+                      {isBuyer ? 'Seller' : 'Buyer'}
+                    </TableCell>
+                    <TableCell>Offer</TableCell>
+                    <TableCell>Deadline</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Status</TableCell>
+                    {showSubmission === true && (
+                      <TableCell>Submission</TableCell>
+                    )}
+                    {showActions === true && <TableCell>Actions</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ordersData.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell component='th' scope='row'>
-                        <Box className={classes_s.gigImg}>
-                          <img
-                            src={order.buyer.img}
-                            alt={order.buyer.userName}
-                          />
-                        </Box>
-                      </TableCell>
-                      <TableCell>{order.buyer.userName}</TableCell>
-                      <TableCell>{order.gig}</TableCell>
-                      <TableCell>{order.deadline}</TableCell>
-                      <TableCell>{order.price}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={order.status}
-                          style={{ textTransform: 'uppercase' }}
-                        />
-                      </TableCell>
-                      {/* <TableCell>
-                      <IconButton
-                        aria-label='show more'
-                        aria-controls={menuId}
-                        data-ordertitle={order.title}
-                        aria-haspopup='true'
-                        onClick={handleMenuOpen}
-                        style={{
-                          marginLeft: 'auto',
-                          color: '#000',
-                        }}
-                      >
-                        <MoreIcon />
-                      </IconButton>
-                    </TableCell> */}
-                      {/* <TableCell align='right'>{gig.protein}</TableCell> */}
-                    </TableRow>
-                  ))}
+                  {loading ? (
+                    Array(5)
+                      .fill()
+                      .map(() => (
+                        <TableRow key={v4()}>
+                          {Array(7)
+                            .fill()
+                            .map(() => (
+                              <TableCell key={v4()}>
+                                <Skeleton />
+                              </TableCell>
+                            ))}
+                        </TableRow>
+                      ))
+                  ) : (
+                    <OrderTableBody
+                      classes_s={classes_s}
+                      data={filteredOrders}
+                      isBuyer={isBuyer}
+                      showSubmission={showSubmission}
+                      showActions={showActions}
+                    />
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Active
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Completed
           </TabPanel>
         </div>
       </Container>
