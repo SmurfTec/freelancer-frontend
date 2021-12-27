@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 
-const CategoryCard = ({ gig, handleClick }) => {
+const GigCard = ({ gig, handleClick }) => {
   const classes = styles();
   const {
     _id,
@@ -68,13 +68,13 @@ const CategoryCard = ({ gig, handleClick }) => {
         >
           <Rating
             name='half-rating'
-            defaultValue={gig.rating}
+            defaultValue={gig.user.ratingsAverage}
             readOnly
             precision={0.5}
             size='small'
           />
           <Typography variant='h6' style={{ color: '#FFB400' }}>
-            {gig.rating}
+            {gig.user.ratingsAverage}
           </Typography>
         </Box>
       </CardContent>
@@ -83,4 +83,4 @@ const CategoryCard = ({ gig, handleClick }) => {
   );
 };
 
-export default CategoryCard;
+export default GigCard;

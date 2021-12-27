@@ -14,12 +14,24 @@ export const DataProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
 
   const [loadingDevRequests, toggleLoadingDevRequests] = useToggle(true);
+  const [loadingServices, toggleLoadingServices] = useToggle(true);
   const [devRequests, setDevRequests] = useState([]);
+  const [services, setServices] = useState([]);
 
   const fetchCategories = async () => {
     const res = await axios.get(`${API_BASE_URL}/categories`);
     // console.log(`res`, res);
     setCategories(res.data.categories);
+  };
+  const fetchServices = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/gigs`);
+      // console.log(`res`, res);
+      setServices(res.data.gigs);
+    } catch (err) {
+    } finally {
+      toggleLoadingServices();
+    }
   };
 
   const fetchDevRequests = async () => {
@@ -41,6 +53,7 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     fetchDevRequests();
     fetchCategories();
+    fetchServices();
   }, []);
 
   return (
@@ -51,6 +64,8 @@ export const DataProvider = ({ children }) => {
         getRequestById,
         loadingDevRequests,
         devRequests,
+        services,
+        loadingServices,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Box,
   Button,
@@ -25,8 +25,10 @@ import gig7 from 'assets/gig7.jpg';
 import gig8 from 'assets/gig8.png';
 import gig9 from 'assets/gig9.jpg';
 import DesignCard from './BuyerHome/designCard';
+import { DataContext } from 'contexts/DataContext';
+import { Skeleton } from '@material-ui/lab';
 
-const gigs = [
+const mockGigs = [
   {
     _id: faker.datatype.uuid(),
     title: faker.random.words(5),
@@ -192,13 +194,13 @@ const gigs = [
 
 const Services = () => {
   const handleCatClick = () => {};
+  const { services, loadingServices } = useContext(DataContext);
 
   const classes = useStyles();
   const [activeItemIndex, setActiveItemIndex] = useState(0);
   const chevronWidth = 40;
   return (
     <Box style={{ paddingInline: 50 }}>
-      <Navbar />
       <Grid container spacing={2} style={{ marginBlock: '2rem' }}>
         <Grid item sm={2} className={classes.Section1A}>
           <Typography variant='h5'>Hi uahmadsoft</Typography>
@@ -248,12 +250,20 @@ const Services = () => {
         Continue browsing
       </Typography>
       <CarouselLayout>
-        {gigs &&
-          gigs.map((el) => (
-            <div key={el.value} className={classes.carouselCard}>
-              <GigCard gig={el} handleClick={handleCatClick} />
-            </div>
-          ))}
+        {loadingServices
+          ? Array(18)
+              .fill()
+              .map(() => (
+                <div key={v4()} className={classes.carouselCard}>
+                  <Skeleton variant='rect' width='100%' height={200} />
+                </div>
+              ))
+          : services &&
+            services.map((el) => (
+              <div key={el.value} className={classes.carouselCard}>
+                <GigCard gig={el} handleClick={handleCatClick} />
+              </div>
+            ))}
       </CarouselLayout>
       <Typography
         variant='h5'
@@ -262,12 +272,19 @@ const Services = () => {
         Most Popular Gigs
       </Typography>
       <Grid container spacing={2}>
-        {gigs &&
-          gigs.map((el) => (
-            <Grid item sm={2} key={el.value}>
-              <GigCard gig={el} handleClick={handleCatClick} />
-            </Grid>
-          ))}
+        {loadingServices
+          ? Array(18)
+              .fill()
+              .map(() => (
+                <Grid item sm={2} key={v4()}>
+                  <Skeleton variant='rect' width='100%' height={200} />
+                </Grid>
+              ))
+          : services.map((el) => (
+              <Grid item sm={2} key={el.value}>
+                <GigCard gig={el} handleClick={handleCatClick} />
+              </Grid>
+            ))}
       </Grid>
     </Box>
   );
