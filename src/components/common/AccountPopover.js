@@ -60,33 +60,49 @@ export default function AccountPopover({ classes }) {
         open={open}
         onClose={handleClose}
         anchorEl={anchorRef.current}
-        sx={{ width: 220 }}
+        // style={{ width: 300 }}
+        PaperProps={{
+          style: {
+            width: 150,
+          },
+        }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant='subtitle1' noWrap>
+          {/* <Typography variant='subtitle1' noWrap>
             {user.fullName.toUpperCase()}
-          </Typography>
-          <Typography variant='subtitle2' className={classes.NavItem}>
+          </Typography> */}
+          <Typography variant='body1' className={classes.NavItem}>
             <Link to='/profile'>Profile</Link>
           </Typography>
+          <Typography variant='body1' className={classes.NavItem}>
+            <Link to='/orders'>Orders</Link>
+          </Typography>
+          {user?.role === 'seller' ? (
+            <>
+              <Typography variant='body1' className={classes.NavItem}>
+                <Link to='/services'>Services</Link>
+              </Typography>
+              <Typography variant='body1' className={classes.NavItem}>
+                <Link to='/offer'>Offers</Link>
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography variant='body1' className={classes.NavItem}>
+                <Link to='/services'>My Jobs</Link>
+              </Typography>
+            </>
+          )}
         </Box>
         <Divider sx={{ my: 1 }} />
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button
-            fullWidth
-            color='primary'
-            variant='outlined'
+          <Typography
             onClick={handleLogout}
-          >
-            Logout
-          </Button>
-          {/* <Typography
-            onClick={handleLogout}
-            variant='subtitle2'
+            variant='body1'
             className={classes.NavItem}
           >
             Logout
-          </Typography> */}
+          </Typography>
         </Box>
         {error !== null &&
           toast.error(error, {

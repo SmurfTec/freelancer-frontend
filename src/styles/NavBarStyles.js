@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   NavItem: {
     display: 'block',
-    color: '#000',
+    // color: '#000',
     cursor: 'pointer',
     textDecoration: 'none',
     '& a': {
@@ -37,12 +37,12 @@ const useStyles = makeStyles((theme) => ({
       '&.active': {
         color: theme.palette.hover.main,
       },
-    },
-    '&:hover': {
-      color: theme.palette.hover.main,
-      // borderBottom: '2px solid #B033fa',
-      // color: 'deepskyblue',
-      transition: '0.3s',
+      '&:hover': {
+        color: theme.palette.hover.main,
+        // borderBottom: '2px solid #B033fa',
+        // color: 'deepskyblue',
+        transition: '0.3s',
+      },
     },
   },
   darkBtn: {

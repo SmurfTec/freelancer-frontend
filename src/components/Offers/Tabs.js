@@ -115,7 +115,7 @@ export default function OffersTabs() {
 
   return (
     <div className={classes.root}>
-      <AppBar position='static' color='default'>
+      {/* <AppBar position='static' color='default'>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -128,7 +128,7 @@ export default function OffersTabs() {
           <Tab label='Sent' {...a11yProps(0)} />
           <Tab label='Received' {...a11yProps(1)} />
         </Tabs>
-      </AppBar>
+      </AppBar> */}
       <TabPanel className={classes.TabPanel} value={value} index={0}>
         <OffersTable
           data={offers}

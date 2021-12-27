@@ -22,34 +22,14 @@ const Navbar = (props) => {
   const sellerNavItems = [
     {
       _id: v4(),
-      link: '/dashboard',
+      link: '/',
       text: 'Dashboard',
-    },
-    {
-      _id: v4(),
-      link: '/services',
-      text: 'Services',
-    },
-    {
-      _id: v4(),
-      link: '/offers',
-      text: 'Offers',
-    },
-    {
-      _id: v4(),
-      link: '/orders',
-      text: 'Orders',
     },
     {
       _id: v4(),
       link: '/messages',
       text: 'Messages',
     },
-    // {
-    //   _id : v4(),
-    //   link : '/dashboard',
-    //   text :'Dashboard',
-    // },
   ];
   const buyerNavItems = [
     {
@@ -59,13 +39,8 @@ const Navbar = (props) => {
     },
     {
       _id: v4(),
-      link: '/jobs',
-      text: 'Jobs',
-    },
-    {
-      _id: v4(),
-      link: '/orders',
-      text: 'Orders',
+      link: '/jobs/create',
+      text: 'Create Job',
     },
     {
       _id: v4(),

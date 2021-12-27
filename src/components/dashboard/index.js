@@ -85,7 +85,6 @@ const Dashboard = () => {
 
   return (
     <section>
-      <Navbar user='user' />
       <Container className={classes.container}>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>

@@ -456,9 +456,7 @@ const Chat = () => {
                                     textAlign: 'right',
                                   }}
                                 >
-                                  {new Date(
-                                    message.offer.createdAt
-                                  ).toLocaleTimeString()}
+                                  {new Date(message.createdAt).toDateString()}
                                 </Typography>
                               </Box>
                             </Box>
