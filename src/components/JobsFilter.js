@@ -25,12 +25,21 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
 
     display: 'flex',
-    [theme.breakpoints.down('md')]: {
-      flexDirection: 'row',
+    // [theme.breakpoints.down('md')]: {
+    //   flexDirection: 'row',
+    // },
+    // [theme.breakpoints.up('md')]: {
+    //   flexDirection: 'column',
+    //   flexWrap: 'nowrap',
+    // },
+    '& .MuiPaper-root': {
+      boxShadow: 'none',
+      borderRight: '1px solid #ccc',
+      borderRadius: 0,
+      width: 500,
     },
-    [theme.breakpoints.up('md')]: {
-      flexDirection: 'column',
-      flexWrap: 'nowrap',
+    '& .MuiAccordion-root': {
+      marginTop: 0,
     },
     '& .MuiAccordionSummary-root.Mui-expanded': {
       minHeight: 'unset',
@@ -42,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiAccordionDetails-root': {
       paddingInline: 10,
       paddingTop: 0,
+      flexGrow: 1,
     },
   },
   CategoriesList: {
@@ -58,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
           color: '#fff',
         },
         '& .MuiTypography-root': {
-          fontSize: 11,
+          fontSize: 14,
         },
       },
     },
@@ -123,15 +133,11 @@ const JobsFilter = ({
   };
 
   return (
-    <Grid item sm={12} md={2}>
-      <Typography variant='h5'>Filter By</Typography>
+    <Box>
+      {/* <Typography variant='h5'>Filter By</Typography> */}
       <div className={classes.filter}>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            aria-controls='panel1a-content'
-            id='panel1a-header'
-          >
+        <Accordion expanded>
+          <AccordionSummary aria-controls='panel1a-content' id='panel1a-header'>
             <Typography variant='subtitle2' className={classes.heading}>
               Price
             </Typography>
@@ -200,12 +206,8 @@ const JobsFilter = ({
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            aria-controls='panel1a-content'
-            id='panel1a-header'
-          >
+        <Accordion expanded>
+          <AccordionSummary aria-controls='panel1a-content' id='panel1a-header'>
             <Typography variant='subtitle2' className={classes.heading}>
               Categories
             </Typography>
@@ -228,12 +230,8 @@ const JobsFilter = ({
           {/* </MenuList> */}
         </Accordion>
 
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            aria-controls='panel1a-content'
-            id='panel1a-header'
-          >
+        <Accordion expanded>
+          <AccordionSummary aria-controls='panel1a-content' id='panel1a-header'>
             <Typography variant='subtitle2' className={classes.heading}>
               Time
             </Typography>
@@ -302,7 +300,7 @@ const JobsFilter = ({
           </AccordionDetails>
         </Accordion>
       </div>
-    </Grid>
+    </Box>
   );
 };
 

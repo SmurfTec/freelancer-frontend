@@ -7,6 +7,7 @@ import {
   CardActionArea,
   Box,
   IconButton,
+  Divider,
 } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -41,6 +42,15 @@ const styles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: 5,
   },
+  time: {
+    '& svg': {
+      fontSize: 20,
+      marginRight: 5,
+    },
+    '& span': {
+      fontSize: 14,
+    },
+  },
 }));
 
 const DevReqCard = ({ devRequest }) => {
@@ -69,6 +79,7 @@ const DevReqCard = ({ devRequest }) => {
           </Typography> */}
           <LineClamp text={description} />
         </CardContent>
+        <Divider />
         <CardActions>
           <Box
             sx={{
@@ -90,9 +101,10 @@ const DevReqCard = ({ devRequest }) => {
               }}
               variant='body2'
               align='right'
+              className={classes.time}
             >
               <AccessTime />
-              <span className={classes.price}>{expectedDays} days</span>
+              <span>{expectedDays} days</span>
             </Typography>
           </Box>
         </CardActions>

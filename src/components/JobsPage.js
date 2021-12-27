@@ -8,6 +8,8 @@ import {
   makeStyles,
   AccordionDetails,
   MenuItem,
+  Button,
+  Popover,
 } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { categories } from 'data';
@@ -20,6 +22,7 @@ import DevReqCard from './DevRequest/DevReqCard';
 import { AuthContext } from 'contexts/AuthContext';
 import { DevRequestsContext } from 'contexts/DevRequestsContext';
 import JobsFilter from './JobsFilter';
+import { FilterList } from '@material-ui/icons';
 const queryString = require('query-string');
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+const filterPopoverId = 'filterPopOver';
 
 const RenderDevRequests = ({ loading, data, handleCatClick }) => {
   return (
@@ -66,6 +70,9 @@ const JobsPage = () => {
     useContext(DevRequestsContext);
 
   const [filteredData, setFilteredData] = useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const isFilterOpen = Boolean(anchorEl);
 
   const handleFilter = (e) => {
     const { filter } = e.currentTarget.dataset;
@@ -187,17 +194,52 @@ const JobsPage = () => {
     else setFilteredData(devRequests);
   }, [user, devRequests, usersRequests]);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <React.Fragment>
       <Container maxWidth='1400'>
-        <Typography
-          variant='h4'
-          align='center'
-          style={{ marginBottom: '2rem' }}
+        <Box style={{ marginBottom: '2rem', textAlign: 'right' }}>
+          <Button
+            variant='contained'
+            color='primary'
+            aria-describedby={filterPopoverId}
+            variant='contained'
+            color='primary'
+            onClick={handleClick}
+            endIcon={<FilterList />}
+            style={{
+              marginRight: '5%',
+            }}
+          >
+            Filter
+          </Button>
+        </Box>
+        <Popover
+          id={filterPopoverId}
+          open={isFilterOpen}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          PaperProps={{
+            style: {
+              width: 600,
+            },
+          }}
         >
-          Popular Jobs
-        </Typography>
-        <Grid container spacing={1}>
           <JobsFilter
             applyPriceFilter={applyPriceFilter}
             applyCategoryFilter={applyCategoryFilter}
@@ -205,17 +247,20 @@ const JobsPage = () => {
             categories={categories}
             handleFilter={handleFilter}
           />
-          <Grid item sm={12} md={10}>
-            <RenderDevRequests
-              loading={
-                user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
-              }
-              data={filteredData}
-              // data={user?.role === 'buyer' ? usersRequests : devRequests}
-              handleCatClick={handleCatClick}
-            />
-          </Grid>
-        </Grid>{' '}
+        </Popover>
+        {/* <Grid item sm={12} md={10}>
+        {/* <Grid container spacing={1}> */}
+
+        <RenderDevRequests
+          loading={
+            user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
+          }
+          data={filteredData}
+          // data={user?.role === 'buyer' ? usersRequests : devRequests}
+          handleCatClick={handleCatClick}
+        />
+        {/* </Grid> */}
+        {/* </Grid>{' '} */}
       </Container>
     </React.Fragment>
   );
