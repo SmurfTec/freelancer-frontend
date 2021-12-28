@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       // console.log(`resData`, resData);
 
       setUser((st) => ({ ...st, gigs: [...st.gigs, resData.gig] }));
-      toast.success('Gig created Successfully!');
+      toast.success('Service created Successfully!');
       navigate('/profile');
     } catch (err) {
       handleCatch(err);
@@ -113,7 +113,22 @@ export const AuthProvider = ({ children }) => {
         ...st,
         gigs: gigs.map((el) => (el._id === id ? resData.gig : el)),
       }));
-      toast.success('Gig Updated Successfully!');
+      toast.success('Service Updated Successfully!');
+    } catch (err) {
+      handleCatch(err);
+    }
+  };
+
+  const deleteGig = async (id) => {
+    try {
+      await makeReq(`/gigs/${id}`, {}, 'DELETE');
+      // console.log(`resData`, resData);
+
+      setUser((st) => ({
+        ...st,
+        gigs: gigs.filter((el) => el._id !== id),
+      }));
+      toast.success('Service Deleted Successfully!');
     } catch (err) {
       handleCatch(err);
     }
@@ -133,6 +148,7 @@ export const AuthProvider = ({ children }) => {
         changeMyPassword,
         createGig,
         updateGig,
+        deleteGig,
       }}
     >
       {children}

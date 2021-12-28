@@ -21,70 +21,18 @@ import img1 from 'assets/gigdetail1.jpg';
 import img2 from 'assets/gigdetail2.jpg';
 import img3 from 'assets/gigdetails3.jpg';
 import GigReview from './GigReview';
-
-var items = [
-  {
-    img: img1,
-  },
-  {
-    img: img2,
-  },
-  {
-    img: img3,
-  },
-];
-
-const package1 = {
-  _id: faker.datatype.uuid(),
-  title: 'Basic',
-  description: faker.random.words(10),
-  price: faker.datatype.number({ min: 10, max: 100 }),
-  deliveryTime: faker.datatype.number({ min: 10, max: 100 }),
-};
-const package2 = {
-  _id: faker.datatype.uuid(),
-  title: 'Standard',
-  description: faker.random.words(10),
-  price: faker.datatype.number({ min: 10, max: 100 }),
-  deliveryTime: faker.datatype.number({ min: 10, max: 100 }),
-};
-const package3 = {
-  _id: faker.datatype.uuid(),
-  title: 'Premium',
-  description: faker.random.words(10),
-  price: faker.datatype.number({ min: 10, max: 100 }),
-  deliveryTime: faker.datatype.number({ min: 10, max: 100 }),
-};
+import { Navigate, useParams } from 'react-router-dom';
+import useFetch from 'hooks/useFetch';
+import { API_BASE_URL } from 'utils/makeReq';
+import Loading from 'components/common/Loading';
 
 function Item({ item }) {
   return (
     <Paper>
-      <img
-        style={{ height: 300, width: '100%' }}
-        src={item.img}
-        alt='gig image'
-      />
+      <img style={{ height: 300, width: '100%' }} src={item} alt='gig image' />
     </Paper>
   );
 }
-
-const gig = {
-  _id: faker.datatype.uuid(),
-  title: faker.random.words(5),
-  images: [gig1],
-  user: {
-    fullName: faker.name.findName(),
-    photo: faker.internet.avatar(),
-  },
-  description: faker.random.words(10),
-  ratingsAverage: faker.datatype.number({ min: 10, max: 100 }),
-  rating: faker.datatype.number({ min: 3, max: 5, precision: 0.1 }),
-  startingPrice: faker.datatype.number({
-    min: 100,
-    max: 1000,
-    precision: 500,
-  }),
-};
 
 function a11yProps(index) {
   return {
@@ -137,7 +85,7 @@ function TabPanel(props) {
           >
             <AccessTimeIcon />
             <Typography fontWeight='bold'>
-              {item.deliveryTime} Days Delivery
+              {item.expectedDays} Days Delivery
             </Typography>
           </Box>
         </Box>
@@ -148,118 +96,152 @@ function TabPanel(props) {
 
 const ViewGig = () => {
   const classes = useStyles();
+  const { id } = useParams();
+
+  const {
+    loading,
+    error,
+    value: service,
+  } = useFetch(`${API_BASE_URL}/gigs/${id}`, {}, [id], 'gig');
+
   const [packageTab, setPackageTab] = useState(0);
+
+  if (loading) return <Loading noTitle />;
+
+  if (error) return <Navigate to='/services' />;
+
+  console.log(`service`, service);
+
   return (
-    <Box style={{ paddingBottom: '2rem' }}>
-      <Navbar />
-      <Container style={{ marginTop: '2rem', maxWidth: '1200px' }}>
-        <Typography variant='h4'>{gig.title}</Typography>
-        <Box
-          style={{
-            display: 'flex',
-            gap: 10,
-            alignItems: 'center',
-          }}
-        >
-          <Avatar src={gig.user.photo} />
-          <Typography variant='body2'>{gig.user.fullName}</Typography>
-          <Rating
-            name='half-rating'
-            defaultValue={gig.rating}
-            readOnly
-            precision={0.5}
-            size='small'
-          />
-          <Typography variant='h6' style={{ color: '#FFB400' }}>
-            {gig.rating}
-          </Typography>
-        </Box>
-        <Grid
-          container
-          spacing={4}
-          style={{
-            marginTop: '1rem',
-          }}
-        >
-          <Grid item sm={8} style={{ height: 400 }}>
-            <Box>
-              <Carousel navButtonsAlwaysVisible>
-                {items.map((item, i) => (
-                  <Item key={i} item={item} />
-                ))}
-              </Carousel>
-            </Box>
-          </Grid>
-          <Grid
-            item
-            sm={4}
+    <Box>
+      {service && (
+        <Container style={{ marginTop: '2rem', maxWidth: '1200px' }}>
+          <Typography variant='h4'>{service.title}</Typography>
+          <Box
             style={{
-              height: 400,
+              display: 'flex',
+              gap: 10,
+              alignItems: 'center',
             }}
           >
-            <Box
+            <Avatar src={service.user.photo} />
+            <Typography variant='body2'>{service.user.fullName}</Typography>
+            <Rating
+              name='half-rating'
+              defaultValue={service.user.ratingsAverage}
+              readOnly
+              precision={0.5}
+              size='small'
+            />
+            <Typography variant='h6' style={{ color: '#FFB400' }}>
+              {service.user.ratingsAverage}
+            </Typography>
+          </Box>
+          <Grid
+            container
+            spacing={4}
+            style={{
+              marginTop: '1rem',
+            }}
+          >
+            <Grid item sm={8} style={{ height: 400 }}>
+              <Box>
+                <Carousel navButtonsAlwaysVisible>
+                  {service.images.map((item, i) => (
+                    <Item key={i} item={item} />
+                  ))}
+                </Carousel>
+              </Box>
+            </Grid>
+            <Grid
+              item
+              sm={4}
               style={{
-                border: '1px solid #ccc',
-                height: 300,
+                height: 400,
               }}
             >
-              <Tabs
-                value={packageTab}
-                onChange={(e, val) => setPackageTab(val)}
-                aria-label='gig packages'
-                indicatorColor=''
-                textColor='primary'
-                // fullWidth
-                className={classes.Tabs}
+              <Box
+                style={{
+                  border: '1px solid #ccc',
+                  height: 300,
+                }}
               >
-                <Tab label='Basic' {...a11yProps(0)} />
-                <Tab label='Standard' {...a11yProps(1)} />
-                <Tab label='Premium' {...a11yProps(2)} />
-              </Tabs>
-              <TabPanel item={package1} value={packageTab} index={0}></TabPanel>
-              <TabPanel item={package2} value={packageTab} index={1}></TabPanel>
-              <TabPanel item={package3} value={packageTab} index={2}></TabPanel>
-            </Box>
+                <Tabs
+                  value={packageTab}
+                  onChange={(e, val) => setPackageTab(val)}
+                  aria-label='gig packages'
+                  indicatorColor=''
+                  textColor='primary'
+                  // fullWidth
+                  className={classes.Tabs}
+                >
+                  <Tab label='Basic' {...a11yProps(0)} />
+                  <Tab label='Standard' {...a11yProps(1)} />
+                  <Tab label='Premium' {...a11yProps(2)} />
+                </Tabs>
+                <TabPanel
+                  item={service.packages[0]}
+                  value={packageTab}
+                  index={0}
+                ></TabPanel>
+                <TabPanel
+                  item={service.packages[1]}
+                  value={packageTab}
+                  index={1}
+                ></TabPanel>
+                <TabPanel
+                  item={service.packages[2]}
+                  value={packageTab}
+                  index={2}
+                ></TabPanel>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-        <Typography variant='h5' style={{ marginBottom: '1rem' }}>
-          About this gig
-        </Typography>
-        <Typography variant='body1'>{gig.description}</Typography>
-        <Box style={{ maxWidth: 500 }}>
-          <Typography
-            variant='h5'
-            fontWeight='normal'
-            style={{ marginTop: '2rem', marginBottom: '1rem' }}
-          >
-            Reviews
+          <Typography variant='h5' style={{ marginBottom: '1rem' }}>
+            About this Service
           </Typography>
-          <Divider />
-          {Array(5)
-            .fill()
-            .map((el) => (
-              <React.Fragment key={faker.name.findName()}>
-                {' '}
-                <GigReview
-                  review={{
-                    user: {
-                      fullName: faker.name.findName(),
-                      photo: faker.internet.avatar(),
-                    },
-                    description: faker.random.words(10),
-                    createdAt: new Date(),
-                    rating: faker.datatype.number({
-                      min: 3,
-                      max: 5,
-                      precision: 0.1,
-                    }),
-                  }}
-                />
-                <Divider />
-              </React.Fragment>
-            ))}
-        </Box>
-      </Container>
+          <Typography variant='body1'>{service.description}</Typography>
+          <Box style={{ maxWidth: 500 }}>
+            <Typography
+              variant='h5'
+              fontWeight='normal'
+              style={{ marginTop: '2rem', marginBottom: '1rem' }}
+            >
+              Reviews
+            </Typography>
+            {service?.user.reviews.length === 0 ? (
+              <Typography variant='subtitle1'>
+                No Reviews for this user yet
+              </Typography>
+            ) : (
+              <>
+                {/* <Divider /> */}
+                {service?.user.reviews.map((el) => (
+                  <React.Fragment key={faker.name.findName()}>
+                    {' '}
+                    <GigReview
+                      review={{
+                        user: {
+                          fullName: faker.name.findName(),
+                          photo: faker.internet.avatar(),
+                        },
+                        description: faker.random.words(10),
+                        createdAt: new Date(),
+                        rating: faker.datatype.number({
+                          min: 3,
+                          max: 5,
+                          precision: 0.1,
+                        }),
+                      }}
+                    />
+                    <Divider />
+                  </React.Fragment>
+                ))}
+              </>
+            )}
+          </Box>
+        </Container>
+      )}
     </Box>
   );
 };

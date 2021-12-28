@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import styles from './cardStyles';
+import styles from '../BuyerHome/Carousel/cardStyles';
 import {
   Avatar,
   Box,
@@ -12,23 +12,15 @@ import {
   CardContent,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
+import { Link } from 'react-router-dom';
 
-const GigCard = ({ gig, handleClick }) => {
+const GigCard = ({ gig }) => {
   const classes = styles();
-  const {
-    _id,
-    title,
-    images,
-    user,
-    description,
-    ratingsAverage,
-    rating,
-    startingPrice,
-  } = gig;
+  const { title, images, user } = gig;
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea component={Link} to={`/services/${gig._id}`}>
         <CardMedia
           component='img'
           alt='Contemplative Reptile'

@@ -2,7 +2,7 @@ import { alpha } from '@material-ui/core/styles';
 
 export const changePalette = () => {
   const palette = {
-    primary: { ...PRIMARY, ...WARNING, ...ERROR, ...INFO },
+    primary: { ...PRIMARY, ...SECONDARY, ...WARNING, ...ERROR, ...INFO },
 
     background: {
       // paper: theme ? themeColors['dark'][0] : themeColors['light'][0],
@@ -31,6 +31,10 @@ const PRIMARY = {
   dark: '#007B55',
   darker: '#005249',
   contrastText: '#fff',
+};
+
+const SECONDARY = {
+  main: '#46B9F6',
 };
 
 const WARNING = {

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,24 +7,23 @@ import Menu from '@material-ui/core/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import useStyles from 'styles/NavBarStyles';
 import { Box, Button, Typography } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AccountPopover from './AccountPopover';
 import Logo from './Logo';
 import { AuthContext } from 'contexts/AuthContext';
 import { NavLink } from 'react-router-dom';
 import { Add } from '@material-ui/icons';
 import { v4 } from 'uuid';
+import SearchBar from 'material-ui-search-bar';
 
 const Navbar = (props) => {
   const classes = useStyles();
-  const { user } = useContext(AuthContext);
+  const { user, updateMe } = useContext(AuthContext);
+  const [searchVal, setSearchVal] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const sellerNavItems = [
-    {
-      _id: v4(),
-      link: '/',
-      text: 'Dashboard',
-    },
     {
       _id: v4(),
       link: '/messages',
@@ -32,11 +31,6 @@ const Navbar = (props) => {
     },
   ];
   const buyerNavItems = [
-    {
-      _id: v4(),
-      link: '/dashboard',
-      text: 'Dashboard',
-    },
     {
       _id: v4(),
       link: '/jobs/create',
@@ -49,11 +43,30 @@ const Navbar = (props) => {
     },
   ];
 
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const showSearchBar = useMemo(() => {
+    let condition = false;
+    // * If user is logged In then , only in '/' and '/jobs'
+    if (user) {
+      if (['/', '/services', '/jobs'].includes(location.pathname.toLowerCase()))
+        condition = true;
+    } else {
+      if (['/', '/services', '/jobs'].includes(location.pathname.toLowerCase()))
+        condition = true;
+    }
+    // * else only in homepage and services , jobs
+
+    return condition;
+  }, [location.pathname, user]);
+
+  const handleSearch = () => {
+    console.log(`searchVal`, searchVal);
+    navigate(`?q=${searchVal}`);
+  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -68,7 +81,10 @@ const Navbar = (props) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleSwitchUser = () => {};
+  const handleSwitchUser = () => {
+    const role = user.role === 'buyer' ? 'seller' : 'buyer';
+    updateMe({ role });
+  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -111,7 +127,7 @@ const Navbar = (props) => {
 
           <MenuItem>
             <Typography variant='subtitle2' className={classes.NavItem}>
-              <NavLink to='/mygigs'>Services</NavLink>
+              <NavLink to='/services/me'>Services</NavLink>
             </Typography>
           </MenuItem>
 
@@ -133,6 +149,7 @@ const Navbar = (props) => {
                 color='primary'
                 // className={classes.NavItem}
                 style={{ fontWeight: 500, cursor: 'pointer' }}
+                onClick={handleSwitchUser}
               >
                 Switch To
                 {user.role === 'seller' ? 'Buyer' : 'Seller'}
@@ -168,7 +185,15 @@ const Navbar = (props) => {
               marginInline: 'auto',
             }}
             className={classes.SearchBar}
-          />
+          >
+            {showSearchBar && (
+              <SearchBar
+                value={searchVal}
+                onChange={(newValue) => setSearchVal(newValue)}
+                onRequestSearch={handleSearch}
+              />
+            )}
+          </div>
           <div className={classes.sectionDesktop}>
             <Box
               display='flex'
@@ -210,6 +235,7 @@ const Navbar = (props) => {
                       variant='subtitle1'
                       color='primary'
                       style={{ fontWeight: 500, cursor: 'pointer' }}
+                      onClick={handleSwitchUser}
                     >
                       Switch To {user.role === 'seller' ? 'Buyer' : 'Seller'}
                     </Typography>

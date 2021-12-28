@@ -1,14 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  AppBar,
-  Tabs,
-  Tab,
-  Grid,
-  Button,
-  Typography,
-  Box,
-} from '@material-ui/core';
+import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import useStyles from 'styles/TabStyles';
 // import FlightTabItem from './FlightTabItem';
 // import FlightIcon from '@material-ui/icons/FlightTakeoff';
@@ -17,20 +9,6 @@ import useStyles from 'styles/TabStyles';
 // import { useForm, Controller } from 'react-hook-form';
 // import Select from 'react-select';
 // import { CustomInputField, CustomDatePicker } from 'components/FormControls';
-
-const selectStyles = {
-  option: (styles, { isSelected }) => {
-    return {
-      ...styles,
-      color: '#000',
-      backgroundColor: isSelected ? '#F4F6F8' : '#fff',
-      '&:hover': {
-        backgroundColor: '#F4F6F8',
-      },
-    };
-  },
-};
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

@@ -4,24 +4,13 @@ import {
   Box,
   Container,
   Grid,
-  Paper,
   Typography,
-  IconButton,
   Divider,
-  Card,
-  CardContent,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Navbar from 'components/common/Navbar';
-import EditIcon from '@material-ui/icons/Edit';
-import { months } from 'data';
-import GigCard from 'components/Gigs/GigCard';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
 import { AuthContext } from 'contexts/AuthContext';
 import Loading from 'components/common/Loading';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import StarIcon from '@material-ui/icons/Star';
 import faker from 'faker';
 const styles = makeStyles((theme) => ({

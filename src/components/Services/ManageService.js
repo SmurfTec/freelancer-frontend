@@ -7,7 +7,6 @@ import {
   Paper,
   TextField,
   Typography,
-  useTheme,
 } from '@material-ui/core';
 import Navbar from 'components/common/Navbar';
 import styles from 'styles/commonStyles';
@@ -20,12 +19,8 @@ import axios from 'axios';
 import { API_BASE_URL } from 'utils/makeReq';
 import { v4 } from 'uuid';
 import { AuthContext } from 'contexts/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Add, HighlightOff } from '@material-ui/icons';
-import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 // import { categories, sub_categories } from 'data';
-import LoadingOverlay from 'react-loading-overlay';
-
 const useStyles = makeStyles((theme) => ({
   container: {
     maxWidth: 700,
@@ -72,12 +67,8 @@ const CreateGig = ({ isUpdate }) => {
   const [loadingSubCats, toggleLoadingSubCats] = useToggle(false);
   // const [category, setCategory] = useState(categories[0]);
   // const [subCategory, setSubCategory] = useState([]);
-  const [isImageUploading, toggleImageUploading] = useToggle(false);
-  const [uploadingText, setUploadingText] = useState('Uploading Image...');
 
   const { id } = useParams();
-  const navigate = useNavigate();
-  const theme = useTheme();
 
   const initialState = {
     title: '',
@@ -87,9 +78,6 @@ const CreateGig = ({ isUpdate }) => {
       { name: 'standard', description: '', deliveryTime: '', price: '' },
       { name: 'premium', description: '', deliveryTime: '', price: '' },
     ],
-    images: [],
-    category: '',
-    subCategory: '',
   };
 
   useEffect(() => {
@@ -145,6 +133,13 @@ const CreateGig = ({ isUpdate }) => {
     fetchSubCategories(inputState.category._id);
   }, [inputState.category]);
 
+  const handleCategoryChange = (e, value) => {
+    setInputstate((st) => ({
+      ...st,
+      category: value,
+    }));
+  };
+
   const handlePackageChange = (e, packageName) => {
     console.log(`e.target.name`, e.target.name);
     console.log(`e.target.value`, e.target.value);
@@ -170,61 +165,6 @@ const CreateGig = ({ isUpdate }) => {
     }
   };
 
-  const handleImageUpload = async (e, toggleFunc, cb) => {
-    setUploadingText('Uploading Image ...');
-    toggleFunc();
-    const selectedFile = e.target.files[0];
-    const fileType = ['image/'];
-    try {
-      console.log(`selectedFile.type`, selectedFile.type);
-      if (selectedFile && selectedFile.type.includes(fileType)) {
-        let reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
-        reader.onloadend = async (e) => {
-          //console.log(`result onLoadEnd`, e.target.result);
-          const file = e.target.result;
-
-          // TODO  Delete Image from cloudinary if it exists on this user
-
-          // // * 1 Upload Image on Cloudinary
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append(
-            'upload_preset',
-            process.env.REACT_APP_CLOUDINARY_PRESET
-          );
-
-          const res = await axios.post(
-            `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
-            formData
-          );
-          const uploadedImage = res.data.url;
-          console.log(`res`, res);
-
-          setUploadingText('Updating Logo ...');
-
-          cb(uploadedImage);
-          toggleFunc();
-        };
-      } else {
-        toast.error('Only Image files are acceptable !');
-      }
-    } catch (err) {
-      toast(
-        err?.response?.data?.message || err.message || 'Something Went Wrong'
-      );
-      console.log(`err`, err);
-    }
-  };
-
-  const filterImage = (e) => {
-    const { img } = e.currentTarget.dataset;
-    setInputstate((st) => ({
-      ...st,
-      images: st.images.filter((el) => el !== img),
-    }));
-  };
-
   return (
     <React.Fragment>
       <Container className={`${classes.container} ${classes_s.container}`}>
@@ -239,7 +179,7 @@ const CreateGig = ({ isUpdate }) => {
               sx={{
                 mt: 4,
                 display: 'flex',
-                rowGap: 20,
+                rowGap: 40,
                 flexDirection: 'column',
               }}
             >
@@ -264,63 +204,50 @@ const CreateGig = ({ isUpdate }) => {
                 fullWidth
               />
 
-              <Box
-                display='flex'
-                justifyContent='space-between'
-                flexWrap='wrap'
-                style={{ rowGap: 20 }}
-              >
-                <Autocomplete
-                  style={{ flexBasis: '45%', minWidth: 250 }}
-                  options={categories}
-                  getOptionLabel={(option) => option.title}
-                  id='category'
-                  data-typeid='category'
-                  value={inputState.category}
-                  onChange={(e, newValue) => {
-                    changeInput('category', newValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='SELECT A CATEGORY'
-                      variant='outlined'
-                      InputProps={{
-                        ...params.InputProps,
-                      }}
-                    />
-                  )}
-                />
-                <Autocomplete
-                  style={{ flexBasis: '45%', minWidth: 250 }}
-                  options={subCategories}
-                  getOptionLabel={(option) => option.title}
-                  id='subCategory'
-                  value={inputState.subCategory}
-                  onChange={(e, newValue) => {
-                    changeInput('subCategory', newValue);
-                  }}
-                  loading
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='SELECT A SUBCATEGORY'
-                      variant='outlined'
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <React.Fragment>
-                            {loadingSubCats ? (
-                              <CircularProgress color='inherit' size={20} />
-                            ) : null}
-                            {params.InputProps.endAdornment}
-                          </React.Fragment>
-                        ),
-                      }}
-                    />
-                  )}
-                />
-              </Box>
+              <Autocomplete
+                options={categories}
+                getOptionLabel={(option) => option.title}
+                id='category'
+                data-typeid='category'
+                value={inputState.category}
+                onChange={handleCategoryChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='SELECT A CATEGORY'
+                    variant='outlined'
+                    InputProps={{
+                      ...params.InputProps,
+                    }}
+                  />
+                )}
+              />
+              <Autocomplete
+                options={subCategories}
+                getOptionLabel={(option) => option.title}
+                id='subCategory'
+                value={inputState.subCategory}
+                onChange={handleAutoComplete}
+                loading
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='SELECT A SUBCATEGORY'
+                    variant='outlined'
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {loadingSubCats ? (
+                            <CircularProgress color='inherit' size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
+                  />
+                )}
+              />
 
               <Typography variant='h5'>Package Details</Typography>
 
@@ -448,94 +375,14 @@ const CreateGig = ({ isUpdate }) => {
                 </div>
               </div>
 
-              <input
-                accept='image/*'
-                style={{ display: 'none' }}
-                id='image'
-                multiple
-                type='file'
-                onChange={(e) =>
-                  handleImageUpload(e, toggleImageUploading, (img) => {
-                    setInputstate((st) => ({
-                      ...st,
-                      images: [...st.images, img],
-                    }));
-                  })
-                }
-              />
-              <Box>
-                <label htmlFor='image' style={{ width: 'fit-content' }}>
-                  {/* <LoadingOverlay
-                    active={isImageUploading}
-                    spinner
-                    text={uploadingText}
-                  > */}
-                  <Box
-                    style={{
-                      marginBottom: '1rem',
-                      display: 'flex',
-                      gap: 10,
-                      background: theme.palette.primary.main,
-                      width: 'fit-content',
-                      padding: 5,
-                      borderRadius: 5,
-                    }}
-                  >
-                    {' '}
-                    <Add style={{ color: '#fff' }} />
-                    <Typography style={{ color: '#fff' }}>Add Image</Typography>
-                  </Box>
-                  {/* </LoadingOverlay> */}
-                </label>
-
-                <Box
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 20,
-                  }}
-                >
-                  {inputState.images.map((el) => (
-                    <Box
-                      key={el}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
-                      }}
-                    >
-                      <img src={el} style={{ width: 100, height: 70 }} />
-                      <HighlightOff
-                        data-img={el}
-                        onClick={filterImage}
-                        color='error'
-                        style={{
-                          cursor: 'pointer',
-                        }}
-                      />
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-              <Box sx={{ textAlign: 'right' }}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  type='submit'
-                  sx={{ mt: 2 }}
-                >
-                  Create
-                </Button>
-                <Button
-                  variant='contained'
-                  color='secondary'
-                  sx={{ mt: 2 }}
-                  onClick={() => navigate(-1)}
-                  style={{ marginLeft: 10 }}
-                >
-                  Cancel
-                </Button>
-              </Box>
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                sx={{ mt: 2 }}
+              >
+                Create
+              </Button>
             </Box>
           </form>
         </Paper>

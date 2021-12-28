@@ -50,6 +50,14 @@ export const DataProvider = ({ children }) => {
     return devRequests?.find((el) => el._id === id);
   };
 
+  const updateDevRequest = (id, updatedReq) => {
+    console.log(`id`, id);
+    console.log(`updatedReq`, updatedReq);
+    return devRequests?.map((el) =>
+      el._id === id ? { ...el, ...updatedReq } : el
+    );
+  };
+
   useEffect(() => {
     fetchDevRequests();
     fetchCategories();
@@ -66,6 +74,7 @@ export const DataProvider = ({ children }) => {
         devRequests,
         services,
         loadingServices,
+        updateDevRequest,
       }}
     >
       {children}

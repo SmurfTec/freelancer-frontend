@@ -22,6 +22,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { months } from 'data';
 import { AuthContext } from 'contexts/AuthContext';
 import { Chat } from '@material-ui/icons';
+import GigReview from 'components/Gigs/GigReview';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -62,22 +63,32 @@ const styles = makeStyles((theme) => ({
 }));
 
 const UserProfile = ({ user }) => {
-  const { user: loggedUser } = useContext(AuthContext);
+  const { user: loggedUser, deleteGig } = useContext(AuthContext);
   const classes = styles();
 
   const navigate = useNavigate();
 
   const handleCreateGig = () => {
-    navigate(`/mygigs/create`);
+    navigate(`/services/create`);
   };
 
   const isMyProfile = useMemo(() => {
+    console.log(`user._id`, user._id);
+    console.log(`loggedUser._id`, loggedUser._id);
+    console.log(`user?._id === loggedUser?._id`, user?._id === loggedUser?._id);
     return user?._id === loggedUser?._id;
   }, [loggedUser, user]);
 
   return (
     <Grid container spacing={4}>
       <Grid item xs={12} sm={4}>
+        <Typography
+          variant='h5'
+          align='center'
+          style={{ marginBottom: '1rem' }}
+        >
+          Profile
+        </Typography>
         <Paper className={classes.paper}>
           <Box className={classes.userBox}>
             {isMyProfile && (
@@ -189,9 +200,16 @@ const UserProfile = ({ user }) => {
         </Paper>
       </Grid>
       <Grid item xs={12} sm={8}>
+        <Typography
+          variant='h5'
+          align='center'
+          style={{ marginBottom: '1rem' }}
+        >
+          Services
+        </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
           {user.gigs.map((g) => (
-            <GigCard isOwner={isMyProfile} {...g} key={g._id} />
+            <GigCard isOwner={false} {...g} key={g._id} deleteGig={deleteGig} />
           ))}
           {user.gigs.length < 5 && isMyProfile && (
             <Card
@@ -233,10 +251,48 @@ const UserProfile = ({ user }) => {
                     {' '}
                     <AddIcon size='large' />
                   </Box>
-                  <Typography variant='body1'>Create a new Gig</Typography>
+                  <Typography variant='body1'>Create a new Service</Typography>
                 </Box>
               </CardContent>
             </Card>
+          )}
+        </Box>
+        <Box style={{ maxWidth: 500 }}>
+          <Typography
+            variant='h5'
+            fontWeight='normal'
+            style={{ marginTop: '2rem', marginBottom: '1rem' }}
+          >
+            Reviews
+          </Typography>
+          {/* <Divider /> */}
+          {user?.reviews.length > 0 ? (
+            user?.reviews?.map((el) => (
+              <React.Fragment key={el._id}>
+                {' '}
+                <GigReview
+                  review={el}
+                  // review={{
+                  //   user: {
+                  //     fullName: faker.name.findName(),
+                  //     photo: faker.internet.avatar(),
+                  //   },
+                  //   description: faker.random.words(10),
+                  //   createdAt: new Date(),
+                  //   rating: faker.datatype.number({
+                  //     min: 3,
+                  //     max: 5,
+                  //     precision: 0.1,
+                  //   }),
+                  // }}
+                />
+                <Divider />
+              </React.Fragment>
+            ))
+          ) : (
+            <Typography variant='subtitle1'>
+              No Reviews for this user yet
+            </Typography>
           )}
         </Box>
       </Grid>

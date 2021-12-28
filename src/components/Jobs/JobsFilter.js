@@ -16,6 +16,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Divider,
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import useManyInputs from 'hooks/useManyInputs';
@@ -57,18 +58,14 @@ const useStyles = makeStyles((theme) => ({
   CategoriesList: {
     '&.MuiList-root': {
       paddingInline: '0',
+      width: '100%',
       '& .MuiListItem-root': {
-        width: '49%',
-        display: 'inline-block',
         padding: 0,
         cursor: 'pointer',
         textAlign: 'center',
         '&:hover': {
           backgroundColor: theme.palette.primary.main,
           color: '#fff',
-        },
-        '& .MuiTypography-root': {
-          fontSize: 14,
         },
       },
     },
@@ -154,7 +151,7 @@ const JobsFilter = ({
                       name='level1'
                     />
                   }
-                  label='$5k +'
+                  label='$1k +'
                 />
                 <FormControlLabel
                   control={
@@ -165,7 +162,7 @@ const JobsFilter = ({
                       name='level2'
                     />
                   }
-                  label='$1k - $5k'
+                  label='$500 - $1k'
                 />
                 <FormControlLabel
                   control={
@@ -176,7 +173,7 @@ const JobsFilter = ({
                       name='level3'
                     />
                   }
-                  label='$500 - $1k'
+                  label='$100 - $500'
                 />
                 <FormControlLabel
                   control={
@@ -187,7 +184,7 @@ const JobsFilter = ({
                       name='level4'
                     />
                   }
-                  label='$100 - $500'
+                  label='$50 - $100'
                 />
                 <FormControlLabel
                   control={
@@ -198,7 +195,7 @@ const JobsFilter = ({
                       name='level5'
                     />
                   }
-                  label='Less than $100'
+                  label='Less than $50'
                 />
               </FormGroup>
               {/* <FormHelperText>Be careful</FormHelperText> */}
@@ -215,13 +212,16 @@ const JobsFilter = ({
           <AccordionDetails>
             <List className={classes.CategoriesList}>
               {categories?.map((cat) => (
-                <ListItem>
-                  <ListItemText
-                    data-catid={cat._id}
-                    primary={cat.title}
-                    onClick={applyCategoryFilter}
-                  />
-                </ListItem>
+                <React.Fragment key={cat._id}>
+                  <ListItem>
+                    <ListItemText
+                      data-catid={cat._id}
+                      primary={cat.title}
+                      onClick={applyCategoryFilter}
+                    />
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
               ))}
             </List>
           </AccordionDetails>
@@ -248,7 +248,7 @@ const JobsFilter = ({
                       name='level1'
                     />
                   }
-                  label='100+ days'
+                  label='60+ days'
                 />
                 <FormControlLabel
                   control={
@@ -259,7 +259,7 @@ const JobsFilter = ({
                       name='level2'
                     />
                   }
-                  label='100 - 500 days'
+                  label='30 - 60 days'
                 />
                 <FormControlLabel
                   control={
@@ -270,7 +270,7 @@ const JobsFilter = ({
                       name='level3'
                     />
                   }
-                  label='50 - 100 days'
+                  label='10-30 days'
                 />
                 <FormControlLabel
                   control={
@@ -281,21 +281,9 @@ const JobsFilter = ({
                       name='level4'
                     />
                   }
-                  label='10-50 days'
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      color='primary'
-                      checked={daysFilters.level5}
-                      onChange={handleDaysChange}
-                      name='level5'
-                    />
-                  }
                   label='Less than 10 days'
                 />
               </FormGroup>
-              {/* <FormHelperText>Be careful</FormHelperText> */}
             </FormControl>
           </AccordionDetails>
         </Accordion>

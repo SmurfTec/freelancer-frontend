@@ -1,29 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
-import styles from 'styles/commonStyles';
-import {
-  Accordion,
-  AccordionSummary,
-  Box,
-  Grid,
-  makeStyles,
-  AccordionDetails,
-  MenuItem,
-  Button,
-  Popover,
-} from '@material-ui/core';
-import { Typography } from '@material-ui/core';
-import { categories } from 'data';
+import React, { useMemo, useContext, useEffect, useState } from 'react';
+import { Box, Grid, makeStyles, Button, Popover } from '@material-ui/core';
 import { Container } from '@material-ui/core';
 
 import { v4 } from 'uuid';
 import { DataContext } from 'contexts/DataContext';
 import { Skeleton } from '@material-ui/lab';
-import DevReqCard from './DevRequest/DevReqCard';
+import DevReqCard from '../DevRequest/DevReqCard';
 import { AuthContext } from 'contexts/AuthContext';
 import { DevRequestsContext } from 'contexts/DevRequestsContext';
 import JobsFilter from './JobsFilter';
 import { FilterList } from '@material-ui/icons';
-const queryString = require('query-string');
+import queryString from 'query-string';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   filter: {
@@ -40,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const filterPopoverId = 'filterPopOver';
 
-const RenderDevRequests = ({ loading, data, handleCatClick }) => {
+const RenderDevRequests = ({ loading, data }) => {
   return (
     <Grid container spacing={2}>
       {loading
@@ -53,7 +41,7 @@ const RenderDevRequests = ({ loading, data, handleCatClick }) => {
             ))
         : data?.map((el) => (
             <Grid item xs={6} sm={4} md={3} lg={3} key={el.value}>
-              <DevReqCard devRequest={el} handleClick={handleCatClick} />
+              <DevReqCard devRequest={el} />
             </Grid>
           ))}
     </Grid>
@@ -62,7 +50,7 @@ const RenderDevRequests = ({ loading, data, handleCatClick }) => {
 
 const JobsPage = () => {
   const classes = useStyles();
-  const handleCatClick = () => {};
+  const location = useLocation();
   const { user } = useContext(AuthContext);
   const { devRequests, loadingDevRequests, categories } =
     useContext(DataContext);
@@ -73,15 +61,14 @@ const JobsPage = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const isFilterOpen = Boolean(anchorEl);
-
-  const handleFilter = (e) => {
-    const { filter } = e.currentTarget.dataset;
-    // console.log(`e.`, filter);
-  };
+  const parsedQuery = useMemo(() => {
+    return queryString.parse(location.search);
+  }, [location.search]);
 
   const applyCategoryFilter = (e) => {
     const { catid } = e.currentTarget.dataset;
-    let allData = user?.role === 'buyer' ? usersRequests : devRequests;
+    // let allData = user?.role === 'buyer' ? usersRequests : devRequests;
+    let allData = devRequests;
 
     console.log(`catid`, catid);
     setFilteredData(allData?.filter((el) => el.category._id === catid));
@@ -89,7 +76,8 @@ const JobsPage = () => {
 
   const applyPriceFilter = (pricesLevels) => {
     // * level 1 => 5k +
-    let allData = user?.role === 'buyer' ? usersRequests : devRequests;
+    // let allData = user?.role === 'buyer' ? usersRequests : devRequests;
+    let allData = devRequests;
     console.log(`allData`, allData);
     let updatedData = [];
     console.log(`pricesLevels`, pricesLevels);
@@ -99,30 +87,30 @@ const JobsPage = () => {
       pricesLevels.forEach((el) => {
         switch (el) {
           case 'level1':
-            updatedData = allData.filter((el) => el.budget >= 5000);
+            updatedData = allData.filter((el) => el.budget >= 1000);
             break;
 
           case 'level2':
             updatedData = allData.filter(
-              (el) => el.budget >= 1000 && el.budget < 5000
+              (el) => el.budget >= 500 && el.budget < 1000
             );
 
             break;
 
           case 'level3':
             updatedData = allData.filter(
-              (el) => el.budget >= 500 && el.budget < 1000
+              (el) => el.budget >= 100 && el.budget < 500
             );
             break;
 
           case 'level4':
             updatedData = allData.filter(
-              (el) => el.budget >= 100 && el.budget < 500
+              (el) => el.budget >= 50 && el.budget < 100
             );
             break;
 
           case 'level5': {
-            updatedData = allData.filter((el) => el.budget < 100);
+            updatedData = allData.filter((el) => el.budget < 50);
             break;
           }
         }
@@ -139,7 +127,9 @@ const JobsPage = () => {
 
   const applyDaysFilter = (daysLevels) => {
     // * level 1 => 5k +
-    let allData = user?.role === 'buyer' ? usersRequests : devRequests;
+    // let allData = user?.role === 'buyer' ? usersRequests : devRequests;
+    let allData = devRequests;
+
     console.log(`allData`, allData);
     let updatedData = [];
     console.log(`daysLevels`, daysLevels);
@@ -149,32 +139,25 @@ const JobsPage = () => {
       daysLevels.forEach((el) => {
         switch (el) {
           case 'level1':
-            updatedData = allData.filter((el) => el.expectedDays >= 500);
+            updatedData = allData.filter((el) => el.expectedDays >= 60);
             break;
 
           case 'level2':
             updatedData = allData.filter(
-              (el) => el.expectedDays >= 100 && el.expectedDays < 500
+              (el) => el.expectedDays >= 30 && el.expectedDays < 60
             );
 
             break;
 
           case 'level3':
             updatedData = allData.filter(
-              (el) => el.expectedDays >= 50 && el.expectedDays < 100
+              (el) => el.expectedDays >= 10 && el.expectedDays < 30
             );
             break;
 
           case 'level4':
-            updatedData = allData.filter(
-              (el) => el.expectedDays >= 10 && el.expectedDays < 50
-            );
-            break;
-
-          case 'level5': {
             updatedData = allData.filter((el) => el.expectedDays < 10);
             break;
-          }
         }
       });
 
@@ -188,10 +171,22 @@ const JobsPage = () => {
   };
 
   useEffect(() => {
+    console.log(`parsedQuery`, parsedQuery);
+    if (!parsedQuery.q) return setFilteredData(devRequests);
+
+    setFilteredData(
+      devRequests?.filter((el) =>
+        el.description.toLowerCase().includes(parsedQuery.q)
+      )
+    );
+  }, [parsedQuery]);
+
+  useEffect(() => {
     if (!user) return setFilteredData(devRequests);
 
-    if (user.role === 'buyer') setFilteredData(usersRequests);
-    else setFilteredData(devRequests);
+    setFilteredData(devRequests);
+    // if (user.role === 'buyer') setFilteredData(usersRequests);
+    // else setFilteredData(devRequests);
   }, [user, devRequests, usersRequests]);
 
   const handleClick = (event) => {
@@ -245,7 +240,6 @@ const JobsPage = () => {
             applyCategoryFilter={applyCategoryFilter}
             applyDaysFilter={applyDaysFilter}
             categories={categories}
-            handleFilter={handleFilter}
           />
         </Popover>
         {/* <Grid item sm={12} md={10}>
@@ -253,11 +247,11 @@ const JobsPage = () => {
 
         <RenderDevRequests
           loading={
-            user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
+            loadingDevRequests
+            // user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
           }
           data={filteredData}
           // data={user?.role === 'buyer' ? usersRequests : devRequests}
-          handleCatClick={handleCatClick}
         />
         {/* </Grid> */}
         {/* </Grid>{' '} */}

@@ -2,8 +2,6 @@ import {
   Box,
   Button,
   Container,
-  Divider,
-  IconButton,
   makeStyles,
   Paper,
   TextField,
@@ -13,14 +11,13 @@ import {
   OutlinedInput,
   FormControl,
   CircularProgress,
+  Grid,
 } from '@material-ui/core';
-import Navbar from 'components/common/Navbar';
+import { Publish } from '@material-ui/icons';
 import React, { useContext, useEffect, useState } from 'react';
 import useManyInputs from 'hooks/useManyInputs';
 import { Autocomplete } from '@material-ui/lab';
-import { categories, sub_categories } from 'data';
 import styles from 'styles/commonStyles';
-import { CloudUpload as CloudUploadIcon } from '@material-ui/icons';
 import { AuthContext } from 'contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -39,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   uploadFileBox: {
+    flexDirection: 'row',
+    gap: 20,
+    /* border: 1px solid #ccc; */
     display: 'flex',
     alignItems: 'center',
     '& img': {
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DevRequest = () => {
+const CreateJob = () => {
   const classes = styles();
   const classes_s = useStyles();
   const { user } = useContext(AuthContext);
@@ -78,6 +78,7 @@ const DevRequest = () => {
     resetState,
     setInputstate,
   ] = useManyInputs(initialState);
+  const [isSubmitting, toggleSubmitting] = useToggle(false);
 
   useEffect(() => {
     if (!inputState.category) return;
@@ -129,6 +130,7 @@ const DevRequest = () => {
     e.preventDefault();
     console.log(`inputState`, inputState);
     if (!inputState.image) return toast.error('Image is required!');
+    toggleSubmitting();
 
     createDevRequest(
       {
@@ -139,6 +141,7 @@ const DevRequest = () => {
       () => {
         resetState();
         toast.success('Success');
+        toggleSubmitting();
         setTimeout(() => {
           navigate('/jobs');
         }, 1500);
@@ -168,37 +171,37 @@ const DevRequest = () => {
                 rowGap: 20,
               }}
             >
-              <Typography variant='subtitle2'>
-                Describe the service you're looking to purchase - please be as
-                detailed as possible:
-              </Typography>
-              <TextField
-                name='description'
-                value={inputState.description}
-                label="I'm looking for...."
-                multiline
-                rows={3}
-                onChange={handleTxtChange}
-                variant='outlined'
-                fullWidth
-                size='small'
-                required
-              />
-
-              <div className={classes_s.uploadFile}>
-                <input id='fileuploadBtn' type='file' onChange={uploadFile} />
-              </div>
-              <Box className={classes_s.uploadFileBox}>
-                <label htmlFor='fileuploadBtn'>
-                  <Button variant='contained' color='primary' component='span'>
-                    Attach Image
-                  </Button>
-                </label>
-                {image && <img src={image} />}
+              <Box item xs={12} sm={6}>
+                <Typography
+                  variant='subtitle2'
+                  style={{ marginBottom: '1rem' }}
+                >
+                  Describe the service you're looking to purchase - please be as
+                  detailed as possible:
+                </Typography>
+                <TextField
+                  name='description'
+                  value={inputState.description}
+                  label="I'm looking for...."
+                  multiline
+                  rows={5}
+                  onChange={handleTxtChange}
+                  variant='outlined'
+                  fullWidth
+                  size='small'
+                  required
+                />
               </Box>
 
-              <Box sx={{ mt: 3 }}>
+              <Box
+                display='flex'
+                justifyContent='space-between'
+                flexWrap='wrap'
+                style={{ rowGap: 20 }}
+              >
+                {' '}
                 <Autocomplete
+                  style={{ flexBasis: '45%', minWidth: 250 }}
                   options={categories}
                   getOptionLabel={(option) => option.title}
                   id='category'
@@ -217,9 +220,8 @@ const DevRequest = () => {
                     />
                   )}
                 />
-              </Box>
-              <Box sx={{ mt: 2 }}>
                 <Autocomplete
+                  style={{ flexBasis: '45%', minWidth: 250 }}
                   options={subCategories}
                   getOptionLabel={(option) => option.title}
                   id='subCategory'
@@ -249,58 +251,100 @@ const DevRequest = () => {
                   )}
                 />
               </Box>
+              <Box
+                display='flex'
+                justifyContent='space-between'
+                flexWrap='wrap'
+                style={{ gap: 20 }}
+              >
+                <Box style={{ flexBasis: '45%', minWidth: 250 }}>
+                  <Typography variant='subtitle2'>
+                    when would you like your service delivered?
+                  </Typography>
 
-              <Box sx={{ mt: 2 }}>
-                <Typography variant='subtitle2'>
-                  Once you place your order, when would you like your service
-                  delivered?
-                </Typography>
+                  <TextField
+                    style={{ marginTop: '1rem' }}
+                    name='expectedDays'
+                    value={inputState.expectedDays}
+                    label='Delivery Time'
+                    onChange={handleTxtChange}
+                    variant='outlined'
+                    fullWidth
+                    type='number'
+                    size='small'
+                    required
+                    inputProps={{ min: 1 }}
+                  />
+                </Box>
+
+                <Box style={{ flexBasis: '45%', minWidth: 250 }}>
+                  <Typography variant='subtitle2'>
+                    What is your budget for this service?
+                  </Typography>
+
+                  <FormControl
+                    style={{ marginTop: '1rem' }}
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                  >
+                    <InputLabel htmlFor='budget'>Budget</InputLabel>
+                    <OutlinedInput
+                      id='budget'
+                      name='budget'
+                      type='number'
+                      value={inputState.budget}
+                      onChange={handleTxtChange}
+                      startAdornment={
+                        <InputAdornment position='start'>USD</InputAdornment>
+                      }
+                      required
+                      inputProps={{ min: 0 }}
+                      labelWidth={60}
+                      size='small'
+                    />
+                  </FormControl>
+                </Box>
               </Box>
-
-              <TextField
-                name='expectedDays'
-                value={inputState.expectedDays}
-                label='Delivery Time'
-                onChange={handleTxtChange}
-                variant='outlined'
-                fullWidth
-                type='number'
-                size='small'
-                required
-                inputProps={{ min: 1 }}
-              />
-
-              <Box sx={{ mt: 2 }}>
-                <Typography variant='subtitle2'>
-                  What is your budget for this service?
-                </Typography>
+              <Box item xs={12} sm={6} style={{ display: 'flex' }}>
+                <div className={classes_s.uploadFile}>
+                  <input id='fileuploadBtn' type='file' onChange={uploadFile} />
+                </div>
+                <Box className={classes_s.uploadFileBox}>
+                  <label htmlFor='fileuploadBtn'>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      component='span'
+                      endIcon={<Publish />}
+                    >
+                      Attach Image
+                    </Button>
+                  </label>{' '}
+                  {image && <img src={image} />}
+                </Box>
               </Box>
-
-              <FormControl fullWidth variant='outlined'>
-                <InputLabel htmlFor='budget'>Budget</InputLabel>
-                <OutlinedInput
-                  id='budget'
-                  name='budget'
-                  type='number'
-                  value={inputState.budget}
-                  onChange={handleTxtChange}
-                  startAdornment={
-                    <InputAdornment position='start'>USD</InputAdornment>
-                  }
-                  required
-                  inputProps={{ min: 0 }}
-                  labelWidth={60}
-                />
-              </FormControl>
-              <Box sx={{ mt: 3, textAlign: 'center' }}>
+              <Box sx={{ mt: 3, textAlign: 'right' }}>
                 <Button
                   type='submit'
                   form='form1'
                   variant='contained'
                   color='primary'
                   align='center'
+                  disabled={isSubmitting}
                 >
                   Submit Request
+                </Button>
+                <Button
+                  type='submit'
+                  form='form1'
+                  variant='contained'
+                  color='secondary'
+                  align='center'
+                  onClick={() => navigate(-1)}
+                  style={{ marginLeft: 10 }}
+                >
+                  Cancel
                 </Button>
               </Box>
             </Box>
@@ -311,4 +355,4 @@ const DevRequest = () => {
   );
 };
 
-export default DevRequest;
+export default CreateJob;

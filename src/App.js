@@ -1,7 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import ThemeConfig from 'theme';
-import Profile from 'components/Profile';
 // import ModifyProfile from 'components/Profile/ModifyProfile';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from 'contexts/AuthContext';

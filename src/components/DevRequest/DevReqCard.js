@@ -21,7 +21,7 @@ const styles = makeStyles((theme) => ({
     // width: 230,
     position: 'relative',
     '& .MuiCardContent-root': {
-      paddingBottom: 0,
+      minHeight: 80,
     },
   },
   price: {
@@ -74,9 +74,6 @@ const DevReqCard = ({ devRequest }) => {
           title={title}
         />
         <CardContent>
-          {/* <Typography variant='subtitle2' color='textSecondary' component='p'>
-            {description}
-          </Typography> */}
           <LineClamp text={description} />
         </CardContent>
         <Divider />

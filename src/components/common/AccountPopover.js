@@ -72,6 +72,9 @@ export default function AccountPopover({ classes }) {
             {user.fullName.toUpperCase()}
           </Typography> */}
           <Typography variant='body1' className={classes.NavItem}>
+            <Link to='/dashboard'>Dashboard</Link>
+          </Typography>
+          <Typography variant='body1' className={classes.NavItem}>
             <Link to='/profile'>Profile</Link>
           </Typography>
           <Typography variant='body1' className={classes.NavItem}>
@@ -80,7 +83,7 @@ export default function AccountPopover({ classes }) {
           {user?.role === 'seller' ? (
             <>
               <Typography variant='body1' className={classes.NavItem}>
-                <Link to='/services'>Services</Link>
+                <Link to='/'>Jobs</Link>
               </Typography>
               <Typography variant='body1' className={classes.NavItem}>
                 <Link to='/offer'>Offers</Link>
@@ -89,7 +92,7 @@ export default function AccountPopover({ classes }) {
           ) : (
             <>
               <Typography variant='body1' className={classes.NavItem}>
-                <Link to='/services'>My Jobs</Link>
+                <Link to='/'>Services</Link>
               </Typography>
             </>
           )}

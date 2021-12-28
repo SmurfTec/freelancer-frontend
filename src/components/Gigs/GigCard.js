@@ -7,11 +7,22 @@ import {
   CardActionArea,
   Box,
   IconButton,
+  Popper,
+  Grow,
+  Paper,
+  ClickAwayListener,
+  MenuList,
+  MenuItem,
+  Menu,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Delete, Edit, MoreHoriz } from '@material-ui/icons';
+import MoreVert from '@material-ui/icons/MoreVert';
+import ConfirmDialog from 'dialogs/ConfirmDialogBox';
+import useToggle from 'hooks/useToggle';
 
 const styles = makeStyles((theme) => ({
   gigCard: {
@@ -38,15 +49,35 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const GigCard = (gig, isOwner) => {
+const GigCard = (gig, isOwner, deleteGig) => {
   const classes = styles();
-  const { _id, title, images, price, packages } = gig;
+  const { _id, title, images, packages } = gig;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [isDeleteOpen, toggleDelete] = useToggle(false);
+
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const navigate = useNavigate();
+
   const handleGigModify = (e) => {
-    navigate(`/mygigs/${_id}`);
+    navigate(`/services/${_id}/edit`);
     e.stopPropagation();
   };
+
+  const handleDeleteGig = () => {
+    console.log(`deleteGig`, deleteGig);
+    // deleteGig(_id);
+    toggleDelete();
+    handleClose();
+  };
+
   return (
     <Card className={classes.gigCard}>
       {isOwner === true && (
@@ -60,12 +91,13 @@ const GigCard = (gig, isOwner) => {
           <EditIcon />
         </IconButton>
       )}
-      <CardActionArea>
+
+      <CardActionArea component={Link} to={`/services/${_id}`}>
         <CardMedia
           component='img'
           alt={title}
           height='170'
-          image={images[0]}
+          image={images?.[0]}
           title={title}
         />
         <CardContent>
@@ -73,15 +105,65 @@ const GigCard = (gig, isOwner) => {
             {title}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Box sx={{ paddingInline: 2, display: 'flex' }}>
-            <Typography variant='body2' color='primary' align='right'>
-              STARTING AT{' '}
-              <span className={classes.price}>{packages[0].price}</span>
-            </Typography>
-          </Box>
-        </CardActions>
       </CardActionArea>
+      <CardActions>
+        <Box
+          style={{
+            display: 'flex',
+            paddingInline: 2,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+        >
+          <Typography variant='body2' color='primary' align='right'>
+            STARTING AT{' '}
+            <span className={classes.price}>{packages[0].price}</span>
+          </Typography>
+          {isOwner && (
+            <IconButton
+              aria-label='more'
+              aria-controls='long-menu'
+              aria-haspopup='true'
+              onClick={handleClick}
+            >
+              <MoreVert />
+            </IconButton>
+          )}
+        </Box>
+      </CardActions>
+      <Menu
+        id='long-menu'
+        anchorEl={anchorEl}
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            // maxHeight: ITEM_HEIGHT * 4.5,
+            // width: '10ch',
+          },
+        }}
+      >
+        <MenuItem
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+          onClick={handleGigModify}
+        >
+          Edit <Edit style={{ color: '#bdbdbd' }} />{' '}
+        </MenuItem>
+        <MenuItem
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+          onClick={toggleDelete}
+        >
+          Delete <Delete style={{ color: '#bdbdbd' }} />{' '}
+        </MenuItem>
+      </Menu>
+      <ConfirmDialog
+        open={isDeleteOpen}
+        toggleDialog={toggleDelete}
+        success={handleDeleteGig}
+        dialogTitle='Delete this service'
+      />
     </Card>
   );
 };

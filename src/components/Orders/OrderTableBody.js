@@ -228,7 +228,7 @@ const OrderTableBody = ({
                 >
                   <MenuItem onClick={toggleReviewOpen}>Complete</MenuItem>
                   <MenuItem onClick={() => handleOrderStatus('notAccepted')}>
-                    Not Accepted
+                    Not Approved
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>

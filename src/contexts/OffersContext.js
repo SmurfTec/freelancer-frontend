@@ -5,12 +5,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { makeReq, handleCatch, API_BASE_URL } from 'utils/makeReq';
 import { AuthContext, LOCALSTORAGE_TOKEN_KEY } from './AuthContext';
+import { DataContext } from './DataContext';
 
 export const OffersContext = React.createContext();
 
 export const OffersProvider = ({ children }) => {
   // let history = useHistory();
   const { user } = useContext(AuthContext);
+  const { updateDevRequest } = useContext(DataContext);
 
   const [loading, toggleLoading] = useToggle(true);
   const [
@@ -56,7 +58,7 @@ export const OffersProvider = ({ children }) => {
         },
         'POST'
       );
-
+      updateDevRequest(devRequestId, { offer: resData.offer });
       console.log(`resData`, resData);
       pushOffer(resData.offer);
       callBack?.();

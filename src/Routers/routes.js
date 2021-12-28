@@ -1,8 +1,8 @@
 import Loading from 'components/common/Loading';
 import ManageGig from 'components/Gigs/ManageGig';
-import JobsPage from 'components/JobsPage';
+import JobsPage from 'components/Jobs/JobsPage';
 import GigTable from 'components/Gigs/MyGigs';
-import DevRequest from 'components/DevRequest/CreateRequest';
+import DevRequest from 'components/Jobs/CreateJob';
 import Login from 'components/Login';
 import Logout from 'components/Logout';
 import OrdersTable from 'components/Orders/MyOrders';
@@ -12,21 +12,21 @@ import Register from 'components/Register';
 import { Navigate } from 'react-router-dom';
 import DevRequestsTable from 'components/DevRequest/MyDevRequests';
 import Dashboard from 'components/dashboard';
-import LandingPageLayout from 'layouts/LandingPageLayout';
-import NavbarLayout from 'layouts/NavbarLayout';
 import SingleRequest from 'components/DevRequest/SingleRequest';
 import UserHome from 'components/UserHome';
-import Services from 'components/ServicesPage';
+import Services from 'components/Services/ServicesPage';
 import MyOffers from 'components/Offers/MyOffers';
 import Chat from 'components/Chat';
 import ViewUser from 'components/Profile/ViewUser';
+import ViewService from 'components/Gigs/ViewGig';
+import CommonLayout from 'layouts/CommonLayout';
 
 const NotFound = () => <h1>Not Found</h1>;
 
 export const protechtedRoutes = [
   {
     path: '/',
-    element: <NavbarLayout />,
+    element: <CommonLayout />,
     children: [
       {
         path: '/',
@@ -66,9 +66,9 @@ export const protechtedRoutes = [
       },
 
       // * GIGS
-      { path: '/mygigs', element: <GigTable /> },
-      { path: '/mygigs/create', element: <ManageGig /> },
-      { path: '/mygigs/:id', element: <ManageGig isUpdate /> },
+      { path: '/services/me', element: <GigTable /> },
+      { path: '/services/create', element: <ManageGig /> },
+      { path: '/services/:id/edit', element: <ManageGig isUpdate /> },
       { path: '/gigs/manage', element: <GigTable /> },
 
       // * DevRequests
@@ -89,13 +89,11 @@ export const protechtedRoutes = [
   { path: '*', element: <Navigate to='/profile' /> },
 ];
 
-export const commonRotues = [{ path: 'login', element: <Login /> }];
-
-export const publicRoutes = [
-  // { path: '/', element: <LandingPage /> },
+export const commonRotues = [
+  { path: '/login', element: <Login /> },
   {
     path: '/',
-    element: <LandingPageLayout />,
+    element: <CommonLayout />,
     children: [
       {
         path: '/',
@@ -105,11 +103,21 @@ export const publicRoutes = [
         path: '/services',
         element: <Services />,
       },
+      {
+        path: '/services/:id',
+        element: <ViewService />,
+      },
       { path: '/jobs/:id', element: <SingleRequest /> },
     ],
   },
-  { path: 'register', element: <Register /> },
   { path: '*', element: <Navigate to='/' /> },
+
+  // {path : '/' , element : <Nav}
+];
+
+export const publicRoutes = [
+  // { path: '/', element: <LandingPage /> },
+  { path: 'register', element: <Register /> },
 ];
 
 export const loading = [{ path: '*', element: <Loading /> }];

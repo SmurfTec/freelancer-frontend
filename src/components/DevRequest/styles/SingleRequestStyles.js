@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     border: '1px solid #ccc',
-    width: 600,
     margin: 'auto',
     padding: 20,
   },

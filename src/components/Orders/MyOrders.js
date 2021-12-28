@@ -162,56 +162,62 @@ const OrdersTable = () => {
               {/* <Tab label='Priority' {...a11yProps(0)} /> */}
               <Tab label='Active' {...a11yProps(0)} />
               <Tab label='Delivered' {...a11yProps(1)} />
-              <Tab label='Not Accepted' {...a11yProps(2)} />
+              <Tab label='Not Approved' {...a11yProps(2)} />
               <Tab label='Completed' {...a11yProps(3)} />
             </Tabs>
           </AppBar>
           <TabPanel className={tabClasses.TabPanel}>
-            <TableContainer component={Paper}>
-              <Table className={tabClasses.table} aria-label='simple table'>
-                <TableHead>
-                  <TableRow>
-                    <TableCell colspan='2' align='center'>
-                      {isBuyer ? 'Seller' : 'Buyer'}
-                    </TableCell>
-                    <TableCell>Offer</TableCell>
-                    <TableCell>Deadline</TableCell>
-                    <TableCell>Price</TableCell>
-                    <TableCell>Status</TableCell>
-                    {showSubmission === true && (
-                      <TableCell>Submission</TableCell>
+            {filteredOrders.length === 0 ? (
+              <Typography variant='subtitle1'>
+                No Orders for this category
+              </Typography>
+            ) : (
+              <TableContainer component={Paper}>
+                <Table className={tabClasses.table} aria-label='simple table'>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell colspan='2' align='center'>
+                        {isBuyer ? 'Seller' : 'Buyer'}
+                      </TableCell>
+                      <TableCell>Offer</TableCell>
+                      <TableCell>Deadline</TableCell>
+                      <TableCell>Price</TableCell>
+                      <TableCell>Status</TableCell>
+                      {showSubmission === true && (
+                        <TableCell>Submission</TableCell>
+                      )}
+                      {showActions === true && <TableCell>Actions</TableCell>}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {loading ? (
+                      Array(5)
+                        .fill()
+                        .map(() => (
+                          <TableRow key={v4()}>
+                            {Array(7)
+                              .fill()
+                              .map(() => (
+                                <TableCell key={v4()}>
+                                  <Skeleton />
+                                </TableCell>
+                              ))}
+                          </TableRow>
+                        ))
+                    ) : (
+                      <OrderTableBody
+                        classes_s={classes_s}
+                        data={filteredOrders}
+                        isBuyer={isBuyer}
+                        showSubmission={showSubmission}
+                        showActions={showActions}
+                        manageOrder={manageOrder}
+                      />
                     )}
-                    {showActions === true && <TableCell>Actions</TableCell>}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {loading ? (
-                    Array(5)
-                      .fill()
-                      .map(() => (
-                        <TableRow key={v4()}>
-                          {Array(7)
-                            .fill()
-                            .map(() => (
-                              <TableCell key={v4()}>
-                                <Skeleton />
-                              </TableCell>
-                            ))}
-                        </TableRow>
-                      ))
-                  ) : (
-                    <OrderTableBody
-                      classes_s={classes_s}
-                      data={filteredOrders}
-                      isBuyer={isBuyer}
-                      showSubmission={showSubmission}
-                      showActions={showActions}
-                      manageOrder={manageOrder}
-                    />
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </TabPanel>
         </div>
       </Container>

@@ -62,12 +62,13 @@ const CreateOfferDialog = ({ open, toggleDialog, handleCreate }) => {
   ] = useManyInputs(initialState);
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+
     handleCreate(inputState);
     //  handleCreate(devRequestId, inputState, () => {
     //    toast.success('Offer Sent successfully!');
     //    toggleDialog();
     //  });
-    e.preventDefault();
   };
 
   return (
@@ -75,60 +76,68 @@ const CreateOfferDialog = ({ open, toggleDialog, handleCreate }) => {
       <DialogTitle>Create an offer</DialogTitle>
       <DialogContent>
         <Box
-          className={`${classes_s.paper} ${classes_s.marginBetween}`}
+          className={`${classes_s.paper}`}
           sx={{ borderRadius: 0, boxShadow: 'none' }}
         >
           <form id='form1' onSubmit={handleSubmit}>
             <Box
               sx={{
-                pt: 3,
                 display: 'flex',
                 flexDirection: 'column',
                 rowGap: 20,
               }}
             >
+              <Box
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignContent: 'center',
+                  flexWrap: 'wrap',
+                  gap: 20,
+                }}
+              >
+                <TextField
+                  name='expectedDays'
+                  value={inputState.expectedDays}
+                  label='Delivery Time'
+                  onChange={handleTxtChange}
+                  variant='outlined'
+                  type='number'
+                  size='small'
+                  required
+                  inputProps={{ min: 1 }}
+                />
+
+                <FormControl variant='outlined' size='small'>
+                  <InputLabel htmlFor='budget'>Budget</InputLabel>
+                  <OutlinedInput
+                    id='budget'
+                    name='budget'
+                    type='number'
+                    value={inputState.budget}
+                    onChange={handleTxtChange}
+                    startAdornment={
+                      <InputAdornment position='start'>USD</InputAdornment>
+                    }
+                    required
+                    inputProps={{ min: 0 }}
+                    labelWidth={60}
+                  />
+                </FormControl>
+              </Box>
               <TextField
                 name='description'
                 value={inputState.description}
                 label='Description'
                 multiline
-                rows={3}
+                rows={5}
+                inputProps={{ resize: 'vertical' }}
                 onChange={handleTxtChange}
                 variant='outlined'
                 fullWidth
                 size='small'
                 required
               />
-
-              <TextField
-                name='expectedDays'
-                value={inputState.expectedDays}
-                label='Delivery Time'
-                onChange={handleTxtChange}
-                variant='outlined'
-                fullWidth
-                type='number'
-                size='small'
-                required
-                inputProps={{ min: 1 }}
-              />
-
-              <FormControl fullWidth variant='outlined'>
-                <InputLabel htmlFor='budget'>Budget</InputLabel>
-                <OutlinedInput
-                  id='budget'
-                  name='budget'
-                  type='number'
-                  value={inputState.budget}
-                  onChange={handleTxtChange}
-                  startAdornment={
-                    <InputAdornment position='start'>USD</InputAdornment>
-                  }
-                  required
-                  inputProps={{ min: 0 }}
-                  labelWidth={60}
-                />
-              </FormControl>
             </Box>
           </form>
         </Box>

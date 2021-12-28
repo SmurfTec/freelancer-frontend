@@ -8,7 +8,7 @@ import {
   TableRow,
   Paper,
 } from '@material-ui/core';
-import { MoreHor, MoreHoriz, MoreHoriziz } from '@material-ui/icons';
+import { MoreHoriz } from '@material-ui/icons';
 import React from 'react';
 
 const DevRequestsTable = ({ handleMenuOpen, classes, data, menuId }) => (

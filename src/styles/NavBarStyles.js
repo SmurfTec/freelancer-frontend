@@ -77,8 +77,10 @@ const useStyles = makeStyles((theme) => ({
     height: 500,
   },
   SearchBar: {
-    '&.MuiPaper-root': {
+    '& .MuiPaper-root': {
       boxShadow: 'none',
+      border: '1px solid #ccc',
+      height: 35,
     },
   },
   navLink: {
