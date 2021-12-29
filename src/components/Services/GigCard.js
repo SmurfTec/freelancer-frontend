@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import { Link } from 'react-router-dom';
+import LineClamp from 'components/DevRequest/line-clamp';
 
 const GigCard = ({ gig }) => {
   const classes = styles();
@@ -30,13 +31,16 @@ const GigCard = ({ gig }) => {
         />
       </CardActionArea>
       <CardContent>
-        <Box style={{}}>
+        <Box>
           <Box
             display='flex'
             alignItems='center'
+            component={Link}
+            to={`/users/${user._id}`}
             style={{
               gap: 10,
               marginBottom: 10,
+              width: 'fit-content',
             }}
           >
             <Avatar
@@ -47,26 +51,37 @@ const GigCard = ({ gig }) => {
               {user.fullName}
             </Typography>
           </Box>
-          <Typography variant='body1' fontWeight='bold' component='body2'>
-            {title}
-          </Typography>
+          <LineClamp line={2} text={title} variant='body1' />
         </Box>
         <Box
           style={{
             display: 'flex',
-            gap: 10,
             alignItems: 'center',
+            borderTop: '1px solid #ccc',
+            justifyContent: 'space-between',
           }}
         >
-          <Rating
-            name='half-rating'
-            defaultValue={gig.user.ratingsAverage}
-            readOnly
-            precision={0.5}
-            size='small'
-          />
-          <Typography variant='h6' style={{ color: '#FFB400' }}>
-            {gig.user.ratingsAverage}
+          <Box
+            style={{
+              flexGrow: 1,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Rating
+              name='half-rating'
+              defaultValue={gig.user.ratingsAverage}
+              readOnly
+              precision={0.5}
+              size='small'
+            />
+            <Typography variant='h6' style={{ color: '#FFB400' }}>
+              {gig.user.ratingsAverage}
+            </Typography>
+          </Box>
+          <Typography variant='subtitle2'>
+            <span style={{ fontSize: 12, fontWeight: 'normal' }}> From </span>$
+            {gig.packages[0].price}
           </Typography>
         </Box>
       </CardContent>

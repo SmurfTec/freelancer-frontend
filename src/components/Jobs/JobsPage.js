@@ -12,6 +12,7 @@ import JobsFilter from './JobsFilter';
 import { FilterList } from '@material-ui/icons';
 import queryString from 'query-string';
 import { useLocation } from 'react-router-dom';
+import PaginationBar from 'components/common/Pagination';
 
 const useStyles = makeStyles((theme) => ({
   filter: {
@@ -48,6 +49,8 @@ const RenderDevRequests = ({ loading, data }) => {
   );
 };
 
+const JOBS_PER_PAGE = 20;
+
 const JobsPage = () => {
   const classes = useStyles();
   const location = useLocation();
@@ -59,11 +62,34 @@ const JobsPage = () => {
 
   const [filteredData, setFilteredData] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [page, setPage] = React.useState(1);
 
   const isFilterOpen = Boolean(anchorEl);
   const parsedQuery = useMemo(() => {
     return queryString.parse(location.search);
   }, [location.search]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const DataCount = useMemo(() => {
+    if (!filteredData) return;
+    console.log(
+      `filteredData
+                    ?.slice(
+                      (page - 1) * JOBS_PER_PAGE,
+                      (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
+                    )`,
+      filteredData?.slice(
+        (page - 1) * JOBS_PER_PAGE,
+        (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
+      )
+    );
+
+    // *  total pages  = (total filteredData / filteredData per page )+ 1
+    return Math.ceil(filteredData.length / JOBS_PER_PAGE);
+  }, [filteredData]);
 
   const applyCategoryFilter = (e) => {
     const { catid } = e.currentTarget.dataset;
@@ -250,8 +276,16 @@ const JobsPage = () => {
             loadingDevRequests
             // user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
           }
-          data={filteredData}
+          data={filteredData.slice(
+            (page - 1) * JOBS_PER_PAGE,
+            (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
+          )}
           // data={user?.role === 'buyer' ? usersRequests : devRequests}
+        />
+        <PaginationBar
+          count={DataCount}
+          page={page}
+          onChange={handleChangePage}
         />
         {/* </Grid> */}
         {/* </Grid>{' '} */}

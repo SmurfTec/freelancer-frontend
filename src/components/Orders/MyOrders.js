@@ -162,7 +162,7 @@ const OrdersTable = () => {
               {/* <Tab label='Priority' {...a11yProps(0)} /> */}
               <Tab label='Active' {...a11yProps(0)} />
               <Tab label='Delivered' {...a11yProps(1)} />
-              <Tab label='Not Approved' {...a11yProps(2)} />
+              <Tab label='Waiting Approval' {...a11yProps(2)} />
               <Tab label='Completed' {...a11yProps(3)} />
             </Tabs>
           </AppBar>

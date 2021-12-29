@@ -6,6 +6,7 @@ import {
   Grid,
   Typography,
   Divider,
+  Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { AuthContext } from 'contexts/AuthContext';
@@ -13,6 +14,9 @@ import Loading from 'components/common/Loading';
 import { useNavigate } from 'react-router-dom';
 import StarIcon from '@material-ui/icons/Star';
 import faker from 'faker';
+import Review from 'components/Gigs/GigReview';
+import DashboardOrders from './Order';
+import { OrdersContext } from 'contexts/OrdersContext';
 const styles = makeStyles((theme) => ({
   avatarImg: {
     width: theme.spacing(15),
@@ -63,7 +67,8 @@ const handleClick = () => {
 
 const Dashboard = () => {
   const classes = styles();
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
+  const { orders } = useContext(OrdersContext);
 
   const navigate = useNavigate();
   if (!user) return <Loading noTitle />;
@@ -141,11 +146,7 @@ const Dashboard = () => {
                       </Typography>
                     </Box>
                     <Typography variant='body1'>
-                      {faker.datatype.number({
-                        min: 10,
-                        max: 1000,
-                        precision: 100,
-                      })}
+                      {orders?.length || 0}
                     </Typography>
                   </Box>
                   <Box className={classes.MoreInfoBox}>
@@ -159,11 +160,8 @@ const Dashboard = () => {
                       </Typography>
                     </Box>
                     <Typography variant='body1'>
-                      {faker.datatype.number({
-                        min: 10,
-                        max: 1000,
-                        precision: 100,
-                      })}
+                      {orders?.filter((el) => el.status === 'completed')
+                        ?.length || 0}
                     </Typography>
                   </Box>
                   <Box className={classes.MoreInfoBox}>
@@ -177,16 +175,69 @@ const Dashboard = () => {
                       </Typography>
                     </Box>
                     <Typography variant='body1'>
-                      {faker.datatype.number({
-                        min: 10,
-                        max: 100,
-                        precision: 10,
-                      })}
+                      {orders?.filter((el) => el.status === 'active')?.length ||
+                        0}
                     </Typography>
                   </Box>
                 </Box>
               </Box>
             </Box>
+            <Paper className={classes.paper} style={{ marginTop: '2rem' }}>
+              <Box sx={{ py: 2 }}>
+                <Typography variant='h5' gutterBottom>
+                  Description
+                </Typography>
+                <Box>
+                  <Typography variant='body1'>{user.about}</Typography>
+                </Box>
+              </Box>
+              <Box sx={{ mt: 4 }}>
+                <Divider />
+              </Box>
+              <Box sx={{ mt: 3 }}>
+                <Box sx={{ mt: 4 }}>
+                  <Typography variant='h5'>Skills</Typography>
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant='body1'>
+                      {user.skills.length > 0
+                        ? user.skills.map((us) => (
+                            <span key={us}>
+                              {us} <strong> | </strong>{' '}
+                            </span>
+                          ))
+                        : 'You dont have any skills yet!'}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Paper>
+            {/* <Box
+              style={{
+                border: '1px solid #ccc',
+                marginTop: '2rem',
+                padding: 20,
+              }}
+            >
+              <Typography
+                variant='h5'
+                fontWeight='normal'
+                align='center'
+                style={{ marginBottom: '1rem' }}
+              >
+                Reviews
+              </Typography> */}
+            {/* <Divider /> */}
+            {/* {user?.reviews.length > 0 ? (
+                user?.reviews?.map((el) => (
+                  <React.Fragment key={el._id}>
+                    <Review review={el} />
+                    <Divider />
+                  </React.Fragment>
+                ))
+              ) : (
+                <Typography variant='subtitle1'>No Reviews yet</Typography>
+              )}
+            </Box> */}
           </Grid>
           <Grid item xs={12} sm={8}>
             <Box
@@ -197,81 +248,16 @@ const Dashboard = () => {
                 backgroundColor: '#fff',
               }}
             >
-              <Typography variant='h5'>Active Orders 10 </Typography>
+              <Typography variant='h5'>
+                Active Orders{' '}
+                {orders?.filter((el) =>
+                  ['active', 'delivered', 'notAccepted'].includes(el.status)
+                )?.length || 0}{' '}
+              </Typography>
             </Box>
 
             <Box sx={{ mt: 4 }} />
-            {Array(5)
-              .fill()
-              .map((el) => (
-                <>
-                  {/* <Box
-                    display='flex'
-                    justifyContent='space-around'
-                    alignItems='center'
-                    style={{
-                      border: '3px solid #f3f3f3',
-                      minHeight: '8rem',
-                      padding: '0.5rem',
-                      margin: '1rem',
-                    }}
-                  >
-                    <Avatar
-                      src={`https://ui-avatars.com/api/?rounded=true&name=${faker.name
-                        .findName()
-                        .split(' ')
-                        .join('+')}`}
-                      alt={'asda'}
-                      style={{ minWidth: '5rem', minHeight: '5rem' }}
-                    />
-                    <Typography varaint='h5'>
-                      {faker.name.findName}
-                    </Typography>
-                    <Box>
-                      <Typography
-                        variant='h5'
-                        style={{
-                          color: '#8c8c8c',
-                          marginBottom: '0.5rem',
-                        }}
-                      >
-                        Deadline
-                      </Typography>
-                      <Typography variant='h6'>
-                        {new Date(faker.date.soon()).toDateString()}
-                      </Typography>
-                    </Box> */}
-
-                  {/* <Paper
-                    className={classes.Paper}
-                    style={{
-                      padding: 20,
-                      border: '1px solid #ccc',
-                      backgroundColor: '#fff',
-                      marginBottom: '2rem',
-                    }}
-                  >
-                    <Box>
-                      <Avatar
-                        src={`https://ui-avatars.com/api/?rounded=true&name=${faker.name
-                          .findName()
-                          .split(' ')
-                          .join('+')}`}
-                      ></Avatar>
-                      <Typography variant='h5'>
-                        {faker.name.findName()}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography variant='h5'>
-                        {new Date(faker.date.soon()).toDateString()}
-                      </Typography>
-                      <Typography variant='h5'>Deadline</Typography>
-                    </Box>
-                  </Paper> */}
-                  {/* </Box> */}
-                </>
-              ))}
+            <DashboardOrders user={user} token={token} />
           </Grid>
         </Grid>
       </Container>

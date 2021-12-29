@@ -2,7 +2,7 @@ import { Avatar, Box, Typography } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import React from 'react';
 
-const GigReview = ({ review }) => {
+const Review = ({ review }) => {
   return (
     <Box style={{ marginBottom: '2rem', marginTop: '1rem', marginLeft: 20 }}>
       <Box>
@@ -24,4 +24,4 @@ const GigReview = ({ review }) => {
   );
 };
 
-export default GigReview;
+export default Review;

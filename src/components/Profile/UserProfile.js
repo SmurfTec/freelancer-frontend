@@ -22,7 +22,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { months } from 'data';
 import { AuthContext } from 'contexts/AuthContext';
 import { Chat } from '@material-ui/icons';
-import GigReview from 'components/Gigs/GigReview';
+import Review from 'components/Gigs/GigReview';
 
 const styles = makeStyles((theme) => ({
   avatarImg: {
@@ -73,9 +73,9 @@ const UserProfile = ({ user }) => {
   };
 
   const isMyProfile = useMemo(() => {
-    console.log(`user._id`, user._id);
-    console.log(`loggedUser._id`, loggedUser._id);
-    console.log(`user?._id === loggedUser?._id`, user?._id === loggedUser?._id);
+    // console.log(`user._id`, user._id);
+    // console.log(`loggedUser._id`, loggedUser._id);
+    // console.log(`user?._id === loggedUser?._id`, user?._id === loggedUser?._id);
     return user?._id === loggedUser?._id;
   }, [loggedUser, user]);
 
@@ -207,55 +207,75 @@ const UserProfile = ({ user }) => {
         >
           Services
         </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-          {user.gigs.map((g) => (
-            <GigCard isOwner={false} {...g} key={g._id} deleteGig={deleteGig} />
-          ))}
-          {user.gigs.length < 5 && isMyProfile && (
-            <Card
-              style={{
-                width: 230,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 300,
-              }}
-            >
-              <CardContent>
-                <Box
+        <Box>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            {isMyProfile
+              ? loggedUser.gigs.map((g) => (
+                  <GigCard
+                    isOwner={isMyProfile}
+                    gig={g}
+                    key={g._id}
+                    deleteGig={deleteGig}
+                  />
+                ))
+              : user.gigs.map((g) => (
+                  <GigCard
+                    isOwner={isMyProfile}
+                    gig={g}
+                    key={g._id}
+                    deleteGig={deleteGig}
+                  />
+                ))}
+            {user.gigs.length < 5 &&
+              isMyProfile &&
+              loggedUser.role === 'seller' && (
+                <Card
                   style={{
+                    width: 230,
                     display: 'flex',
-                    flexDirection: 'column',
+                    justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100%',
-                    gap: 10,
-                    cursor: 'pointer',
+                    height: 300,
                   }}
-                  onClick={handleCreateGig}
                 >
-                  <Box
-                    style={{
-                      color: 'rgb(255, 255, 255)',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgb(51, 187, 119)',
-                      width: 100,
-                      textAlign: 'center',
-                      height: 100,
-                      fontSize: '20p',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1.2em',
-                    }}
-                  >
-                    {' '}
-                    <AddIcon size='large' />
-                  </Box>
-                  <Typography variant='body1'>Create a new Service</Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          )}
+                  <CardContent>
+                    <Box
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        height: '100%',
+                        gap: 10,
+                        cursor: 'pointer',
+                      }}
+                      onClick={handleCreateGig}
+                    >
+                      <Box
+                        style={{
+                          color: 'rgb(255, 255, 255)',
+                          borderRadius: '50%',
+                          backgroundColor: 'rgb(51, 187, 119)',
+                          width: 100,
+                          textAlign: 'center',
+                          height: 100,
+                          fontSize: '20p',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.2em',
+                        }}
+                      >
+                        {' '}
+                        <AddIcon size='large' />
+                      </Box>
+                      <Typography variant='body1'>
+                        Create a new Service
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              )}
+          </Box>
         </Box>
         <Box style={{ maxWidth: 500 }}>
           <Typography
@@ -269,23 +289,7 @@ const UserProfile = ({ user }) => {
           {user?.reviews.length > 0 ? (
             user?.reviews?.map((el) => (
               <React.Fragment key={el._id}>
-                {' '}
-                <GigReview
-                  review={el}
-                  // review={{
-                  //   user: {
-                  //     fullName: faker.name.findName(),
-                  //     photo: faker.internet.avatar(),
-                  //   },
-                  //   description: faker.random.words(10),
-                  //   createdAt: new Date(),
-                  //   rating: faker.datatype.number({
-                  //     min: 3,
-                  //     max: 5,
-                  //     precision: 0.1,
-                  //   }),
-                  // }}
-                />
+                <Review review={el} />
                 <Divider />
               </React.Fragment>
             ))

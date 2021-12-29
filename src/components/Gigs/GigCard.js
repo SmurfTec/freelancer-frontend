@@ -19,7 +19,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import { Link, useNavigate } from 'react-router-dom';
-import { Delete, Edit, MoreHoriz } from '@material-ui/icons';
+import { Delete, Edit, MoreHoriz, Vignette } from '@material-ui/icons';
 import MoreVert from '@material-ui/icons/MoreVert';
 import ConfirmDialog from 'dialogs/ConfirmDialogBox';
 import useToggle from 'hooks/useToggle';
@@ -49,7 +49,7 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-const GigCard = (gig, isOwner, deleteGig) => {
+const GigCard = ({ gig, isOwner, deleteGig }) => {
   const classes = styles();
   const { _id, title, images, packages } = gig;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -73,14 +73,16 @@ const GigCard = (gig, isOwner, deleteGig) => {
 
   const handleDeleteGig = () => {
     console.log(`deleteGig`, deleteGig);
-    // deleteGig(_id);
+    deleteGig(_id);
     toggleDelete();
     handleClose();
   };
 
+  console.log(`packages`, packages);
+
   return (
     <Card className={classes.gigCard}>
-      {isOwner === true && (
+      {/* {isOwner === true && (
         <IconButton
           aria-label='show more'
           aria-haspopup='true'
@@ -90,7 +92,7 @@ const GigCard = (gig, isOwner, deleteGig) => {
         >
           <EditIcon />
         </IconButton>
-      )}
+      )} */}
 
       <CardActionArea component={Link} to={`/services/${_id}`}>
         <CardMedia
@@ -118,7 +120,7 @@ const GigCard = (gig, isOwner, deleteGig) => {
         >
           <Typography variant='body2' color='primary' align='right'>
             STARTING AT{' '}
-            <span className={classes.price}>{packages[0].price}</span>
+            <span className={classes.price}>{packages?.[0].price}</span>
           </Typography>
           {isOwner && (
             <IconButton
@@ -145,6 +147,14 @@ const GigCard = (gig, isOwner, deleteGig) => {
           },
         }}
       >
+        <MenuItem
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+          onClick={handleGigModify}
+          component={Link}
+          to={`/services/${_id}`}
+        >
+          View <Vignette style={{ color: '#bdbdbd' }} />{' '}
+        </MenuItem>
         <MenuItem
           style={{ display: 'flex', justifyContent: 'space-between' }}
           onClick={handleGigModify}

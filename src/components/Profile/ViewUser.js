@@ -9,7 +9,6 @@ import useToggle from 'hooks/useToggle';
 
 const styles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(8),
     marginBottom: theme.spacing(4),
   },
 }));

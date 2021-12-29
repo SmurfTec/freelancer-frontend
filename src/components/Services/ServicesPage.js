@@ -12,8 +12,11 @@ import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import ServicesFilter from './ServicesFilter';
 import { FilterList } from '@material-ui/icons';
+import PaginationBar from 'components/common/Pagination';
 
 const filterPopoverId = 'ServicesPopOver';
+
+const SERVICER_PER_PAGE = 20;
 
 const Services = () => {
   const classes = useStyles();
@@ -25,9 +28,29 @@ const Services = () => {
   const [filteredServices, setFilteredServices] = useState([]);
   const location = useLocation();
 
+  const [page, setPage] = React.useState(1);
+
   const parsedQuery = useMemo(() => {
     return queryString.parse(location.search);
   }, [location.search]);
+
+  const servicesCount = useMemo(() => {
+    if (!services) return;
+    console.log(
+      `services
+                    ?.slice(
+                      (page - 1) * SERVICER_PER_PAGE,
+                      (page - 1) * SERVICER_PER_PAGE + SERVICER_PER_PAGE
+                    )`,
+      services?.slice(
+        (page - 1) * SERVICER_PER_PAGE,
+        (page - 1) * SERVICER_PER_PAGE + SERVICER_PER_PAGE
+      )
+    );
+
+    // *  total pages  = (total services / services per page )+ 1
+    return Math.ceil(services.length / SERVICER_PER_PAGE);
+  }, [services]);
 
   useEffect(() => {
     if (!services) return;
@@ -44,10 +67,23 @@ const Services = () => {
     );
   }, [parsedQuery]);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  //  * For Info Only
+  //  const handleChangeRowsPerPage = (event) => {
+  //    setRowsPerPage(+event.target.value);
+  //    setPage(0);
+  //  };
+
   const applyCategoryFilter = (e) => {
     const { catid } = e.currentTarget.dataset;
-    // let allData = user?.role === 'buyer' ? usersRequests : services;
 
+    console.log(
+      `services?.filter((el) => !el.category)`,
+      services?.filter((el) => !el.category)
+    );
     console.log(`catid`, catid);
     setFilteredServices(services?.filter((el) => el.category._id === catid));
   };
@@ -65,32 +101,23 @@ const Services = () => {
       pricesLevels.forEach((el) => {
         switch (el) {
           case 'level1':
-            updatedData = allData.filter((el) => el.budget >= 1000);
+            updatedData = allData.filter((el) => el.user.ratingsAverage >= 4.5);
             break;
 
           case 'level2':
-            updatedData = allData.filter(
-              (el) => el.budget >= 500 && el.budget < 1000
-            );
+            updatedData = allData.filter((el) => el.user.ratingsAverage >= 4.5);
 
             break;
 
           case 'level3':
-            updatedData = allData.filter(
-              (el) => el.budget >= 100 && el.budget < 500
-            );
+            updatedData = allData.filter((el) => el.user.ratingsAverage >= 3.5);
+
             break;
 
           case 'level4':
-            updatedData = allData.filter(
-              (el) => el.budget >= 50 && el.budget < 100
-            );
-            break;
+            updatedData = allData.filter((el) => el.user.ratingsAverage >= 3);
 
-          case 'level5': {
-            updatedData = allData.filter((el) => el.budget < 50);
             break;
-          }
         }
       });
 
@@ -161,6 +188,22 @@ const Services = () => {
       <Typography variant='h5' style={{ marginTop: '2rem' }}>
         Continue browsing
       </Typography> */}
+      <Box style={{ marginBottom: '2rem', textAlign: 'right' }}>
+        <Button
+          variant='contained'
+          color='primary'
+          aria-describedby={filterPopoverId}
+          variant='contained'
+          color='primary'
+          onClick={handleClick}
+          endIcon={<FilterList />}
+          style={{
+            marginRight: '5%',
+          }}
+        >
+          Filter
+        </Button>
+      </Box>
       {!parsedQuery ||
         (!parsedQuery.q && (
           <>
@@ -179,8 +222,7 @@ const Services = () => {
                         <Skeleton variant='rect' width='100%' height={200} />
                       </div>
                     ))
-                : services &&
-                  services.map((el) => (
+                : services.map((el) => (
                     <div key={el.value} className={classes.carouselCard}>
                       <GigCard gig={el} />
                     </div>
@@ -194,22 +236,7 @@ const Services = () => {
       >
         Services You May Like
       </Typography>
-      <Box style={{ marginBottom: '2rem', textAlign: 'right' }}>
-        <Button
-          variant='contained'
-          color='primary'
-          aria-describedby={filterPopoverId}
-          variant='contained'
-          color='primary'
-          onClick={handleClick}
-          endIcon={<FilterList />}
-          style={{
-            marginRight: '5%',
-          }}
-        >
-          Filter
-        </Button>
-      </Box>
+
       <Popover
         id={filterPopoverId}
         open={isFilterOpen}
@@ -246,11 +273,16 @@ const Services = () => {
               </Grid>
             ))
         ) : filteredServices.length > 0 ? (
-          filteredServices.map((el) => (
-            <Grid item sm={2} key={el.value}>
-              <GigCard gig={el} />
-            </Grid>
-          ))
+          filteredServices
+            .slice(
+              (page - 1) * SERVICER_PER_PAGE,
+              (page - 1) * SERVICER_PER_PAGE + SERVICER_PER_PAGE
+            )
+            .map((el) => (
+              <Grid item xs={12} sm={4} md={3} key={el.value}>
+                <GigCard gig={el} />
+              </Grid>
+            ))
         ) : (
           <Typography
             variant='h5'
@@ -260,6 +292,11 @@ const Services = () => {
           </Typography>
         )}
       </Grid>
+      <PaginationBar
+        count={servicesCount}
+        page={page}
+        onChange={handleChangePage}
+      />
     </Box>
   );
 };

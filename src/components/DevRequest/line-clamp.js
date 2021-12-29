@@ -1,19 +1,17 @@
 import { Box, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 
-const LineClamp = ({ className, text, component }) => {
-  const [expanded, setExpanded] = useState(false);
-
+const LineClamp = ({ text, lines, variant }) => {
   return (
     <Box
       sx={{
         overflow: 'hidden',
         display: '-webkit-box',
-        WebkitLineClamp: 2,
+        WebkitLineClamp: lines || 2,
         WebkitBoxOrient: 'vertical',
       }}
     >
-      <Typography variant='body1'>{text}</Typography>
+      <Typography variant={variant || 'body1'}>{text}</Typography>
     </Box>
   );
 };

@@ -17,7 +17,6 @@ const ViewProfile = () => {
   const classes = styles();
   const { user } = useContext(AuthContext);
 
-  const navigate = useNavigate();
   if (!user) return <Loading noTitle />;
 
   return (

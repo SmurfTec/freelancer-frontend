@@ -8,27 +8,32 @@ import {
   Tabs,
   Tab,
   Divider,
+  List,
+  ListItem,
+  ListItemText,
 } from '@material-ui/core';
-import Navbar from 'components/common/Navbar';
 import React, { useState } from 'react';
 import faker from 'faker';
-import gig1 from 'assets/gig1.jpg';
 import useStyles from './viewStyles';
 import { Rating } from '@material-ui/lab';
 import Carousel from 'react-material-ui-carousel';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import img1 from 'assets/gigdetail1.jpg';
-import img2 from 'assets/gigdetail2.jpg';
-import img3 from 'assets/gigdetails3.jpg';
 import GigReview from './GigReview';
-import { Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import useFetch from 'hooks/useFetch';
 import { API_BASE_URL } from 'utils/makeReq';
 import Loading from 'components/common/Loading';
+import UserAvatar from 'components/common/UserAvatar';
+import { months } from 'data';
 
 function Item({ item }) {
   return (
-    <Paper>
+    <Paper
+      style={{
+        border: '1px solid #ccc',
+        boxShadow: 'none',
+      }}
+    >
       <img style={{ height: 300, width: '100%' }} src={item} alt='gig image' />
     </Paper>
   );
@@ -123,6 +128,8 @@ const ViewGig = () => {
               gap: 10,
               alignItems: 'center',
             }}
+            component={Link}
+            to={`/users/${service.user._id}`}
           >
             <Avatar src={service.user.photo} />
             <Typography variant='body2'>{service.user.fullName}</Typography>
@@ -201,13 +208,102 @@ const ViewGig = () => {
             About this Service
           </Typography>
           <Typography variant='body1'>{service.description}</Typography>
+          <Box style={{ marginTop: '2rem' }}>
+            <Typography variant='h5'>About User</Typography>
+
+            <Box
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                marginTop: '2rem',
+              }}
+            >
+              <UserAvatar
+                user={service.user}
+                nameKey='fullName'
+                photoKey='photo'
+                height={60}
+                width={60}
+              />
+              <Box
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: '200p',
+                }}
+              >
+                <Typography
+                  component={Link}
+                  to={`/users/${service.user._id}`}
+                  variant='h6'
+                  style={{ color: 'unset' }}
+                >
+                  {service.user.fullName}
+                </Typography>
+                <Box
+                  style={{
+                    minWidth: '200p',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                  }}
+                >
+                  <Rating
+                    name='half-rating'
+                    defaultValue={service.user.ratingsAverage}
+                    readOnly
+                    precision={0.5}
+                    size='small'
+                  />
+                  <Typography variant='h6' style={{ color: '#FFB400' }}>
+                    {service.user.ratingsAverage}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            <Box
+              style={{
+                marginTop: '2rem',
+                padding: 20,
+                border: '1px solid #ccc',
+                width: 500,
+              }}
+            >
+              <List style={{ display: 'flex' }}>
+                <ListItem>
+                  <ListItemText
+                    primary='From'
+                    secondary={service.user.country}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary='Member Since'
+                    secondary={`${
+                      months[new Date(service.user.createdAt).getMonth()]
+                    } ${new Date(service.user.createdAt).getFullYear()}
+                      `}
+                  />
+                </ListItem>
+              </List>
+
+              <Divider />
+
+              <Typography style={{ marginTop: '1rem' }} variant='body1'>
+                {service.user.about}
+              </Typography>
+            </Box>
+          </Box>
           <Box style={{ maxWidth: 500 }}>
             <Typography
               variant='h5'
               fontWeight='normal'
               style={{ marginTop: '2rem', marginBottom: '1rem' }}
             >
-              Reviews
+              User Reviews
             </Typography>
             {service?.user.reviews.length === 0 ? (
               <Typography variant='subtitle1'>

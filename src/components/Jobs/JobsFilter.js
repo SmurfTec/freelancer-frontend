@@ -212,16 +212,13 @@ const JobsFilter = ({
           <AccordionDetails>
             <List className={classes.CategoriesList}>
               {categories?.map((cat) => (
-                <React.Fragment key={cat._id}>
-                  <ListItem>
-                    <ListItemText
-                      data-catid={cat._id}
-                      primary={cat.title}
-                      onClick={applyCategoryFilter}
-                    />
-                  </ListItem>
-                  <Divider />
-                </React.Fragment>
+                <ListItem key={cat._id}>
+                  <ListItemText
+                    data-catid={cat._id}
+                    primary={cat.title}
+                    onClick={applyCategoryFilter}
+                  />
+                </ListItem>
               ))}
             </List>
           </AccordionDetails>

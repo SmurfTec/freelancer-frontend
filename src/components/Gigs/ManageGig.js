@@ -111,6 +111,8 @@ const CreateGig = ({ isUpdate }) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(`inputState`, inputState);
+    if (!inputState.images.length)
+      return toast.error('Service must contain atleast 1 image!');
     if (isUpdate)
       updateGig(id, {
         ...inputState,
@@ -157,17 +159,6 @@ const CreateGig = ({ isUpdate }) => {
           : el
       ),
     }));
-  };
-
-  const handleAutoComplete = (e, value) => {
-    // ^ To be reviewed and need correction......
-    const { id } = e.target;
-    if (!!value) {
-      setInputstate((st) => ({
-        ...st,
-        [id.split('-')[0]]: value,
-      }));
-    }
   };
 
   const handleImageUpload = async (e, toggleFunc, cb) => {
@@ -231,7 +222,7 @@ const CreateGig = ({ isUpdate }) => {
         <Paper className={classes.paper}>
           <Box sx={{ pt: 3 }}>
             <Typography variant='h4' align='center'>
-              Describe your Gig
+              Describe your Service
             </Typography>
           </Box>
           <form onSubmit={handleFormSubmit}>
@@ -524,7 +515,7 @@ const CreateGig = ({ isUpdate }) => {
                   type='submit'
                   sx={{ mt: 2 }}
                 >
-                  Create
+                  {isUpdate ? 'Update' : 'Create'}
                 </Button>
                 <Button
                   variant='contained'

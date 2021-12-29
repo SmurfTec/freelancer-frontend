@@ -60,10 +60,6 @@ export const protechtedRoutes = [
         element: <CreateProfile />,
       },
       // * Users
-      {
-        path: '/users/:id',
-        element: <ViewUser />,
-      },
 
       // * GIGS
       { path: '/services/me', element: <GigTable /> },
@@ -108,6 +104,10 @@ export const commonRotues = [
         element: <ViewService />,
       },
       { path: '/jobs/:id', element: <SingleRequest /> },
+      {
+        path: '/users/:id',
+        element: <ViewUser />,
+      },
     ],
   },
   { path: '*', element: <Navigate to='/' /> },

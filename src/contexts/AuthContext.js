@@ -1,4 +1,3 @@
-import { gigs } from 'data';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -111,7 +110,7 @@ export const AuthProvider = ({ children }) => {
 
       setUser((st) => ({
         ...st,
-        gigs: gigs.map((el) => (el._id === id ? resData.gig : el)),
+        gigs: st.gigs.map((el) => (el._id === id ? resData.gig : el)),
       }));
       toast.success('Service Updated Successfully!');
     } catch (err) {
@@ -126,7 +125,7 @@ export const AuthProvider = ({ children }) => {
 
       setUser((st) => ({
         ...st,
-        gigs: gigs.filter((el) => el._id !== id),
+        gigs: st.gigs.filter((el) => el._id !== id),
       }));
       toast.success('Service Deleted Successfully!');
     } catch (err) {

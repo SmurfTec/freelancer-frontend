@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
       paddingInline: 5,
       justifyContent: 'space-between',
       paddingBottom: 10,
-      minHeight: 170,
+      minHeight: 150,
     },
   },
 }));

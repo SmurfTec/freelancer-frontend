@@ -48,6 +48,10 @@ const Navbar = (props) => {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const searchBarPlaceholder = useMemo(() => {
+    return user?.role === 'seller' ? 'Search Jobs' : 'Search Services';
+  }, [location.pathname, user]);
+
   const showSearchBar = useMemo(() => {
     let condition = false;
     // * If user is logged In then , only in '/' and '/jobs'
@@ -182,7 +186,7 @@ const Navbar = (props) => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              marginInline: 'auto',
+              marginInline: '10px auto',
             }}
             className={classes.SearchBar}
           >
@@ -191,6 +195,7 @@ const Navbar = (props) => {
                 value={searchVal}
                 onChange={(newValue) => setSearchVal(newValue)}
                 onRequestSearch={handleSearch}
+                placeholder={searchBarPlaceholder}
               />
             )}
           </div>

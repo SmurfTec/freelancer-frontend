@@ -108,7 +108,7 @@ const JobsFilter = ({ categories, applyPriceFilter, applyCategoryFilter }) => {
         <Accordion expanded>
           <AccordionSummary aria-controls='panel1a-content' id='panel1a-header'>
             <Typography variant='subtitle2' className={classes.heading}>
-              Price
+              Rating
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -123,7 +123,7 @@ const JobsFilter = ({ categories, applyPriceFilter, applyCategoryFilter }) => {
                       name='level1'
                     />
                   }
-                  label='$1k +'
+                  label={`4.5 & up`}
                 />
                 <FormControlLabel
                   control={
@@ -134,7 +134,7 @@ const JobsFilter = ({ categories, applyPriceFilter, applyCategoryFilter }) => {
                       name='level2'
                     />
                   }
-                  label='$500 - $1k'
+                  label={`4.0 & up`}
                 />
                 <FormControlLabel
                   control={
@@ -145,7 +145,7 @@ const JobsFilter = ({ categories, applyPriceFilter, applyCategoryFilter }) => {
                       name='level3'
                     />
                   }
-                  label='$100 - $500'
+                  label={`3.5 & up`}
                 />
                 <FormControlLabel
                   control={
@@ -156,18 +156,7 @@ const JobsFilter = ({ categories, applyPriceFilter, applyCategoryFilter }) => {
                       name='level4'
                     />
                   }
-                  label='$50 - $100'
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      color='primary'
-                      checked={priceFilters.level5}
-                      onChange={handlePriceChange}
-                      name='level5'
-                    />
-                  }
-                  label='Less than $50'
+                  label={`3.0 & up`}
                 />
               </FormGroup>
               {/* <FormHelperText>Be careful</FormHelperText> */}
