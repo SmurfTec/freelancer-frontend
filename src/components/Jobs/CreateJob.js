@@ -145,7 +145,8 @@ const CreateJob = () => {
         setTimeout(() => {
           navigate('/jobs');
         }, 1500);
-      }
+      },
+      toggleSubmitting
     );
   };
 

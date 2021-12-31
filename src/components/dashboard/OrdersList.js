@@ -4,68 +4,110 @@ import { v4 } from 'uuid';
 
 import Countdown from 'components/common/CountDown';
 import { Avatar, Box, Button, makeStyles, Typography } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import UserAvatar from 'components/common/UserAvatar';
+import { Message } from '@material-ui/icons';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    border: '1px solid #ccc',
+    minHeight: '8rem',
+    padding: '0.5rem',
+    flexWrap: 'wrap',
+    margin: 0,
+    marginBottom: '1rem',
+    display: 'flex',
+    // alignItems: 'center',
+    paddingTop: 10,
+    justifyContent: 'space-around',
+    backgroundColor: '#fff',
+  },
+}));
 
 const OrdersList = ({ data, loading }) => {
+  const classes = useStyles();
   const navigate = useNavigate();
   return (
     <>
       {loading
         ? Array(5)
             .fill()
-            .map(() => <Skeleton key={v4()} variant='rect' />)
-        : data?.map((order) => (
-            <Box
-              key={order._id}
-              display='flex'
-              justifyContent='space-around'
-              alignItems='center'
-              style={{
-                border: '3px solid #f3f3f3',
-                minHeight: '8rem',
-                padding: '0.5rem',
-                margin: '1rem',
-                flexWrap: 'wrap',
-              }}
-            >
-              <Avatar
-                src={
-                  order.seller.photo ||
-                  `https://ui-avatars.com/api/?rounded=true&name=${order.seller.fullName
-                    .split(' ')
-                    .join('+')}`
-                }
-                alt={'asda'}
-                style={{ minWidth: '2rem', minHeight: '2rem', marginRight: 10 }}
+            .map(() => (
+              <Skeleton
+                key={v4()}
+                variant='rect'
+                height={140}
+                width={540}
+                style={{ marginBottom: '1rem' }}
               />
-              <Typography varaint='h5'>{order.seller.fullName}</Typography>
+            ))
+        : data?.map((order) => (
+            <Box key={order._id} className={classes.root}>
+              <UserAvatar
+                user={order.seller}
+                photoKey='photo'
+                nameKey='fullName'
+                width={40}
+                height={40}
+                styles={{
+                  marginRight: 10,
+                  marginTop: 10,
+                }}
+              />
               <Box>
                 <Typography
-                  variant='h5'
-                  align='center'
-                  style={{
-                    color: '#8c8c8c',
-                    marginBottom: '0.5rem',
-                  }}
+                  varaint='h5'
+                  component={Link}
+                  to={`/users/${order.seller._id}`}
+                  gutterBottom
                 >
-                  Deadline
+                  {order.seller.fullName}
                 </Typography>
-                <Countdown deadline={new Date(order.deadline)} />
-                {/* <Typography variant='h6'>
-                  {new Date(order.deadline).toDateString()}
-                </Typography> */}
+                <Typography component='h5' varaint='body1'>
+                  {order.offer.description}
+                </Typography>
               </Box>
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={() => navigate(`/orders/${order._id}`)}
+
+              <Box
                 style={{
-                  flexBasis: '21%',
                   marginLeft: 'auto',
                 }}
               >
-                View
-              </Button>
+                {new Date(order.deadline) >= new Date() ? (
+                  <Countdown deadline={new Date(order.deadline)} />
+                ) : (
+                  <Typography
+                    style={{
+                      paddingBottom: 20,
+                    }}
+                    color='error'
+                    variant='body2'
+                  >
+                    Late: {new Date(order.deadline).toDateString()}
+                  </Typography>
+                )}
+              </Box>
+
+              <Box textAlign='right' flexBasis='100%'>
+                <Button
+                  size='small'
+                  variant='contained'
+                  color='primary'
+                  endIcon={<Message />}
+                  style={{ marginRight: 10 }}
+                  onClick={() => navigate(`/orders/${order._id}`)}
+                >
+                  Chat
+                </Button>
+                <Button
+                  size='small'
+                  variant='contained'
+                  color='info'
+                  onClick={() => navigate(`/orders/${order._id}`)}
+                >
+                  View
+                </Button>
+              </Box>
             </Box>
           ))}
     </>

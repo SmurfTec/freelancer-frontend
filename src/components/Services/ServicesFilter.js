@@ -3,23 +3,18 @@ import {
   Accordion,
   AccordionSummary,
   Box,
-  Grid,
   AccordionDetails,
   Typography,
   makeStyles,
-  FormLabel,
   FormControl,
   FormGroup,
   FormControlLabel,
-  FormHelperText,
   Checkbox,
   List,
   ListItem,
   ListItemText,
   Divider,
 } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
-import useManyInputs from 'hooks/useManyInputs';
 
 const useStyles = makeStyles((theme) => ({
   filter: {

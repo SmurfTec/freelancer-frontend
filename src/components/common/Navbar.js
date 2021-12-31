@@ -49,7 +49,10 @@ const Navbar = (props) => {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const searchBarPlaceholder = useMemo(() => {
-    return user?.role === 'seller' ? 'Search Jobs' : 'Search Services';
+    let value = 'Search ';
+    if (user) value += user.role === 'seller' ? 'Jobs' : 'Services';
+    else value += location.pathname.includes('services') ? 'Services' : 'Jobs';
+    return value;
   }, [location.pathname, user]);
 
   const showSearchBar = useMemo(() => {

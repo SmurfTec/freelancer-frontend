@@ -2,7 +2,7 @@ const { makeStyles } = require('@material-ui/core');
 
 const useStyles = makeStyles((theme) => ({
   JobMain: {
-    alignItems: 'center',
+    // alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

@@ -202,6 +202,23 @@ const styles = makeStyles((theme) => ({
       color: '#fff',
     },
   },
+  uploadFile: {
+    '& input': {
+      display: 'none',
+    },
+  },
+  uploadFileBox: {
+    flexDirection: 'row',
+    gap: 20,
+    /* border: 1px solid #ccc; */
+    display: 'flex',
+    alignItems: 'center',
+    '& img': {
+      height: 100,
+      width: 100,
+      objectFit: 'cover',
+    },
+  },
 }));
 
 export default styles;

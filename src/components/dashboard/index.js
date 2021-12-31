@@ -256,7 +256,7 @@ const Dashboard = () => {
               </Typography>
             </Box>
 
-            <Box sx={{ mt: 4 }} />
+            <Box sx={{ mt: 3 }} />
             <DashboardOrders user={user} token={token} />
           </Grid>
         </Grid>

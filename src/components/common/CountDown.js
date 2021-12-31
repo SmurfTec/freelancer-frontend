@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   Countdown: {
-    margin: '10px auto',
+    margin: 'auto',
     paddingBottom: 20,
   },
 
@@ -13,11 +13,12 @@ const useStyles = makeStyles((theme) => ({
 
   CountdownElement: {
     display: 'inline-block',
-    margin: '0 20px',
+    margin: '0 5px',
     display: 'flex',
     flexDirection: 'column',
     '& strong': {
-      fontSize: 20,
+      fontSize: 14,
+      textAlign: 'center',
     },
   },
 }));

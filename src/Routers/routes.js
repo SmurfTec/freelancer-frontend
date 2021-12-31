@@ -20,6 +20,7 @@ import Chat from 'components/Chat';
 import ViewUser from 'components/Profile/ViewUser';
 import ViewService from 'components/Gigs/ViewGig';
 import CommonLayout from 'layouts/CommonLayout';
+import OrderDetails from 'components/Orders/OrderDetails';
 
 const NotFound = () => <h1>Not Found</h1>;
 
@@ -78,6 +79,7 @@ export const protechtedRoutes = [
 
       // * Orders
       { path: '/orders', element: <OrdersTable /> },
+      { path: '/orders/:id', element: <OrderDetails /> },
       { path: '/logout', element: <Logout /> },
       { path: '*', element: <NotFound /> },
     ],

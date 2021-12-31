@@ -63,7 +63,7 @@ export const DevRequestsProvider = ({ children }) => {
   };
 
   // * CRUD Operations
-  const createDevRequest = async (request, callBack) => {
+  const createDevRequest = async (request, successCallback, errorCallBack) => {
     // * For Image, we have to send body as FormData
     let formData = new FormData();
 
@@ -90,9 +90,10 @@ export const DevRequestsProvider = ({ children }) => {
       const resData = await res.json();
       if (res.ok) {
         pushMyDevRequest(resData.devRequest);
-        callBack?.();
+        successCallback?.();
       } else {
         handleCatch(resData);
+        errorCallBack?.();
       }
       // callBack?.();
     });

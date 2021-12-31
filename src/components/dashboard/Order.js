@@ -29,6 +29,9 @@ const useStyles = makeStyles({
       textTransform: 'capitalize',
     },
   },
+  TabPanel: {
+    padding: 0,
+  },
 });
 
 function TabPanel(props) {
@@ -43,7 +46,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box>
           <Typography component='span'>{children}</Typography>
         </Box>
       )}

@@ -3,23 +3,18 @@ import {
   Accordion,
   AccordionSummary,
   Box,
-  Grid,
   AccordionDetails,
   Typography,
   makeStyles,
-  FormLabel,
   FormControl,
   FormGroup,
   FormControlLabel,
-  FormHelperText,
   Checkbox,
   List,
   ListItem,
   ListItemText,
   Divider,
 } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
-import useManyInputs from 'hooks/useManyInputs';
 
 const useStyles = makeStyles((theme) => ({
   filter: {
@@ -212,13 +207,16 @@ const JobsFilter = ({
           <AccordionDetails>
             <List className={classes.CategoriesList}>
               {categories?.map((cat) => (
-                <ListItem key={cat._id}>
-                  <ListItemText
-                    data-catid={cat._id}
-                    primary={cat.title}
-                    onClick={applyCategoryFilter}
-                  />
-                </ListItem>
+                <React.Fragment key={cat._id}>
+                  <ListItem>
+                    <ListItemText
+                      data-catid={cat._id}
+                      primary={cat.title}
+                      onClick={applyCategoryFilter}
+                    />
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
               ))}
             </List>
           </AccordionDetails>

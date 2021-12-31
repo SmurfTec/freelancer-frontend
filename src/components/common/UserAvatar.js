@@ -7,12 +7,14 @@ const UserAvatar = ({
   nameKey = 'name',
   height = 40,
   width = 40,
+  styles = {},
 }) => {
   return (
     <Avatar
       style={{
         height,
         width,
+        ...styles,
       }}
       src={
         user[photoKey] ||
