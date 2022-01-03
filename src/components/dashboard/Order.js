@@ -1,5 +1,5 @@
 import useFetch from 'hooks/useFetch';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { API_BASE_URL } from 'utils/makeReq';
 
 import { Box, Typography, Tabs, makeStyles, Tab } from '@material-ui/core';
@@ -94,6 +94,10 @@ const DashboardOrders = ({ user, token }) => {
     setValue(newValue);
   };
 
+  const orderUserKey = useMemo(() => {
+    return user.role === 'buyer' ? 'seller' : 'buyer';
+  }, [user.role]);
+
   return (
     <div className={classes.Tabs}>
       <Tabs
@@ -109,10 +113,18 @@ const DashboardOrders = ({ user, token }) => {
         <Tab label='Delivered' {...a11yProps(1)} />
       </Tabs>
       <TabPanel className={classes.TabPanel} value={value} index={0}>
-        <OrdersList loading={loading} data={activeOrders} />
+        <OrdersList
+          orderUserKey={orderUserKey}
+          loading={loading}
+          data={activeOrders}
+        />
       </TabPanel>
       <TabPanel className={classes.TabPanel} value={value} index={1}>
-        <OrdersList loading={loading} data={deliveredOrders} />
+        <OrdersList
+          orderUserKey={orderUserKey}
+          loading={loading}
+          data={deliveredOrders}
+        />
       </TabPanel>
     </div>
   );

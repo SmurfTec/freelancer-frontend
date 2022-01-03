@@ -12,8 +12,8 @@ import { SocketProvider } from 'contexts/SocketContext';
 
 // * Style Sheets for different Packages
 import 'react-toastify/dist/ReactToastify.css';
-import { OrdersProvider } from 'contexts/OrdersContext';
 // *
+import { OrdersProvider } from 'contexts/OrdersContext';
 
 ReactDOM.render(
   <React.StrictMode>

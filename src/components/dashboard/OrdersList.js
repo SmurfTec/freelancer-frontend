@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrdersList = ({ data, loading }) => {
+const OrdersList = ({ data, loading, orderUserKey }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   return (
@@ -44,7 +44,7 @@ const OrdersList = ({ data, loading }) => {
         : data?.map((order) => (
             <Box key={order._id} className={classes.root}>
               <UserAvatar
-                user={order.seller}
+                user={order[orderUserKey]}
                 photoKey='photo'
                 nameKey='fullName'
                 width={40}
@@ -58,10 +58,10 @@ const OrdersList = ({ data, loading }) => {
                 <Typography
                   varaint='h5'
                   component={Link}
-                  to={`/users/${order.seller._id}`}
+                  to={`/users/${order[orderUserKey]._id}`}
                   gutterBottom
                 >
-                  {order.seller.fullName}
+                  {order[orderUserKey].fullName}
                 </Typography>
                 <Typography component='h5' varaint='body1'>
                   {order.offer.description}
@@ -95,7 +95,9 @@ const OrdersList = ({ data, loading }) => {
                   color='primary'
                   endIcon={<Message />}
                   style={{ marginRight: 10 }}
-                  onClick={() => navigate(`/orders/${order._id}`)}
+                  onClick={() =>
+                    navigate(`/messages?user=${order[orderUserKey]._id}`)
+                  }
                 >
                   Chat
                 </Button>

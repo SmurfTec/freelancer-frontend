@@ -81,7 +81,8 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: 'none',
       border: '1px solid #ccc',
       height: 35,
-      width: 400,
+      // width: 400,
+      width: '100%',
     },
   },
   navLink: {

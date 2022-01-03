@@ -92,6 +92,9 @@ export default function AccountPopover({ classes }) {
           ) : (
             <>
               <Typography variant='body1' className={classes.NavItem}>
+                <Link to='/jobs/me'>My Jobs</Link>
+              </Typography>
+              <Typography variant='body1' className={classes.NavItem}>
                 <Link to='/'>Services</Link>
               </Typography>
             </>

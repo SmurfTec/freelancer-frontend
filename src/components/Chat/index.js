@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -25,111 +24,11 @@ import { AuthContext } from 'contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { makeReq } from 'utils/makeReq';
 import CreateOfferDialog from 'components/Offers/CreateOffer';
+import useStyles from './styles';
+import ChatItem from './ChatItem';
+import ChatMessage from './ChatMessage';
 // import AddGameToAgreement from '../../screens/dashboard/modals/AddGameToAgreement';
 // import CreateAgreement from '../../screens/dashboard/modals/CreateAgreement';
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-  chatSection: {
-    width: '100%',
-    // height: '80vh',
-    boxShadow: 'unset',
-    // padding: 20,
-    background: '#f2f2f2',
-    // color: '#fff',
-    border: '1px solid #ccc',
-    '& .MuiTypography-colorTextSecondary': {
-      color: '#fff',
-    },
-  },
-  headBG: {
-    backgroundColor: '#e0e0e0',
-  },
-  borderRight500: {
-    borderRight: '1px solid #e0e0e0',
-    background: 'dodgerblue',
-  },
-  searchField: {
-    '& .MuiInputBase-root': {
-      backgroundColor: '#fff',
-      borderRadius: 10,
-    },
-  },
-  messageArea: {
-    height: '65vh',
-    overflowY: 'auto',
-    paddingInline: 20,
-  },
-  messageBox: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    columnGap: 20,
-    padding: 0,
-  },
-  message: {
-    // width: '50%',
-    // marginLeft: 'auto',
-    color: '#4d4d4d',
-    width: 'fit-content',
-    background: '#f2f2f2',
-    borderRadius: 20,
-    marginBottom: '1rem',
-    padding: 10,
-    paddingTop: 0,
-    '& p': {
-      fontSize: 14,
-      color: '#000',
-    },
-    '& .MuiListItemText-secondary': {
-      fontSize: 14,
-      color: '#000',
-    },
-  },
-
-  agreementMessage: {
-    width: '50%',
-    // marginLeft: 'auto',
-    color: '#4d4d4d',
-    borderRadius: 20,
-    marginBottom: '1rem',
-    padding: 10,
-    paddingTop: 0,
-    '& p': {
-      fontSize: 14,
-      color: '#000',
-    },
-    '& .MuiListItemText-secondary': {
-      fontSize: 14,
-      color: '#000',
-    },
-  },
-
-  myMessage: {
-    marginLeft: 'auto',
-  },
-  otherMessage: {
-    marginRight: 'auto',
-  },
-  Agreement: {
-    backgroundColor: '#fff',
-    border: '1px solid black',
-    // padding: 10,
-    minWidth: 450,
-  },
-  AgreementHeader: {
-    backgroundColor: '#f2f2f2',
-    display: 'flex',
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    '& .MuiTypography-root': {
-      fontWeight: 'bold',
-    },
-  },
-  AgreementExpansion: {},
-});
 
 const Chat = () => {
   const classes = useStyles();
@@ -278,17 +177,6 @@ const Chat = () => {
     return chat.participants?.[0]._id === user?._id;
   };
 
-  const sendOffer = () => {
-    let targetUser =
-      isMe(activeChat) === true
-        ? activeChat.participants?.[1]._id
-        : activeChat.participants?.[0]._id;
-
-    console.log(`targetUser`, targetUser);
-    setCurrentOfferUser([targetUser, activeChat._id]);
-    toggleSendOffer();
-  };
-
   return (
     <Container sx={{ paddingTop: 2, maxWidth: 'unset' }}>
       <Grid container component={Paper} className={classes.chatSection}>
@@ -311,48 +199,12 @@ const Chat = () => {
             {chats
               ? chats.map((chat) => (
                   <React.Fragment key={chat._id}>
-                    <ListItem
-                      button
-                      // sx={{ marginBlock: 2 }}
-                      data-selected={chat._id}
-                      onClick={handleChatClick}
-                      style={{
-                        backgroundColor:
-                          activeChat?._id === chat._id && 'red !important',
-                      }}
-                    >
-                      <ListItemIcon>
-                        <Avatar
-                          alt='Remy Sharp'
-                          src={`https://ui-avatars.com/api/?rounded=true&name=${
-                            isMe(chat) === true
-                              ? chat.participants?.[1].fullName
-                              : chat.participants?.[0].fullName
-                                  .split(' ')
-                                  .join('+')
-                          }`}
-                        />
-                      </ListItemIcon>
-
-                      <ListItemText
-                        primary={
-                          isMe(chat) === true
-                            ? chat.participants?.[1].fullName
-                            : chat.participants?.[0].fullName
-                        }
-                        secondary={chat.messages[
-                          chat.messages.length - 1
-                        ]?.text?.slice(0, 15)}
-                      />
-                      <ListItemText
-                        // secondary={'08:55'}
-                        align='right'
-                        // secondary={new Date(
-                        //   chat.messages[chat.messages.length - 1].createdAt
-                        // ).toLocaleString()}
-                        align='right'
-                      ></ListItemText>
-                    </ListItem>
+                    <ChatItem
+                      chat={chat}
+                      isMe={isMe}
+                      activeChat={activeChat}
+                      handleChatClick={handleChatClick}
+                    />
                     <Divider />
                   </React.Fragment>
                 ))
@@ -378,272 +230,13 @@ const Chat = () => {
             {activeChat?.messages &&
               activeChat.messages.map((message) => (
                 <React.Fragment key={message._id}>
-                  <ListItem component={Box} className={classes.messageBox}>
-                    {isMyMsg(message) === false && (
-                      <ListItemIcon>
-                        <Avatar
-                          alt={user?.fullName}
-                          src={`https://ui-avatars.com/api/?rounded=true&name=${message.sender.fullName
-                            ?.split(' ')
-                            .join('+')}`}
-                          style={{
-                            height: 35,
-                            width: 35,
-                          }}
-                        />
-                      </ListItemIcon>
-                    )}
-                    <Grid
-                      container
-                      className={clsx({
-                        // classes.drawer is applied always
-                        [classes.message]: message.isOffer === false, // classes.drawerOpen is applied always, bool = true
-                        [classes.agreementMessage]: message.isOffer === true, // classes.drawerOpen is applied always, bool = true
-                        [classes.myMessage]: isMyMsg(message) === true, // classes.drawerOpen is applied always, bool = true
-                        [classes.otherMessage]: isMyMsg(message) === false, // you can also use boolean variable
-                      })}
-                    >
-                      {isMyMsg(message) === true ? (
-                        message.isOffer && message.offer ? (
-                          <Grid item xs={12}>
-                            <Typography
-                              style={{
-                                fontSize: 18,
-                              }}
-                            >
-                              Offer
-                            </Typography>
-                            <Box className={classes.Agreement}>
-                              <Box className={classes.AgreementHeader}>
-                                <Typography variant='h6' fontWeight='bold'>
-                                  {message.offer.description}
-                                </Typography>
-                                <Typography
-                                  variant='h6'
-                                  style={{
-                                    minWidth: 'fit-content',
-                                  }}
-                                >
-                                  $ {message.offer.budget}
-                                </Typography>
-                              </Box>
-                              <Box
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  paddingInline: 10,
-                                }}
-                              >
-                                <Typography
-                                  // variant='h6'
-                                  component='span'
-                                  style={{
-                                    color:
-                                      message.offer.status === 'pending'
-                                        ? 'orange'
-                                        : message.offer.status === 'accepted'
-                                        ? 'green'
-                                        : 'red',
-                                    textTransform: 'Capitalize',
-                                  }}
-                                >
-                                  <b>{message.offer.status}</b>
-                                </Typography>
-                                <Typography
-                                  variant='subtitle2'
-                                  style={{
-                                    marginLeft: 'auto',
-                                    textAlign: 'right',
-                                  }}
-                                >
-                                  {new Date(message.createdAt).toDateString()}
-                                </Typography>
-                              </Box>
-                            </Box>
-                            {/* <Box
-                              style={{
-                                backgroundColor: '#fff',
-                                border: '1px solid black',
-                                padding: 10,
-                              }}
-                            >
-                              <Typography variant='h5'>Agreement</Typography>
-                              <Typography variant='h5'>
-                                <b>Description :</b>{' '}
-                                {message.offer.description}
-                              </Typography>
-                              <Typography variant='h5'>
-                                <b>Cost :</b> {message.offer.cost}
-                              </Typography>
-                              <Typography variant='h5'>
-                                <b>Days :</b> {message.offer.days}
-                              </Typography>
-                              <Typography variant='h5'>
-                                <b>Sent at :</b>{' '}
-                                {new Date(
-                                  message.offer.createdAt
-                                ).toLocaleString()}
-                              </Typography>
-                              <Typography variant='h5'>
-                                <b>Status :</b> {message.offer.status}
-                              </Typography>
-                            </Box> */}
-                          </Grid>
-                        ) : (
-                          <>
-                            <Grid item xs={12}>
-                              <ListItemText
-                                align={'right'}
-                                primary={message.text}
-                              />
-                            </Grid>
-                            <Grid item xs={12}>
-                              <ListItemText
-                                align={'right'}
-                                secondary={new Date(
-                                  message.createdAt
-                                ).toLocaleTimeString()}
-                              />
-                            </Grid>
-                          </>
-                        )
-                      ) : message.isOffer && message.offer ? (
-                        <Grid item xs={12}>
-                          <Typography
-                            style={{
-                              fontSize: 18,
-                            }}
-                          >
-                            Agreement
-                          </Typography>
-                          <Box className={classes.Agreement}>
-                            <Box className={classes.AgreementHeader}>
-                              <Typography variant='h6' fontWeight='bold'>
-                                {message.offer.description}
-                              </Typography>
-                              <Typography variant='h6'>
-                                $ {message.offer.budget}
-                              </Typography>
-                            </Box>
-                            {/* <Box className={classes.AgreementExpansion}>
-                              <Typography variant='subtitle'>
-                                {message.offer.days}
-                                <b>Days :</b>
-                              </Typography>
-                            </Box> */}
-                            {message.offer.status === 'pending' ? (
-                              <Box
-                                style={{
-                                  padding: 10,
-                                  display: 'flex',
-                                  gap: 10,
-                                }}
-                              >
-                                <Button
-                                  variant='contained'
-                                  style={{
-                                    backgroundColor: 'green',
-                                    color: '#fff',
-                                  }}
-                                  onClick={() =>
-                                    handleOffer(
-                                      'accepted',
-                                      message.offer,
-                                      message._id
-                                    )
-                                  }
-                                >
-                                  Accept
-                                </Button>
-                                <Button
-                                  variant='contained'
-                                  style={{
-                                    backgroundColor: 'red',
-                                    color: '#fff',
-                                  }}
-                                  onClick={() =>
-                                    handleOffer(
-                                      'rejected',
-                                      message.offer,
-                                      message._id
-                                    )
-                                  }
-                                >
-                                  Reject
-                                </Button>
-                              </Box>
-                            ) : (
-                              <Box
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  paddingInline: 10,
-                                }}
-                              >
-                                <Typography
-                                  // variant='h6'
-                                  component='span'
-                                  style={{
-                                    color:
-                                      message.offer.status === 'pending'
-                                        ? 'orange'
-                                        : message.offer.status === 'accepted'
-                                        ? 'green'
-                                        : 'red',
-                                    textTransform: 'Capitalize',
-                                  }}
-                                >
-                                  <b>{message.offer.status}</b>
-                                </Typography>
-                                <Typography
-                                  variant='subtitle2'
-                                  style={{
-                                    marginLeft: 'auto',
-                                    textAlign: 'right',
-                                  }}
-                                >
-                                  {new Date(
-                                    message.offer.createdAt
-                                  ).toLocaleTimeString()}
-                                </Typography>
-                              </Box>
-                            )}
-                          </Box>
-                        </Grid>
-                      ) : (
-                        <>
-                          <Grid item xs={12}>
-                            <ListItemText
-                              align={'left'}
-                              primary={message.text}
-                            />
-                          </Grid>
-                          <Grid item xs={12}>
-                            <ListItemText
-                              align={'left'}
-                              secondary={new Date(
-                                message.createdAt
-                              ).toLocaleTimeString()}
-                            />
-                          </Grid>
-                        </>
-                      )}
-                    </Grid>
-                    {isMyMsg(message) === true && (
-                      <ListItemIcon>
-                        <Avatar
-                          alt='Remy Sharp'
-                          src={`https://ui-avatars.com/api/?rounded=true&name=${user?.fullName
-                            .split(' ')
-                            .join('+')}`}
-                          style={{
-                            height: 35,
-                            width: 35,
-                          }}
-                        />
-                      </ListItemIcon>
-                    )}
-                  </ListItem>
+                  <ChatMessage
+                    classes={classes}
+                    user={user}
+                    isMyMsg={isMyMsg}
+                    message={message}
+                    handleOffer={handleOffer}
+                  />
                 </React.Fragment>
               ))}
           </List>

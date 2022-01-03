@@ -1,5 +1,12 @@
 import React, { useMemo, useContext, useEffect, useState } from 'react';
-import { Box, Grid, makeStyles, Button, Popover } from '@material-ui/core';
+import {
+  Box,
+  Grid,
+  makeStyles,
+  Button,
+  Popover,
+  Typography,
+} from '@material-ui/core';
 import { Container } from '@material-ui/core';
 
 import { v4 } from 'uuid';
@@ -32,26 +39,32 @@ const filterPopoverId = 'filterPopOver';
 const RenderDevRequests = ({ loading, data }) => {
   return (
     <Grid container spacing={2}>
-      {loading
-        ? Array(20)
-            .fill()
-            .map(() => (
-              <Grid item xs={6} sm={3} md={3} lg={2} key={v4()}>
-                <Skeleton variant='react' height={200} />
-              </Grid>
-            ))
-        : data?.map((el) => (
-            <Grid item xs={6} sm={4} md={3} lg={3} key={el.value}>
-              <DevReqCard devRequest={el} />
+      {loading ? (
+        Array(20)
+          .fill()
+          .map(() => (
+            <Grid item xs={6} sm={3} md={3} lg={2} key={v4()}>
+              <Skeleton variant='react' height={200} width={200} />
             </Grid>
-          ))}
+          ))
+      ) : data?.length === 0 ? (
+        <Typography style={{ margin: 'auto' }} variant='h5'>
+          No Results Found
+        </Typography>
+      ) : (
+        data?.map((el) => (
+          <Grid item xs={6} sm={4} md={3} lg={3} key={el.value}>
+            <DevReqCard devRequest={el} />
+          </Grid>
+        ))
+      )}
     </Grid>
   );
 };
 
 const JOBS_PER_PAGE = 20;
 
-const JobsPage = () => {
+const JobsPage = ({ onlyMe }) => {
   const classes = useStyles();
   const location = useLocation();
   const { user } = useContext(AuthContext);
@@ -75,17 +88,6 @@ const JobsPage = () => {
 
   const DataCount = useMemo(() => {
     if (!filteredData) return;
-    console.log(
-      `filteredData
-                    ?.slice(
-                      (page - 1) * JOBS_PER_PAGE,
-                      (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
-                    )`,
-      filteredData?.slice(
-        (page - 1) * JOBS_PER_PAGE,
-        (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
-      )
-    );
 
     // *  total pages  = (total filteredData / filteredData per page )+ 1
     return Math.ceil(filteredData.length / JOBS_PER_PAGE);
@@ -273,14 +275,20 @@ const JobsPage = () => {
 
         <RenderDevRequests
           loading={
-            loadingDevRequests
-            // user?.role === 'buyer' ? loadingMyRequests : loadingDevRequests
+            // loadingDevRequests
+            onlyMe ? loadingMyRequests : loadingDevRequests
           }
-          data={filteredData.slice(
-            (page - 1) * JOBS_PER_PAGE,
-            (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
-          )}
-          // data={user?.role === 'buyer' ? usersRequests : devRequests}
+          data={
+            onlyMe
+              ? usersRequests.slice(
+                  (page - 1) * JOBS_PER_PAGE,
+                  (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
+                )
+              : filteredData.slice(
+                  (page - 1) * JOBS_PER_PAGE,
+                  (page - 1) * JOBS_PER_PAGE + JOBS_PER_PAGE
+                )
+          }
         />
         <PaginationBar
           count={DataCount}

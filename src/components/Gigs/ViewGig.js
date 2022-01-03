@@ -128,11 +128,19 @@ const ViewGig = () => {
               gap: 10,
               alignItems: 'center',
             }}
-            component={Link}
-            to={`/users/${service.user._id}`}
           >
-            <Avatar src={service.user.photo} />
-            <Typography variant='body2'>{service.user.fullName}</Typography>
+            <UserAvatar
+              user={service.user}
+              photoKey='photo'
+              nameKey='fullName'
+              width={40}
+              height={40}
+            />
+            <Box component={Link} to={`/users/${service.user._id}`}>
+              <Typography variant='body2'>{service.user.fullName}</Typography>
+            </Box>
+
+            {/* <Avatar src={service.user.photo} /> */}
             <Rating
               name='half-rating'
               defaultValue={service.user.ratingsAverage}

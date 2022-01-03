@@ -70,7 +70,11 @@ const CreateProfile = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    updateMe(state);
+    // * 2nd argument is success callback func ,
+    // * will be called if profile successfully updated
+    updateMe(state, () => {
+      toast.success('Profile Updated Successfully!');
+    });
 
     console.log(`state`, state);
   };

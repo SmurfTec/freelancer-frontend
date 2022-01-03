@@ -70,6 +70,7 @@ export const protechtedRoutes = [
 
       // * DevRequests
       { path: '/jobs', element: <JobsPage /> },
+      { path: '/jobs/me', element: <JobsPage onlyMe /> },
       { path: '/jobs/create', element: <DevRequest /> },
       { path: '/jobs/:id', element: <SingleRequest /> },
       { path: '/requests', element: <DevRequestsTable /> },

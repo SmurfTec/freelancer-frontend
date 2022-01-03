@@ -21,6 +21,8 @@ import { AttachFile, Cancel, CheckCircle, Publish } from '@material-ui/icons';
 
 import useCommonStyles from 'styles/commonStyles';
 import axios from 'axios';
+import useToggle from 'hooks/useToggle';
+import CreateReview from './CreateReviewDialog';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -49,6 +51,18 @@ const useStyles = makeStyles(() => ({
 const RenderOrderSide = ({ order, user, submitFile, handleApproval }) => {
   const [submission, setSubmission] = useState();
   const classes = useCommonStyles();
+
+  const SubmissionActions = () => (
+    <Typography variant='subtitle2'>
+      Mark as
+      <IconButton onClick={() => handleApproval('completed')}>
+        <CheckCircle color='primary' />
+      </IconButton>
+      <IconButton onClick={() => handleApproval('incomplete')}>
+        <Cancel color='error' />
+      </IconButton>
+    </Typography>
+  );
 
   const theme = useTheme();
   console.log(`order`, order);
@@ -142,15 +156,7 @@ const RenderOrderSide = ({ order, user, submitFile, handleApproval }) => {
             >
               View Submission
             </Typography>
-            <Typography variant='subtitle2'>
-              Mark as
-              <IconButton onClick={() => handleApproval('completed')}>
-                <CheckCircle color='primary' />
-              </IconButton>
-              <IconButton onClick={() => handleApproval('incomplete')}>
-                <Cancel color='error' />
-              </IconButton>
-            </Typography>
+            <SubmissionActions />
           </>
         ) : (
           <Typography variant='subtitle2'>Waiting for Approval</Typography>
@@ -164,15 +170,17 @@ const RenderOrderSide = ({ order, user, submitFile, handleApproval }) => {
         <Typography variant='h5'>InComplete</Typography>
         {user._id === order.buyer._id ? (
           <>
-            <Typography variant='subtitle2'>
-              Mark as
-              <IconButton>
-                <CheckCircle color='primary' />
-              </IconButton>
-              <IconButton>
-                <Cancel color='error' />
-              </IconButton>
+            <Typography
+              style={{ cursor: 'pointer', color: 'grey' }}
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(order.submission);
+              }}
+              variant='subtitle2'
+            >
+              View Submission
             </Typography>
+            <SubmissionActions />
           </>
         ) : (
           <Button
@@ -187,7 +195,23 @@ const RenderOrderSide = ({ order, user, submitFile, handleApproval }) => {
       </Box>
     );
 
-  return <h1>bla</h1>;
+  return (
+    <Box>
+      <Typography variant='h5' color='primary'>
+        Completed
+      </Typography>
+      <Typography
+        style={{ cursor: 'pointer', color: 'grey' }}
+        onClick={(e) => {
+          e.preventDefault();
+          window.open(order.submission);
+        }}
+        variant='subtitle2'
+      >
+        View Submission
+      </Typography>
+    </Box>
+  );
 };
 
 const OrderDetails = () => {
@@ -195,11 +219,13 @@ const OrderDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [isReviewOpen, toggleReviewOpen] = useToggle(false);
   const { token, user } = useContext(AuthContext);
   let {
     value: order,
     loading,
     error,
+    setValue: setOrder,
   } = useFetch(
     `${API_BASE_URL}/orders/${id}`,
     {
@@ -212,7 +238,19 @@ const OrderDetails = () => {
     'order'
   );
 
+  const handleCreateReview = async ({ review, rating }) => {
+    const resData = await makeReq(
+      `/orders/manageorder/${order._id}`,
+      { body: { status: 'completed', review, rating } },
+      'PATCH'
+    );
+    console.log(`resData`, resData);
+    setOrder(resData.order);
+    toggleReviewOpen();
+  };
+
   const handleApproval = async (status) => {
+    console.log(`status`, status);
     if (status === 'incomplete') {
       const resData = await makeReq(
         `/orders/manageorder/${order._id}`,
@@ -220,6 +258,9 @@ const OrderDetails = () => {
         'PATCH'
       );
       console.log(`resData`, resData);
+      setOrder(resData.order);
+    } else {
+      toggleReviewOpen();
     }
   };
 
@@ -321,6 +362,11 @@ const OrderDetails = () => {
             user={user}
             submitFile={submitFile}
             handleApproval={handleApproval}
+          />
+          <CreateReview
+            open={isReviewOpen}
+            toggleDialog={toggleReviewOpen}
+            handleCreate={handleCreateReview}
           />
         </Grid>
       </Grid>

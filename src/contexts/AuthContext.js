@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateMe = async (newProfile, setState) => {
+  const updateMe = async (newProfile, successCallBack) => {
     try {
       const res = await makeReq(
         `/users/me`,
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
       // console.log(`res`, res);
 
       setUser(res.user);
-      toast.success('Profile Updated Successfully !');
+      successCallBack?.();
     } catch (err) {
       handleCatch(err);
     }
