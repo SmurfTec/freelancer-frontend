@@ -1,23 +1,17 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import Add from '@material-ui/icons/Add';
-import { Container } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { SocketContext } from 'contexts/SocketContext';
 import v4 from 'uuid/dist/v4';
-import clsx from 'clsx';
 import useTextInput from 'hooks/useTextInput';
 import useToggleInput from 'hooks/useToggle';
 import { AuthContext } from 'contexts/AuthContext';
@@ -181,7 +175,7 @@ const Chat = () => {
     <Container sx={{ paddingTop: 2, maxWidth: 'unset' }}>
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
-          {/* <Divider />
+          <Divider />
           <Box sx={{ margin: 1, marginLeft: 0 }}>
             <TextField
               id='outlined-basic-email'
@@ -193,7 +187,7 @@ const Chat = () => {
               className={classes.searchField}
             />
           </Box>
-          <Divider /> */}
+          <Divider />
           <List>
             {/* {1 === 5 */}
             {chats

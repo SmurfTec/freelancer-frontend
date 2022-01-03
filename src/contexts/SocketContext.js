@@ -79,6 +79,7 @@ export const SocketProvider = (props) => {
         );
     });
 
+    // * Only for updatation of agreement/offer message
     socket.on('updatedMessage', ({ chatId, message, receiver }) => {
       console.log(`updatedMessage received :`, message);
       console.log(`chatId :`, chatId);
