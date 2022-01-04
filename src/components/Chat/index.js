@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import Add from '@material-ui/icons/Add';
-import { Box, Container } from '@material-ui/core';
+import { Avatar, Box, Container, Input, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { SocketContext } from 'contexts/SocketContext';
 import v4 from 'uuid/dist/v4';
@@ -21,6 +21,9 @@ import CreateOfferDialog from 'components/Offers/CreateOffer';
 import useStyles from './styles';
 import ChatItem from './ChatItem';
 import ChatMessage from './ChatMessage';
+import chatImg from 'assets/chat.svg';
+
+import SvgIcon from '@material-ui/core/SvgIcon';
 // import AddGameToAgreement from '../../screens/dashboard/modals/AddGameToAgreement';
 // import CreateAgreement from '../../screens/dashboard/modals/CreateAgreement';
 
@@ -45,6 +48,10 @@ const Chat = () => {
   const [activeChat, setActiveChat] = useState();
 
   const location = useLocation();
+
+  function ChatIcon(props) {
+    return <SvgIcon>{chatImg}</SvgIcon>;
+  }
 
   useEffect(() => {
     (async () => {
@@ -128,7 +135,7 @@ const Chat = () => {
     // * Update Active Chat (if any)
     if (activeChat)
       setActiveChat(chats.find((el) => el._id === activeChat._id));
-    // setActiveChat(chats[0]);
+    else setActiveChat(chats[0]);
   }, [chats]);
 
   const scrollChat = () => {
@@ -174,22 +181,34 @@ const Chat = () => {
   return (
     <Container sx={{ paddingTop: 2, maxWidth: 'unset' }}>
       <Grid container component={Paper} className={classes.chatSection}>
-        <Grid item xs={3} className={classes.borderRight500}>
-          <Divider />
-          <Box sx={{ margin: 1, marginLeft: 0 }}>
-            <TextField
-              id='outlined-basic-email'
-              label='Search'
-              variant='outlined'
-              fullWidth
-              size='small'
-              sx={{ marginBottom: 2 }}
-              className={classes.searchField}
-            />
-          </Box>
-          <Divider />
-          <List>
+        <Grid item xs={4} className={classes.borderRight500}>
+          {/* <Divider /> */}
+          <div className={classes.padding}>
+            <div className={classes.chatTitle}>
+              <img src={chatImg} alt='chat' />
+              <Typography variant='h4'>Chat</Typography>
+            </div>
+            <Box sx={{ margin: 1, marginLeft: 0 }}>
+              <TextField
+                id='outlined-basic-email'
+                label='Search'
+                variant='outlined'
+                fullWidth
+                size='small'
+                sx={{ marginBottom: 2 }}
+                className={classes.searchField}
+              />
+            </Box>
+          </div>
+          <Box mt={4}>{/* <Divider /> */}</Box>
+          <List className={`${classes.chatList} ${classes.padding}`}>
             {/* {1 === 5 */}
+            <Box my={1}>
+              <Typography variant='subtitle1'>All Conversations</Typography>
+              <Box mt={1}>
+                <Divider />
+              </Box>
+            </Box>
             {chats
               ? chats.map((chat) => (
                   <React.Fragment key={chat._id}>
@@ -199,7 +218,7 @@ const Chat = () => {
                       activeChat={activeChat}
                       handleChatClick={handleChatClick}
                     />
-                    <Divider />
+                    {/* <Divider /> */}
                   </React.Fragment>
                 ))
               : Array(5)
@@ -219,7 +238,11 @@ const Chat = () => {
                   ))}
           </List>
         </Grid>
-        <Grid item xs={9} style={{ backgroundColor: '#fff' }}>
+        <Grid
+          item
+          xs={8}
+          style={{ backgroundColor: '#fff', minHeight: '70vh' }}
+        >
           <List id='messageArea' className={classes.messageArea}>
             {activeChat?.messages &&
               activeChat.messages.map((message) => (
@@ -239,18 +262,25 @@ const Chat = () => {
             <Grid container style={{ padding: '20px', alignItems: 'center' }}>
               <Grid item xs={10}>
                 <form id='messageForm' onSubmit={handleCreateMessage}>
-                  <TextField
+                  {/* <TextField
                     id='outlined-basic-email'
                     label='Type Something'
                     fullWidth
                     value={messageTxt}
                     onChange={handleTxtChange}
                     required
+                  /> */}
+                  <Input
+                    fullWidth
+                    placeholder='Write your message...'
+                    inputProps={{ required: true }}
+                    value={messageTxt}
+                    onChange={handleTxtChange}
                   />
                 </form>
               </Grid>
 
-              <Grid item xs={1} align='right'>
+              <Grid item xs={2} align='right'>
                 <Button
                   color='primary'
                   aria-label='add'

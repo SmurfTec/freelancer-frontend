@@ -12,6 +12,17 @@ import {
 import clsx from 'clsx';
 
 const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
+  const msgTime = new Date(message.createdAt).toLocaleString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  let msgDate = new Date(message.createdAt).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+  });
+
   return (
     <ListItem component={Box} className={classes.messageBox}>
       {isMyMsg(message) === false && (
@@ -32,7 +43,7 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
         container
         className={clsx({
           // classes.drawer is applied always
-          [classes.message]: message.isOffer === false, // classes.drawerOpen is applied always, bool = true
+          [classes.message]: !message.isOffer || message.isOffer === false, // classes.drawerOpen is applied always, bool = true
           [classes.agreementMessage]: message.isOffer === true, // classes.drawerOpen is applied always, bool = true
           [classes.myMessage]: isMyMsg(message) === true, // classes.drawerOpen is applied always, bool = true
           [classes.otherMessage]: isMyMsg(message) === false, // you can also use boolean variable
@@ -42,19 +53,19 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
           message.isOffer && message.offer ? (
             <Grid item xs={12}>
               <Typography
-                style={{
-                  fontSize: 18,
-                }}
+              // style={{
+              //   fontSize: 18,
+              // }}
               >
-                Offer
+                Here's your custom Offer
               </Typography>
               <Box className={classes.Agreement}>
                 <Box className={classes.AgreementHeader}>
-                  <Typography variant='h6' fontWeight='bold'>
+                  <Typography variant='subtitle1' fontWeight='bold'>
                     {message.offer.description}
                   </Typography>
                   <Typography
-                    variant='h6'
+                    variant='h3'
                     style={{
                       minWidth: 'fit-content',
                     }}
@@ -66,7 +77,7 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    paddingInline: 10,
+                    padding: 10,
                   }}
                 >
                   <Typography
@@ -84,16 +95,13 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
                   >
                     <b>{message.offer.status}</b>
                   </Typography>
-                  <Typography
-                    variant='subtitle2'
-                    style={{
-                      marginLeft: 'auto',
-                      textAlign: 'right',
-                    }}
-                  >
-                    {new Date(message.createdAt).toDateString()}
-                  </Typography>
                 </Box>
+              </Box>
+              <Box mt={1}>
+                <ListItemText
+                  align={'right'}
+                  secondary={`${msgDate}, ${msgTime}`}
+                />
               </Box>
               {/* <Box
                               style={{
@@ -130,10 +138,12 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
                 <ListItemText align={'right'} primary={message.text} />
               </Grid>
               <Grid item xs={12}>
-                <ListItemText
-                  align={'right'}
-                  secondary={new Date(message.createdAt).toLocaleTimeString()}
-                />
+                <Box mt={1}>
+                  <ListItemText
+                    align={'right'}
+                    secondary={`${msgDate}, ${msgTime}`}
+                  />
+                </Box>
               </Grid>
             </>
           )
@@ -215,7 +225,7 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
                   >
                     <b>{message.offer.status}</b>
                   </Typography>
-                  <Typography
+                  {/* <Typography
                     variant='subtitle2'
                     style={{
                       marginLeft: 'auto',
@@ -223,21 +233,26 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
                     }}
                   >
                     {new Date(message.offer.createdAt).toLocaleTimeString()}
-                  </Typography>
+                  </Typography> */}
                 </Box>
               )}
+            </Box>
+            <Box mt={1}>
+              <ListItemText
+                align={'right'}
+                secondary={`${msgDate}, ${msgTime}`}
+              />
             </Box>
           </Grid>
         ) : (
           <>
             <Grid item xs={12}>
-              <ListItemText align={'left'} primary={message.text} />
+              <ListItemText align={'left'} primary={`${message.text} fff`} />
             </Grid>
             <Grid item xs={12}>
-              <ListItemText
-                align={'left'}
-                secondary={new Date(message.createdAt).toLocaleTimeString()}
-              />
+              <Box mt={1} sx={{ color: '#fff' }}>
+                <ListItemText secondary={`${msgDate}, ${msgTime}`} />
+              </Box>
             </Grid>
           </>
         )}
