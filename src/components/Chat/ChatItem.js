@@ -16,10 +16,11 @@ const styles = makeStyles((theme) => ({
     // paddingRight: 0,
     // paddingLeft: 0,
     color: '#000',
-    borderRadius: 8,
-    marginBottom: '0.5em',
+    // marginBottom: '0.5em',
     '&.MuiListItem-root.Mui-selected': {
-      backgroundColor: '#f0f7f4',
+      // backgroundColor: '#f0f7f4',
+      backgroundColor: '#edf9ee',
+      borderLeft: `3px solid ${theme.palette.primary.main}`,
     },
   },
   chatTime: {
@@ -55,9 +56,9 @@ const ChatItem = ({ chat, handleChatClick, isMe, activeChat }) => {
       data-selected={chat._id}
       onClick={handleChatClick}
       className={classes.chatItemRoot}
-      style={{
-        backgroundColor: activeChat?._id === chat._id && 'red !important',
-      }}
+      // style={{
+      //   backgroundColor: activeChat?._id === chat._id && 'red !important',
+      // }}
     >
       <ListItemIcon>
         <Avatar

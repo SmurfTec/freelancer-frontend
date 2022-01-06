@@ -8,7 +8,15 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import Add from '@material-ui/icons/Add';
-import { Avatar, Box, Container, Input, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Container,
+  Icon,
+  Input,
+  InputBase,
+  Typography,
+} from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { SocketContext } from 'contexts/SocketContext';
 import v4 from 'uuid/dist/v4';
@@ -22,7 +30,7 @@ import useStyles from './styles';
 import ChatItem from './ChatItem';
 import ChatMessage from './ChatMessage';
 import chatImg from 'assets/chat.svg';
-
+import SearchBar from 'components/common/Search';
 import SvgIcon from '@material-ui/core/SvgIcon';
 // import AddGameToAgreement from '../../screens/dashboard/modals/AddGameToAgreement';
 // import CreateAgreement from '../../screens/dashboard/modals/CreateAgreement';
@@ -184,11 +192,13 @@ const Chat = () => {
         <Grid item xs={4} className={classes.borderRight500}>
           {/* <Divider /> */}
           <div className={classes.padding}>
-            <div className={classes.chatTitle}>
+            {/* <div className={classes.chatTitle}>
               <img src={chatImg} alt='chat' />
               <Typography variant='h4'>Chat</Typography>
-            </div>
-            <Box sx={{ margin: 1, marginLeft: 0 }}>
+            </div> */}
+            <SearchBar />
+
+            {/* <Box sx={{ margin: 1, marginLeft: 0 }}>
               <TextField
                 id='outlined-basic-email'
                 label='Search'
@@ -198,17 +208,19 @@ const Chat = () => {
                 sx={{ marginBottom: 2 }}
                 className={classes.searchField}
               />
-            </Box>
+            </Box> */}
           </div>
-          <Box mt={4}>{/* <Divider /> */}</Box>
+          <Box>
+            <Divider />
+          </Box>
           <List className={`${classes.chatList} ${classes.padding}`}>
             {/* {1 === 5 */}
-            <Box my={1}>
+            {/* <Box my={1}>
               <Typography variant='subtitle1'>All Conversations</Typography>
               <Box mt={1}>
                 <Divider />
               </Box>
-            </Box>
+            </Box> */}
             {chats
               ? chats.map((chat) => (
                   <React.Fragment key={chat._id}>
@@ -218,7 +230,7 @@ const Chat = () => {
                       activeChat={activeChat}
                       handleChatClick={handleChatClick}
                     />
-                    {/* <Divider /> */}
+                    <Divider />
                   </React.Fragment>
                 ))
               : Array(5)
@@ -259,7 +271,7 @@ const Chat = () => {
           </List>
           <Divider />
           {activeChat && (
-            <Grid container style={{ padding: '20px', alignItems: 'center' }}>
+            <Grid container style={{ padding: '13px', alignItems: 'center' }}>
               <Grid item xs={10}>
                 <form id='messageForm' onSubmit={handleCreateMessage}>
                   {/* <TextField
@@ -270,13 +282,22 @@ const Chat = () => {
                     onChange={handleTxtChange}
                     required
                   /> */}
-                  <Input
-                    fullWidth
-                    placeholder='Write your message...'
-                    inputProps={{ required: true }}
-                    value={messageTxt}
-                    onChange={handleTxtChange}
-                  />
+                  <div className={classes.typeMessage}>
+                    {/* <Input
+                      fullWidth
+                      placeholder='Write your message...'
+                      inputProps={{ required: true }}
+                      value={messageTxt}
+                      onChange={handleTxtChange}
+                    /> */}
+                    <InputBase
+                      fullWidth
+                      inputProps={{ required: true }}
+                      placeholder='Type your message ...'
+                      value={messageTxt}
+                      onChange={handleTxtChange}
+                    />
+                  </div>
                 </form>
               </Grid>
 
@@ -287,10 +308,6 @@ const Chat = () => {
                   type='submit'
                   form='messageForm'
                   variant='contained'
-                  sx={{ marginLeft: 1 }}
-                  style={{
-                    background: 'dodgerblue',
-                  }}
                 >
                   <SendIcon />
                 </Button>

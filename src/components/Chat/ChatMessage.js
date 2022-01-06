@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   ListItemText,
+  Tooltip,
 } from '@material-ui/core';
 import clsx from 'clsx';
 
@@ -59,50 +60,57 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
               >
                 Here's your custom Offer
               </Typography>
-              <Box className={classes.Agreement}>
-                <Box className={classes.AgreementHeader}>
-                  <Typography variant='subtitle1' fontWeight='bold'>
-                    {message.offer.description}
-                  </Typography>
-                  <Typography
-                    variant='h3'
+              <Tooltip title={`${msgDate}, ${msgTime}`}>
+                <Box className={classes.Agreement}>
+                  <Box className={classes.AgreementHeader}>
+                    <Typography variant='subtitle1' fontWeight='bold'>
+                      {message.offer.description}
+                    </Typography>
+                    <Typography
+                      variant='h3'
+                      style={{
+                        minWidth: 'fit-content',
+                      }}
+                    >
+                      $ {message.offer.budget}
+                    </Typography>
+                  </Box>
+                  <Box
                     style={{
-                      minWidth: 'fit-content',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      padding: 10,
                     }}
                   >
-                    $ {message.offer.budget}
-                  </Typography>
+                    <Typography
+                      // variant='h6'
+                      component='span'
+                      style={{
+                        color:
+                          message.offer.status === 'pending'
+                            ? 'orange'
+                            : message.offer.status === 'accepted'
+                            ? 'green'
+                            : 'red',
+                        textTransform: 'Capitalize',
+                      }}
+                    >
+                      <b>{message.offer.status}</b>
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: 10,
-                  }}
-                >
-                  <Typography
-                    // variant='h6'
-                    component='span'
-                    style={{
-                      color:
-                        message.offer.status === 'pending'
-                          ? 'orange'
-                          : message.offer.status === 'accepted'
-                          ? 'green'
-                          : 'red',
-                      textTransform: 'Capitalize',
-                    }}
-                  >
-                    <b>{message.offer.status}</b>
-                  </Typography>
-                </Box>
-              </Box>
-              <Box mt={1}>
+              </Tooltip>
+              {/* <Box mt={1}>
                 <ListItemText
                   align={'right'}
                   secondary={`${msgDate}, ${msgTime}`}
                 />
-              </Box>
+              </Box> */}
+              <div className={`${classes.messageTime} ${classes.myTime}`}>
+                {/* <ListItemText secondary={`${msgDate}, ${msgTime}`} /> */}
+                <ListItemText secondary={`${msgTime.split(' ')[0]}`} />
+              </div>
+
               {/* <Box
                               style={{
                                 backgroundColor: '#fff',
@@ -135,16 +143,14 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
           ) : (
             <>
               <Grid item xs={12}>
-                <ListItemText align={'right'} primary={message.text} />
+                <Tooltip title={`${msgDate}, ${msgTime}`}>
+                  <ListItemText align={'right'} primary={message.text} />
+                </Tooltip>
               </Grid>
-              <Grid item xs={12}>
-                <Box mt={1}>
-                  <ListItemText
-                    align={'right'}
-                    secondary={`${msgDate}, ${msgTime}`}
-                  />
-                </Box>
-              </Grid>
+              <div className={`${classes.messageTime} ${classes.myTime}`}>
+                {/* <ListItemText secondary={`${msgDate}, ${msgTime}`} /> */}
+                <ListItemText secondary={`${msgTime.split(' ')[0]}`} />
+              </div>
             </>
           )
         ) : message.isOffer && message.offer ? (
@@ -156,6 +162,7 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
             >
               Agreement
             </Typography>
+
             <Box className={classes.Agreement}>
               <Box className={classes.AgreementHeader}>
                 <Typography variant='h6' fontWeight='bold'>
@@ -165,8 +172,8 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
               </Box>
               {/* <Box className={classes.AgreementExpansion}>
                               <Typography variant='subtitle'>
-                                {message.offer.days}
-                                <b>Days :</b>
+                              {message.offer.days}
+                              <b>Days :</b>
                               </Typography>
                             </Box> */}
               {message.offer.status === 'pending' ? (
@@ -231,29 +238,34 @@ const ChatMessage = ({ classes, user, isMyMsg, message, handleOffer }) => {
                       marginLeft: 'auto',
                       textAlign: 'right',
                     }}
-                  >
+                    >
                     {new Date(message.offer.createdAt).toLocaleTimeString()}
                   </Typography> */}
                 </Box>
               )}
             </Box>
-            <Box mt={1}>
+            {/* <Box mt={1}>
               <ListItemText
                 align={'right'}
                 secondary={`${msgDate}, ${msgTime}`}
               />
-            </Box>
+            </Box> */}
           </Grid>
         ) : (
           <>
             <Grid item xs={12}>
-              <ListItemText align={'left'} primary={`${message.text} fff`} />
+              <Tooltip title={`${msgDate}, ${msgTime}`}>
+                <ListItemText align={'left'} primary={`${message.text} fff`} />
+              </Tooltip>
             </Grid>
-            <Grid item xs={12}>
+            <div className={`${classes.messageTime} ${classes.otherTime}`}>
+              <ListItemText secondary={`${msgTime.split(' ')[0]}`} />
+            </div>
+            {/* <Grid item xs={12}>
               <Box mt={1} sx={{ color: '#fff' }}>
                 <ListItemText secondary={`${msgDate}, ${msgTime}`} />
               </Box>
-            </Grid>
+            </Grid> */}
           </>
         )}
       </Grid>
